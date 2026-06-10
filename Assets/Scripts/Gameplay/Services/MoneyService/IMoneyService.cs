@@ -7,7 +7,8 @@ namespace Gameplay.Services.MoneyService
         public event Action OnMoneyChanged;
         public float Money { get; }
         public void Earn();
-        public void Income(float amount);
+        public void AddIncome(string id, float amount);
         public bool TrySpend(float amount);
+        public bool CanSpend(float amount);
     }
 }

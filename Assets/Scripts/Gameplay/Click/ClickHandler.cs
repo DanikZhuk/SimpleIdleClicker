@@ -8,7 +8,7 @@ namespace Gameplay.Click
     public class ClickHandler : MonoBehaviour
     {
         [SerializeField] private Button button;
-        [Inject] private MoneyService _moneyService;
+        [Inject] private IMoneyService _moneyService;
 
         private void Awake()
         {

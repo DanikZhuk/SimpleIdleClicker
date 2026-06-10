@@ -25,7 +25,7 @@ namespace UI.TabControls.CloseTab
             closeButton.onClick.RemoveAllListeners();
         }
 
-        private void CloseTab()
+        public void CloseTab()
         {
             Destroy(tab);
         }

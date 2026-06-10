@@ -1,4 +1,4 @@
-namespace Gameplay.Estates
+namespace Gameplay.Estates.Generic
 {
     public enum EstateType
     {

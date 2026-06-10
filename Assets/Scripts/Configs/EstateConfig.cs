@@ -1,10 +1,11 @@
 using Gameplay.Estates;
+using Gameplay.Estates.Generic;
 using UnityEngine;
 
 namespace Configs
 {
     [CreateAssetMenu(fileName = "EstateConfig", menuName = "Configs/EstateConfig")]
-    public class Estate: ScriptableObject
+    public class EstateConfig: ScriptableObject
     {
         public EstateType Type;
         public string EstateName;
@@ -12,5 +13,6 @@ namespace Configs
         public float Price;
         public float Income;
         public int MaxCount;
+        public GameObject Tab;
     }
 }

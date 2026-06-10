@@ -1,20 +1,20 @@
-using System;
+using Configs;
 
-namespace Gameplay.Estates
+namespace Gameplay.Estates.Generic
 {
     public class Estate
     {
         public string id;
         public string name;
-        public EstateType type;
+        public EstateConfig Config;
         
         private static long _nextId = 0;
 
-        public Estate(string name, EstateType type)
+        public Estate(string name, EstateConfig config)
         {
             this.id = (_nextId++).ToString();
             this.name = name;
-            this.type = type;
+            this.Config = config;
         }
     }
 }

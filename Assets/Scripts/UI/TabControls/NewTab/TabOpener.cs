@@ -13,11 +13,17 @@ namespace UI.TabControls.NewTab
         [SerializeField]
         private Button openButton;
 
+        protected GameObject Tab;
+
         private void Start()
         {
             if (!openButton)
             {
                 openButton = gameObject.GetComponent<Button>();
+            }
+            if (!container)
+            {
+                container = GameObject.FindGameObjectWithTag("TabContainer").transform;
             }
             
             openButton.onClick.AddListener(OpenTab);
@@ -25,12 +31,13 @@ namespace UI.TabControls.NewTab
 
         private void OnDestroy()
         {
-            openButton.onClick.RemoveAllListeners();
+            if(openButton)
+                openButton.onClick.RemoveAllListeners();
         }
 
-        private void OpenTab()
+        protected virtual void OpenTab()
         {
-            Instantiate(tabPrefab, container);
+            Tab=Instantiate(tabPrefab, container);
         }
     }
 }

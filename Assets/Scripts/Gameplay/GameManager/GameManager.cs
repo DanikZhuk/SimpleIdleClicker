@@ -8,7 +8,6 @@ namespace Gameplay.GameManager
     public class GameManager: MonoBehaviour
     {
         [Inject] private ITimeService _timeService;
-        [Inject] private IMoneyService _moneyService;
 
         private void Awake()
         {

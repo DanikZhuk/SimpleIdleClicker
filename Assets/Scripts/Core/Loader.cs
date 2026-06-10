@@ -9,7 +9,6 @@ namespace Core
         {
             void InstallExtra(UnityEngine.SceneManagement.Scene scene, ContainerBuilder builder)
             {
-                builder.RegisterValue("of Developers");
             }
         
             // This way you can access ContainerBuilder of the scene that is currently building
