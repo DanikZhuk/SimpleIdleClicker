@@ -1,3 +1,5 @@
+using Gameplay.Services.MoneyService;
+using Reflex.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,8 +7,8 @@ namespace Gameplay.Click
 {
     public class ClickHandler : MonoBehaviour
     {
-        [SerializeField] private GameManager.GameManager gameManager;
         [SerializeField] private Button button;
+        [Inject] private MoneyService _moneyService;
 
         private void Awake()
         {
@@ -20,7 +22,7 @@ namespace Gameplay.Click
 
         private void OnClick()
         {
-            gameManager.MoneyService.Earn();
+            _moneyService.Earn();
         }
     }
 }

@@ -1,16 +1,14 @@
 using Gameplay.Services.MoneyService;
 using Gameplay.Services.TimeService;
+using Reflex.Attributes;
 using UnityEngine;
 
 namespace Gameplay.GameManager
 {
     public class GameManager: MonoBehaviour
     {
-        private TimeService _timeService;
-        private MoneyService _moneyService;
-        
-        public TimeService TimeService=>_timeService;
-        public MoneyService MoneyService => _moneyService;
+        [Inject] private ITimeService _timeService;
+        [Inject] private IMoneyService _moneyService;
 
         private void Awake()
         {
@@ -19,8 +17,7 @@ namespace Gameplay.GameManager
         
         private void Initialize()
         {
-            _timeService = new TimeService();
-            _moneyService = new MoneyService();
+            _timeService.StartTicking();
         }
     }
 }
