@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Core.SaveSystem;
 using Gameplay.Services.TimeService;
+using UnityEngine;
 using Zenject;
 
 namespace Gameplay.Services.MoneyService
@@ -15,19 +18,51 @@ namespace Gameplay.Services.MoneyService
         private readonly Dictionary<string, float> _incomes = new();
         private ITimeService _timeService;
         
+        private IDataService _dataService;
+        private const string Path = "Money/Money.json";
+
+        private class MoneyData
+        {
+            public Dictionary<string, float> Incomes;
+            public float Money;
+            public MoneyData(Dictionary<string, float> incomes, float money)
+            {
+                Incomes = incomes;
+                Money = money;
+            }
+        }
+        
         
         public float Money => _money;
         
         [Inject]
-        private void Construct(ITimeService timeService)
+        private void Construct(ITimeService timeService, IDataService dataService)
         {
             _timeService = timeService;
+            _dataService = dataService;
             Initialize();
         }
 
         private void Initialize()
         {
             _timeService.OnTick += Income;
+
+            try
+            {
+                var data = _dataService.LoadData<MoneyData>(Path);
+
+                _money = data.Money;
+
+                _incomes.Clear();
+                foreach (var income in data.Incomes)
+                {
+                    _incomes.TryAdd(income.Key, income.Value);
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                
+            }
         }
 
         public void TapEarn()
@@ -73,6 +108,12 @@ namespace Gameplay.Services.MoneyService
             }
             
             OnMoneyChanged?.Invoke();
+        }
+        
+        public void Dispose()
+        {
+            Debug.Log("DISPOSE");
+            _dataService.SaveData(Path, new MoneyData(_incomes, _money));
         }
     }
 }

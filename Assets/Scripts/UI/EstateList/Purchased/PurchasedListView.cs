@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.U2D.Animation;
 using Zenject;
 
-namespace UI.EstateList
+namespace UI.EstateList.Purchased
 {
     public class PurchasedListView : MonoBehaviour
     {

@@ -1,40 +1,39 @@
 using System;
-using Configs;
 using Gameplay.Estates.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.EstateList
+namespace UI.EstateList.Purchased
 {
-    public class EstateLineView : MonoBehaviour
+    public class PurchasedLineView : MonoBehaviour
     {
         [Header("Controlled elements")]
         [SerializeField] private Image image;
         [SerializeField] private TMP_Text estateName;
-        [SerializeField] private TMP_Text price;
+        [SerializeField] private TMP_Text income;
         [SerializeField] private Button button;
 
-        public event Action<EstateType> OnClick;
+        public event Action<Estate> OnClick;
 
-        private EstateType _type;
+        private Estate _estate;
 
         private void Awake()
         {
             button.onClick.AddListener(Button_OnClick);
         }
         
-        public void Initialize(Sprite icon, EstateConfig config)
+        public void Initialize(Sprite icon, Estate estate)
         {
             image.sprite = icon;
-            estateName.text = config.EstateName;
-            price.text = $"{config.Price}$";
-            _type = config.Type;
+            estateName.text = estate.name;
+            income.text = $"{estate.Config.Income}$";
+            _estate = estate;
         }
 
         private void Button_OnClick()
         {
-            OnClick?.Invoke(_type);
+            OnClick?.Invoke(_estate);
         }
     }
 }

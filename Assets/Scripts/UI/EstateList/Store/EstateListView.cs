@@ -4,7 +4,7 @@ using Gameplay.Estates.Generic;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 
-namespace UI.EstateList
+namespace UI.EstateList.Store
 {
     public class EstateListView : MonoBehaviour
     {

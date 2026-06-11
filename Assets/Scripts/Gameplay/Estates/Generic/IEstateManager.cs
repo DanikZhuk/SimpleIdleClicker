@@ -4,7 +4,7 @@ using Configs;
 
 namespace Gameplay.Estates.Generic
 {
-    public interface IEstateManager
+    public interface IEstateManager: IDisposable
     {
         public event Action OnEstatesChanged;
         public List<Estate> Estates { get; }

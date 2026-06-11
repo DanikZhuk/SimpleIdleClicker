@@ -1,3 +1,5 @@
+using System;
+using Core.SaveSystem;
 using Gameplay.Estates.Generic;
 using Gameplay.Services.MoneyService;
 using Gameplay.Services.TimeService;
@@ -9,8 +11,9 @@ namespace Core.Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<IEstateManager>().To<EstateManager>().AsSingle();
-            Container.Bind<IMoneyService>().To<MoneyService>().AsSingle();
+            Container.Bind<IDataService>().To<JsonDataService>().AsSingle();
+            Container.Bind(typeof(IEstateManager),typeof(IDisposable)).To<EstateManager>().AsSingle();
+            Container.Bind(typeof(IMoneyService),typeof(IDisposable)).To<MoneyService>().AsSingle();
             Container.Bind<ITimeService>().To<TimeService>().AsSingle();
         }
     }

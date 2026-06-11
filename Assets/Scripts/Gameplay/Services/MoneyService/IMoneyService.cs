@@ -2,7 +2,7 @@ using System;
 
 namespace Gameplay.Services.MoneyService
 {
-    public interface IMoneyService
+    public interface IMoneyService: IDisposable
     {
         public event Action OnMoneyChanged;
         public float Money { get; }
