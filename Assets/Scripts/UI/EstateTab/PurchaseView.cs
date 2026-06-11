@@ -1,0 +1,78 @@
+using System.Linq;
+using Configs;
+using Gameplay.Estates.Generic;
+using Gameplay.Services.MoneyService;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
+
+namespace UI.EstateTab
+{
+    public class PurchaseView : MonoBehaviour
+    {
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text countText;
+        [SerializeField] private Image image;
+        [SerializeField] private TMP_Text priceText;
+        [SerializeField] private TMP_Text incomeText;
+        [SerializeField] private TMP_InputField nameInput;
+        [SerializeField] private Button buyButton;
+
+        private IMoneyService _moneyService;
+        private IEstateManager _estateManager;
+
+        private EstateConfig _config;
+
+        [Inject]
+        private void Construct(IMoneyService moneyService, IEstateManager estateManager)
+        {
+            _moneyService = moneyService;
+            _estateManager = estateManager;
+        }
+
+        public void Initialize(Sprite icon, EstateConfig config)
+        {
+            nameText.text = config.name;
+            image.sprite = icon;
+            priceText.text = $"{config.Price}$";
+            incomeText.text = $"{config.Income}$";
+            _config = config;
+        }
+
+        private void Start()
+        {
+            buyButton.onClick.AddListener(Buy);
+            _moneyService.OnMoneyChanged += CheckButton;
+            _estateManager.OnEstatesChanged += CheckButton;
+            CheckButton();
+        }
+
+        private void OnDestroy()
+        {
+            if (_moneyService != null)
+                _moneyService.OnMoneyChanged -= CheckButton;
+            if (_estateManager != null)
+                _estateManager.OnEstatesChanged -= CheckButton;
+        }
+
+        private void Buy()
+        {
+            var text = nameInput.text;
+            if (text.Length == 0)
+                text = "Unnamed";
+            if (!_estateManager.TryAddEstate(text, _config)) return;
+            nameInput.text = "";
+        }
+
+        private void CheckButton()
+        {
+            if (!_config) return;
+            var num = _estateManager.Estates.Count(estate => estate.Config.Type == _config.Type);
+            countText.text =
+                $"{num}/{_config.MaxCount}";
+            if (_moneyService == null) return;
+            buyButton.interactable = (_moneyService.CanSpend(_config.Income) && num < _config.MaxCount);
+        }
+    }
+}

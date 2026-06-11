@@ -9,10 +9,8 @@ namespace Configs
     {
         public EstateType Type;
         public string EstateName;
-        public Sprite Icon;
         public float Price;
         public float Income;
         public int MaxCount;
-        public GameObject Tab;
     }
 }

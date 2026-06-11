@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.Services.TimeService;
-using Reflex.Attributes;
+using Zenject;
 
 namespace Gameplay.Services.MoneyService
 {
@@ -19,7 +19,7 @@ namespace Gameplay.Services.MoneyService
         public float Money => _money;
         
         [Inject]
-        public void Construct(ITimeService timeService)
+        private void Construct(ITimeService timeService)
         {
             _timeService = timeService;
             Initialize();
@@ -30,15 +30,26 @@ namespace Gameplay.Services.MoneyService
             _timeService.OnTick += Income;
         }
 
-        public void Earn()
+        public void TapEarn()
         {
             _money += _tapAmount;
+            OnMoneyChanged?.Invoke();
+        }
+
+        public void Earn(float amount)
+        {
+            _money += amount;
             OnMoneyChanged?.Invoke();
         }
 
         public void AddIncome(string id, float amount)
         {
             _incomes.TryAdd(id, amount);
+        }
+
+        public void RemoveIncome(string id)
+        {
+            _incomes.Remove(id);
         }
 
         public bool TrySpend(float amount)

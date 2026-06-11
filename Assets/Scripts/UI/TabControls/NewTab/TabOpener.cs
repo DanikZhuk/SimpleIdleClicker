@@ -17,25 +17,10 @@ namespace UI.TabControls.NewTab
 
         private void Start()
         {
-            if (!openButton)
-            {
-                openButton = gameObject.GetComponent<Button>();
-            }
-            if (!container)
-            {
-                container = GameObject.FindGameObjectWithTag("TabContainer").transform;
-            }
-            
             openButton.onClick.AddListener(OpenTab);
         }
 
-        private void OnDestroy()
-        {
-            if(openButton)
-                openButton.onClick.RemoveAllListeners();
-        }
-
-        protected virtual void OpenTab()
+        private void OpenTab()
         {
             Tab=Instantiate(tabPrefab, container);
         }

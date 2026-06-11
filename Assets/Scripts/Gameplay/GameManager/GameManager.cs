@@ -1,13 +1,18 @@
-using Gameplay.Services.MoneyService;
 using Gameplay.Services.TimeService;
-using Reflex.Attributes;
 using UnityEngine;
+using Zenject;
 
 namespace Gameplay.GameManager
 {
     public class GameManager: MonoBehaviour
     {
-        [Inject] private ITimeService _timeService;
+        private ITimeService _timeService;
+
+        [Inject]
+        private void Construct(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
 
         private void Awake()
         {

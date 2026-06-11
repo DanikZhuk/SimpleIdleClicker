@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Configs;
 using Cysharp.Threading.Tasks;
+using Zenject;
 
 namespace Gameplay.Services.TimeService
 {
@@ -12,6 +13,13 @@ namespace Gameplay.Services.TimeService
         
         private CancellationTokenSource _cancellationTokenSource;
         private int _delay;
+        private TimeConfig _config;
+
+        [Inject]
+        private void Construct(TimeConfig config)
+        {
+            _config = config;
+        }
 
         public void StartTicking()
         {
@@ -26,8 +34,7 @@ namespace Gameplay.Services.TimeService
 
         private async UniTask InitializeTicking()
         {
-            var config = await ConfigLoader.LoadInternalAsync<TimeConfig>("Configs/Time/TimeConfig");
-            _delay = (int)(config.incomeSeconds*1000);
+            _delay = (int)(_config.incomeSeconds*1000);
             _ = Ticking();
         }
 
