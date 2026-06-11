@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f64f0a77c50470d9028640f65d5511c, type: 3}
   m_Name: GameplaySettingsInstaller
   m_EditorClassIdentifier: Assembly-CSharp::GameplaySettingsInstaller
-  timeConfig: {fileID: 0}
-  economyConfig: {fileID: 0}
+  timeConfig: {fileID: 11400000, guid: da4c2ac90e5d3de498777a31588409e8, type: 2}
+  economyConfig: {fileID: 11400000, guid: 4f37e7b30debfad46a1d5fb0d7930521, type: 2}

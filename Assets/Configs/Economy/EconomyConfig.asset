@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f082ea6a89490798c3045cdd8e0678, type: 3}
   m_Name: EconomyConfig
   m_EditorClassIdentifier: Assembly-CSharp::Configs.EconomyConfig
-  sellPercentage: 0
+  sellPercentage: 0.3
