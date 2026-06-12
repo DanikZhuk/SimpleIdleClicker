@@ -1,4 +1,5 @@
 using System;
+using Configs;
 using Gameplay.Estates.Generic;
 using TMPro;
 using UnityEngine;
@@ -23,11 +24,11 @@ namespace UI.EstateList.Purchased
             button.onClick.AddListener(Button_OnClick);
         }
         
-        public void Initialize(Sprite icon, Estate estate)
+        public void Initialize(Sprite icon, Estate estate, EstateConfig config)
         {
             image.sprite = icon;
-            estateName.text = estate.name;
-            income.text = $"{estate.Config.Income}$";
+            estateName.text = estate.Name;
+            income.text = $"{config.Income}$";
             _estate = estate;
         }
 

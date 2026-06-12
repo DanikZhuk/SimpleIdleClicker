@@ -7,17 +7,26 @@ namespace Core.SceneInstallers
 {
     public class GameplaySceneMonoInstaller: MonoInstaller
     {
-        [SerializeField] private Transform gameManager;
+        [SerializeField] private EstateManager em;
+        [SerializeField] private MoneyService ms;
+        [SerializeField] private TimeService ts;
         public override void InstallBindings()
         {
-            var em = gameManager.GetComponent<EstateManager>();
-            var ms = gameManager.GetComponent<MoneyService>();
-            var ts = gameManager.GetComponent<TimeService>();
-            
-            Container.BindInterfacesAndSelfTo<EstateManager>().FromInstance(em).AsSingle();
-            Container.BindInterfacesAndSelfTo<MoneyService>().FromInstance(ms).AsSingle();
-            Container.BindInterfacesAndSelfTo<TimeService>().FromInstance(ts).AsSingle();
-            Container.BindInterfacesAndSelfTo<OfflinePaymentService>().AsSingle();
+            Container
+                .BindInterfacesAndSelfTo<EstateManager>()
+                .FromInstance(em)
+                .AsSingle();
+            Container
+                .BindInterfacesAndSelfTo<MoneyService>()
+                .FromInstance(ms)
+                .AsSingle();
+            Container
+                .BindInterfacesAndSelfTo<TimeService>()
+                .FromInstance(ts)
+                .AsSingle();
+            Container
+                .BindInterfacesAndSelfTo<OfflinePaymentService>()
+                .AsSingle();
         }
     }
 }

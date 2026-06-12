@@ -1,5 +1,3 @@
-using System.Linq;
-using Configs;
 using Gameplay.Estates.Generic;
 using UI.EstateTab;
 using UnityEngine;
@@ -35,7 +33,8 @@ namespace UI.EstateList.Store
             foreach (var estate in config.Estates)
             {
                 var line = Instantiate(estateLinePrefab, lineContainer);
-                line.Initialize(library.GetSprite(Category, estate.Type.ToString()), estate);
+                line.Initialize(library.GetSprite(Category, estate.Type.ToString()),
+                    estate);
                 line.OnClick += ShowPopUp;
             }
         }

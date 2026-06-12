@@ -9,29 +9,28 @@ using Zenject;
 
 namespace Gameplay.Estates.Generic
 {
-    public class EstateManager: MonoBehaviour
+    public class EstateManager : MonoBehaviour
     {
+        [SerializeField] private EstateList list;
+
         [Inject] private MoneyService _moneyService;
         [Inject] private OfflinePaymentService _offlinePaymentService;
         [Inject] private IDataService _dataService;
         public event Action OnEstatesChanged;
-        
-        public IReadOnlyList<Estate> Estates => _dataService.Estates;
 
-        private void Start()
-        {
-            OnEstatesChanged += CalculateIncome;
-            CalculateIncome();
-        }
+        private readonly Dictionary<EstateType, EstateConfig> _configs = new();
+
+        public IReadOnlyList<Estate> Estates => _dataService.Estates;
 
         public bool TryAddEstate(string name, EstateConfig config)
         {
-            if (_dataService.Estates.Count(estate1 => estate1.Config.Type == config.Type)
+            if (_dataService.Estates.Count(estate1 => estate1.Type == config.Type)
                 >= config.MaxCount)
                 return false;
             if (!_moneyService.TrySpend(config.Price)) return false;
 
-            var estate = new Estate(name, config, config.Price * config.SellPercentage);
+            var estate = 
+                new Estate(name, config.Type, config.Price * config.SellPercentage);
             _dataService.AddEstate(estate);
             OnEstatesChanged?.Invoke();
             return true;
@@ -40,14 +39,35 @@ namespace Gameplay.Estates.Generic
         public void SellEstate(Estate estate)
         {
             if (estate == null) return;
-            _moneyService.Earn(estate.sellPrice);
+            _moneyService.Earn(estate.SellPrice);
             _dataService.RemoveEstate(estate);
             OnEstatesChanged?.Invoke();
         }
 
+        public EstateConfig GetConfig(EstateType type)
+        {
+            return _configs[type];
+        }
+
+        private void Start()
+        {
+            OnEstatesChanged += CalculateIncome;
+            PrepareConfigs();
+            CalculateIncome();
+        }
+
         private void CalculateIncome()
         {
-            _offlinePaymentService.EstateIncome=Estates.Sum(estate => estate.Config.Income);
+            _offlinePaymentService.EstateIncome =
+                Estates.Sum(estate => _configs[estate.Type].Income);
+        }
+
+        private void PrepareConfigs()
+        {
+            foreach (var estate in list.Estates)
+            {
+                _configs.Add(estate.Type, estate);
+            }
         }
     }
 }

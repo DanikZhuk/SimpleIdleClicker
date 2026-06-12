@@ -7,7 +7,10 @@ namespace Core.ProjectInstaller
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<JsonDataService>().AsSingle().NonLazy();
+            Container
+                .BindInterfacesAndSelfTo<JsonDataService>()
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

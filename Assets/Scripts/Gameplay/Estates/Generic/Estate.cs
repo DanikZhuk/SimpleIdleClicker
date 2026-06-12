@@ -1,22 +1,20 @@
-using Configs;
-
 namespace Gameplay.Estates.Generic
 {
     public class Estate
     {
-        public string id;
-        public string name;
-        public EstateConfig Config;
-        public float sellPrice;
+        public string Id;
+        public string Name;
+        public EstateType Type;
+        public float SellPrice;
         
         private static long _nextId = 0;
 
-        public Estate(string name, EstateConfig config, float sellPrice)
+        public Estate(string name, EstateType type, float sellPrice)
         {
-            this.id = (_nextId++).ToString();
-            this.name = name;
-            this.Config = config;
-            this.sellPrice = sellPrice;
+            Id = (_nextId++).ToString();
+            Name = name;
+            Type = type;
+            SellPrice = sellPrice;
         }
     }
 }

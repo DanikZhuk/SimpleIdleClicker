@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,8 +12,6 @@ namespace UI.TabControls.NewTab
         [SerializeField]
         private Button openButton;
 
-        protected GameObject Tab;
-
         private void Start()
         {
             openButton.onClick.AddListener(OpenTab);
@@ -22,7 +19,7 @@ namespace UI.TabControls.NewTab
 
         private void OpenTab()
         {
-            Tab=Instantiate(tabPrefab, container);
+            Instantiate(tabPrefab, container);
         }
     }
 }

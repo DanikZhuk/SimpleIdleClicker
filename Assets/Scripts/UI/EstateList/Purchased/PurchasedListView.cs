@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Configs;
 using Gameplay.Estates.Generic;
 using UI.EstateTab;
 using UnityEngine;
@@ -59,7 +57,8 @@ namespace UI.EstateList.Purchased
                 }
 
                 var estate = _estateManager.Estates[index];
-                view.Initialize(library.GetSprite(Category, estate.Config.Type.ToString()), estate);
+                view.Initialize(library.GetSprite(Category, estate.Type.ToString()),
+                    estate, _estateManager.GetConfig(estate.Type));
             }
 
             for (var i = _lineViews.Count - 1; i >= index; i--)
@@ -74,7 +73,10 @@ namespace UI.EstateList.Purchased
         private void ShowPopUp(Estate estate)
         {
             Instantiate(reviseView, popUpContainer)
-                .Initialize(library.GetSprite(Category, estate.Config.Type.ToString()), estate);
+                .Initialize(
+                    library.GetSprite(Category, estate.Type.ToString()),
+                    estate,
+                    _estateManager.GetConfig(estate.Type).Income);
         }
     }
 }

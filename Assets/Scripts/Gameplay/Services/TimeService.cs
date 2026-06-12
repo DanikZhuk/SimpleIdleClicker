@@ -3,7 +3,6 @@ using System.Threading;
 using Configs;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Zenject;
 
 namespace Gameplay.Services
 {

@@ -18,12 +18,12 @@ namespace UI.EstateTab
         
         private Estate _estate;
 
-        public void Initialize(Sprite icon, Estate estate)
+        public void Initialize(Sprite icon, Estate estate, float income)
         {
-            nameText.text = estate.name;
+            nameText.text = estate.Name;
             image.sprite = icon;
-            incomeText.text = $"{estate.Config.Income}$";
-            priceText.text = $"{estate.sellPrice}$";
+            incomeText.text = $"{income}$";
+            priceText.text = $"{estate.SellPrice}$";
             _estate = estate;
         }
         private void Start()

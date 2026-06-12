@@ -61,11 +61,12 @@ namespace UI.EstateTab
         private void CheckButton()
         {
             if (!_config) return;
-            var num = _estateManager.Estates.Count(estate => estate.Config.Type == _config.Type);
+            var num = _estateManager.Estates.Count(estate => estate.Type == _config.Type);
             countText.text =
                 $"{num}/{_config.MaxCount}";
             if (_moneyService == null) return;
-            buyButton.interactable = (_moneyService.CanSpend(_config.Income) && num < _config.MaxCount);
+            buyButton.interactable = 
+                _moneyService.CanSpend(_config.Income) && num < _config.MaxCount;
         }
     }
 }
