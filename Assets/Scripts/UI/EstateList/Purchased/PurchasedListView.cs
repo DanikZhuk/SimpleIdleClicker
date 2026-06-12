@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Configs;
 using Gameplay.Estates.Generic;
+using UI.EstateTab;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 using Zenject;
@@ -14,22 +15,16 @@ namespace UI.EstateList.Purchased
         [SerializeField] private PurchasedLineView estateLinePrefab;
         [SerializeField] private Transform lineContainer;
         [SerializeField] private SpriteLibrary library;
-        
+
         [Header("PopUp Settings")]
-        [SerializeField] private EstateViewsConfig viewsConfig;
+        [SerializeField] private ReviseView reviseView;
         [SerializeField] private Transform popUpContainer;
-        
-        private IEstateManager _estateManager;
-        
+
+        [Inject] private EstateManager _estateManager;
+
         private const string Category = "Estate";
 
         private readonly List<PurchasedLineView> _lineViews = new();
-
-        [Inject]
-        private void Construct(IEstateManager estateManager)
-        {
-            _estateManager = estateManager;
-        }
 
         private void Start()
         {
@@ -75,14 +70,11 @@ namespace UI.EstateList.Purchased
                 Destroy(view.gameObject);
             }
         }
-        
+
         private void ShowPopUp(Estate estate)
         {
-            foreach (var view in viewsConfig.EstateViews.Where(view => view.Type == estate.Config.Type).ToList())
-            {
-                Instantiate(view.ViewPrefab, popUpContainer).Initialize(library.GetSprite(Category, view.Type.ToString()), estate);
-                break;
-            }
+            Instantiate(reviseView, popUpContainer)
+                .Initialize(library.GetSprite(Category, estate.Config.Type.ToString()), estate);
         }
     }
 }

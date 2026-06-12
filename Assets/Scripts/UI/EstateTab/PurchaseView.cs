@@ -1,7 +1,7 @@
 using System.Linq;
 using Configs;
 using Gameplay.Estates.Generic;
-using Gameplay.Services.MoneyService;
+using Gameplay.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,17 +19,10 @@ namespace UI.EstateTab
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private Button buyButton;
 
-        private IMoneyService _moneyService;
-        private IEstateManager _estateManager;
+        [Inject]private MoneyService _moneyService;
+        [Inject]private EstateManager _estateManager;
 
         private EstateConfig _config;
-
-        [Inject]
-        private void Construct(IMoneyService moneyService, IEstateManager estateManager)
-        {
-            _moneyService = moneyService;
-            _estateManager = estateManager;
-        }
 
         public void Initialize(Sprite icon, EstateConfig config)
         {

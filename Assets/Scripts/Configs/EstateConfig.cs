@@ -9,8 +9,9 @@ namespace Configs
     {
         public EstateType Type;
         public string EstateName;
-        public float Price;
-        public float Income;
+        public long Price;
+        public long Income;
         public int MaxCount;
+        public float SellPercentage = 0.3f;
     }
 }

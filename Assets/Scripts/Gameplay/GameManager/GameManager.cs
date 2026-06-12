@@ -1,4 +1,4 @@
-using Gameplay.Services.TimeService;
+using Gameplay.Services;
 using UnityEngine;
 using Zenject;
 
@@ -6,13 +6,7 @@ namespace Gameplay.GameManager
 {
     public class GameManager: MonoBehaviour
     {
-        private ITimeService _timeService;
-
-        [Inject]
-        private void Construct(ITimeService timeService)
-        {
-            _timeService = timeService;
-        }
+        [Inject] private TimeService _timeService;
 
         private void Awake()
         {

@@ -1,9 +1,14 @@
+using System.Collections.Generic;
+using Gameplay.Estates.Generic;
+
 namespace Core.SaveSystem
 {
     public interface IDataService
     {
-        bool SaveData<T>(string RelativePath, T Data);
-    
-        T LoadData<T>(string RelativePath);
+        public List<Estate> Estates { get; }
+        public void AddEstate(Estate estate);
+        public void RemoveEstate(Estate estate);
+        
+        public float Money {get; set;}
     }
 }

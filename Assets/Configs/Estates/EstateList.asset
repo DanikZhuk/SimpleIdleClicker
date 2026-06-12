@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8986c8e8406e4a1495d0c26d233b7915, type: 3}
   m_Name: EstateList
   m_EditorClassIdentifier: Assembly-CSharp::Configs.EstateList
-  estates:
+  Estates:
   - {fileID: 11400000, guid: 35e8c72b30aa8344988014634ccf0fee, type: 2}

@@ -1,6 +1,7 @@
 using System.Linq;
 using Configs;
 using Gameplay.Estates.Generic;
+using UI.EstateTab;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 
@@ -8,16 +9,18 @@ namespace UI.EstateList.Store
 {
     public class EstateListView : MonoBehaviour
     {
-        [Header("Estate List Config")]
-        [SerializeField] private Configs.EstateList config;
-        
-        [Header("Instance Settings")]
-        [SerializeField] private EstateLineView estateLinePrefab;
+        [Header("Estate List Config")] [SerializeField]
+        private Configs.EstateList config;
+
+        [Header("Instance Settings")] [SerializeField]
+        private EstateLineView estateLinePrefab;
+
         [SerializeField] private Transform lineContainer;
         [SerializeField] private SpriteLibrary library;
-        
-        [Header("PopUp Settings")]
-        [SerializeField] private EstateViewsConfig viewsConfig;
+
+        [Header("PopUp Settings")] [SerializeField]
+        private PurchaseView purchaseView;
+
         [SerializeField] private Transform popUpContainer;
 
         private const string Category = "Estate";
@@ -29,7 +32,7 @@ namespace UI.EstateList.Store
 
         private void Initialize()
         {
-            foreach (var estate in config.estates)
+            foreach (var estate in config.Estates)
             {
                 var line = Instantiate(estateLinePrefab, lineContainer);
                 line.Initialize(library.GetSprite(Category, estate.Type.ToString()), estate);
@@ -39,13 +42,9 @@ namespace UI.EstateList.Store
 
         private void ShowPopUp(EstateType type)
         {
-            foreach (var view in viewsConfig.EstateViews.Where(view => view.Type == type))
-            {
-                Instantiate(view.PurchasePrefab, popUpContainer)
-                    .Initialize(library.GetSprite(Category, type.ToString()),
-                        config.estates.Find(estate=>estate.Type==type));
-                break;
-            }
+            Instantiate(purchaseView, popUpContainer)
+                .Initialize(library.GetSprite(Category, type.ToString()),
+                    config.Estates.Find(estate => estate.Type == type));
         }
     }
 }

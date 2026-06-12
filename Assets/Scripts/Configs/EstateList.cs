@@ -7,6 +7,6 @@ namespace Configs
     [CreateAssetMenu(fileName = "EstateList", menuName = "Configs/EstateList")]
     public class EstateList:ScriptableObject
     {
-        public List<EstateConfig> estates;
+        public List<EstateConfig> Estates;
     }
 }

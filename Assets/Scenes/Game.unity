@@ -773,6 +773,9 @@ GameObject:
   m_Component:
   - component: {fileID: 713788460}
   - component: {fileID: 713788459}
+  - component: {fileID: 713788463}
+  - component: {fileID: 713788462}
+  - component: {fileID: 713788461}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -807,6 +810,44 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &713788461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713788458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8238bdcf4d524d8cb8c9a848a05a7431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Estates.Generic.EstateManager
+--- !u!114 &713788462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713788458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f0b9eb3bf5943d6a4d3bee9dc44823d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.MoneyService
+  click: {fileID: 11400000, guid: 35c9f1874abe0d442add779e521c6297, type: 2}
+--- !u!114 &713788463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713788458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b5150992a7c432f981e8b236180747e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.TimeService
+  config: {fileID: 11400000, guid: da4c2ac90e5d3de498777a31588409e8, type: 2}
 --- !u!1 &803745199
 GameObject:
   m_ObjectHideFlags: 0
@@ -1740,7 +1781,7 @@ MonoBehaviour:
   estateLinePrefab: {fileID: 6318964972959091876, guid: 429ddc6a04dbcf64e8e1422f2cf29f22, type: 3}
   lineContainer: {fileID: 1322503680}
   library: {fileID: 1148385895}
-  viewsConfig: {fileID: 11400000, guid: 07ef860f1b3d22047bba661c6b243616, type: 2}
+  reviseView: {fileID: 4920001572597515464, guid: 7ded2dc23b7a0dd4e8d74f115436a70f, type: 3}
   popUpContainer: {fileID: 198493398}
 --- !u!114 &1148385892
 MonoBehaviour:
@@ -1915,6 +1956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec1f142e3b540cc92c2c32f98de61f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Installers.GameplaySceneInstaller
+  gameManager: {fileID: 713788460}
 --- !u!114 &1243805343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1927,8 +1969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Zenject::Zenject.SceneContext
-  _scriptableObjectInstallers:
-  - {fileID: 11400000, guid: 6f52894e949a4c448bab3cc10d5f4c88, type: 2}
+  _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 1243805342}
   _installerPrefabs: []
@@ -2823,10 +2864,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1929359899}
+  - component: {fileID: 1929359904}
   - component: {fileID: 1929359903}
   - component: {fileID: 1929359902}
   - component: {fileID: 1929359905}
-  - component: {fileID: 1929359904}
   m_Layer: 5
   m_Name: ShopList
   m_TagString: Untagged
@@ -2908,7 +2949,7 @@ MonoBehaviour:
   estateLinePrefab: {fileID: -5916038710499051395, guid: 50f964cd58892e54b90a4465b2ebb69c, type: 3}
   lineContainer: {fileID: 1212922544}
   library: {fileID: 1929359905}
-  viewsConfig: {fileID: 11400000, guid: 07ef860f1b3d22047bba661c6b243616, type: 2}
+  purchaseView: {fileID: 6703067795351227166, guid: e063c29a29a0c6345a3a43b1b8c6bb26, type: 3}
   popUpContainer: {fileID: 198493398}
 --- !u!114 &1929359905
 MonoBehaviour:

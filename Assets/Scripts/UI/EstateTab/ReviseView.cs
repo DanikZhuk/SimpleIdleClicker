@@ -14,15 +14,9 @@ namespace UI.EstateTab
         [SerializeField] private TMP_Text priceText;
         [SerializeField] private Button sellButton;
         
-        private IEstateManager _estateManager;
+        [Inject] private EstateManager _estateManager;
         
         private Estate _estate;
-        
-        [Inject]
-        private void Construct(IEstateManager estateManager)
-        {
-            _estateManager = estateManager;
-        }
 
         public void Initialize(Sprite icon, Estate estate)
         {
@@ -39,7 +33,7 @@ namespace UI.EstateTab
 
         private void SellButton_OnClick()
         {
-            _estateManager.SellEstate(_estate.id);
+            _estateManager.SellEstate(_estate);
             Destroy(gameObject);
         }
     }

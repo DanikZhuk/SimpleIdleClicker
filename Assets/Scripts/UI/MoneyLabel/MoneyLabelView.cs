@@ -1,4 +1,4 @@
-using Gameplay.Services.MoneyService;
+using Gameplay.Services;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -9,13 +9,7 @@ namespace UI.MoneyLabel
     {
         [SerializeField] private TMP_Text moneyText;
 
-        private IMoneyService _moneyService;
-
-        [Inject]
-        private void Construct(IMoneyService moneyService)
-        {
-            _moneyService = moneyService;
-        }
+        [Inject] private MoneyService _moneyService;
         
         private void Start()
         {

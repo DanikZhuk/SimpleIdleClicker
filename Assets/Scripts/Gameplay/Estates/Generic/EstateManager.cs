@@ -1,79 +1,53 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Configs;
 using Core.SaveSystem;
-using Gameplay.Services.MoneyService;
-using JetBrains.Annotations;
+using Gameplay.Services;
+using UnityEngine;
 using Zenject;
 
 namespace Gameplay.Estates.Generic
 {
-    public class EstateManager : IEstateManager
+    public class EstateManager: MonoBehaviour
     {
+        [Inject] private MoneyService _moneyService;
+        [Inject] private OfflinePaymentService _offlinePaymentService;
+        [Inject] private IDataService _dataService;
         public event Action OnEstatesChanged;
-
-        private Dictionary<string, Estate> _estates;
-        private IMoneyService _moneyService;
         
-        private IDataService _dataService;
-        private const string Path = "Estates/estates.json";
+        public IReadOnlyList<Estate> Estates => _dataService.Estates;
 
-        private EconomyConfig _config;
-
-        [Inject]
-        private void Construct(IMoneyService moneyService, IDataService dataService, EconomyConfig econConfig)
+        private void Start()
         {
-            _moneyService = moneyService;
-            _dataService = dataService;
-            try
-            {
-                _estates = _dataService.LoadData<Dictionary<string, Estate>>(Path);
-            }
-            catch (FileNotFoundException e)
-            {
-                _estates = new Dictionary<string, Estate>();
-            }
-
-            _config = econConfig;
+            OnEstatesChanged += CalculateIncome;
+            CalculateIncome();
         }
-
-        public List<Estate> Estates => _estates.Values.ToList();
 
         public bool TryAddEstate(string name, EstateConfig config)
         {
-            if (_estates.Count(estate1 => estate1.Value.Config.Type == config.Type)
+            if (_dataService.Estates.Count(estate1 => estate1.Config.Type == config.Type)
                 >= config.MaxCount)
                 return false;
             if (!_moneyService.TrySpend(config.Price)) return false;
 
-            var estate = new Estate(name, config, config.Price * _config.sellPercentage);
-            _estates.Add(estate.id, estate);
-            _moneyService.AddIncome(estate.id, estate.Config.Income);
+            var estate = new Estate(name, config, config.Price * config.SellPercentage);
+            _dataService.AddEstate(estate);
             OnEstatesChanged?.Invoke();
             return true;
         }
 
-        public void SellEstate(string id)
+        public void SellEstate(Estate estate)
         {
-            var estate = _estates.GetValueOrDefault(id);
             if (estate == null) return;
-            _moneyService.RemoveIncome(id);
             _moneyService.Earn(estate.sellPrice);
-            _estates.Remove(id);
+            _dataService.RemoveEstate(estate);
             OnEstatesChanged?.Invoke();
         }
 
-        [CanBeNull]
-        public Estate GetEstate(string id)
+        private void CalculateIncome()
         {
-            return _estates.GetValueOrDefault(id);
-        }
-
-        public void Dispose()
-        {
-            _dataService.SaveData(Path, _estates);
+            _offlinePaymentService.EstateIncome=Estates.Sum(estate => estate.Config.Income);
         }
     }
 }
