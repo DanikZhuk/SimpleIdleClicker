@@ -14,7 +14,7 @@ namespace Gameplay.Services
 
         public event Action OnMoneyChanged;
         
-        public float Money
+        public long Money
         {
             get=>_dataService.Money;
             set=>_dataService.Money = value;
@@ -26,13 +26,13 @@ namespace Gameplay.Services
             OnMoneyChanged?.Invoke();
         }
 
-        public void Earn(float amount)
+        public void Earn(long amount)
         {
             Money += amount;
             OnMoneyChanged?.Invoke();
         }
 
-        public bool TrySpend(float amount)
+        public bool TrySpend(long amount)
         {
             if (Money < amount) return false;
             Money -= amount;
@@ -40,7 +40,7 @@ namespace Gameplay.Services
             return true;
         }
 
-        public bool CanSpend(float amount)
+        public bool CanSpend(long amount)
         {
             return Money >= amount;
         }

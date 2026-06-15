@@ -5,11 +5,11 @@ namespace Gameplay.Estates.Generic
         public string Id;
         public string Name;
         public EstateType Type;
-        public float SellPrice;
+        public long SellPrice;
         
         private static long _nextId = 0;
 
-        public Estate(string name, EstateType type, float sellPrice)
+        public Estate(string name, EstateType type, long sellPrice)
         {
             Id = (_nextId++).ToString();
             Name = name;

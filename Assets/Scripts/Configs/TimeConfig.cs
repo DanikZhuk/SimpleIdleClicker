@@ -6,5 +6,6 @@ namespace Configs
     public class TimeConfig: ScriptableObject
     {
         public float IncomeSeconds;
+        public float InvestitionUpdateSeconds;
     }
 }

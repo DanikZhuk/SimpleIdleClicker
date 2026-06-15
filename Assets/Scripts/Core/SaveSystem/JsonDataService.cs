@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Core.SaveSystem.Data;
 using Gameplay.Estates.Generic;
+using Gameplay.Investitions;
 using Newtonsoft.Json;
 using UnityEngine;
 using Zenject;
@@ -13,11 +14,10 @@ namespace Core.SaveSystem
     {
         private static readonly string FilePath = Path.Combine(Application.persistentDataPath, "data.json");
         private GameData _data = new();
-        public List<Estate> Estates
-        {
-            get => _data.Estates;
-        }
-        
+        public List<Estate> Estates => _data.Estates;
+
+        public List<Investition> Investitions => _data.Investitions;
+
         public void AddEstate(Estate estate)
         {
             Estates.Add(estate);
@@ -30,7 +30,7 @@ namespace Core.SaveSystem
             SaveData();
         }
 
-        public float Money
+        public long Money
         {
             get => _data.Money;
             set => _data.Money = value;

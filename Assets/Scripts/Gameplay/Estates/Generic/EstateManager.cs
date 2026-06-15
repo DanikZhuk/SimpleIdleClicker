@@ -30,7 +30,7 @@ namespace Gameplay.Estates.Generic
             if (!_moneyService.TrySpend(config.Price)) return false;
 
             var estate = 
-                new Estate(name, config.Type, config.Price * config.SellPercentage);
+                new Estate(name, config.Type, (long)(config.Price * config.SellPercentage));
             _dataService.AddEstate(estate);
             OnEstatesChanged?.Invoke();
             return true;

@@ -10,15 +10,18 @@ namespace Gameplay.Services
     {
         [SerializeField] private TimeConfig config;
         
-        private float _time;
+        private int _incomeTime;
+        private int _investitionTime;
         public event Action OnTick;
+
+        public event Action OnInvestitionUpdate;
         
         private CancellationTokenSource _cancellationTokenSource;
-        private int _delay;
         
         private void Awake()
         {
-            _delay = (int)(config.IncomeSeconds*1000);
+            _incomeTime = (int)(config.IncomeSeconds*1000);
+            _investitionTime = (int)(config.InvestitionUpdateSeconds*1000);
         }
 
         public void StartTicking()
@@ -34,10 +37,24 @@ namespace Gameplay.Services
 
         private async UniTask Ticking()
         {
+            var incTime = _incomeTime;
+            var invTime = _investitionTime;
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                await UniTask.Delay(_delay);
-                OnTick?.Invoke();
+                var delay = Mathf.Min(incTime, invTime);
+                await UniTask.Delay(delay);
+                incTime -= delay;
+                invTime -= delay;
+                if (incTime <= 0)
+                {
+                    incTime = _incomeTime;
+                    OnTick?.Invoke();
+                }
+                if (invTime <= 0)
+                {
+                    invTime = _investitionTime;
+                    OnInvestitionUpdate?.Invoke();
+                }
             }
         }
     }
