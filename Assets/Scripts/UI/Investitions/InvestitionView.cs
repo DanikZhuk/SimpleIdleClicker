@@ -10,7 +10,8 @@ using Utils.String;
 
 public class InvestitionView : MonoBehaviour
 {
-    [Header("General")] [SerializeField] private TMP_Text investitionName;
+    [Header("General")]
+    [SerializeField] private TMP_Text investitionName;
     [SerializeField] private AbsoluteLineChartManager chartManager;
     [SerializeField] private TMP_Text currentCost;
     [SerializeField] private TMP_Text lastChange;

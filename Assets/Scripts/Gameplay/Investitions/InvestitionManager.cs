@@ -11,56 +11,63 @@ using Zenject;
 
 namespace Gameplay.Investitions
 {
-    public class InvestitionManager: MonoBehaviour
+    public class InvestitionManager : MonoBehaviour
     {
         [SerializeField] private InvestitionListConfig list;
 
         [Inject] private TimeService _timeService;
-        [Inject]  private MoneyService _moneyService;
+        [Inject] private MoneyService _moneyService;
         [Inject] private IDataService _dataService;
         [Inject] private SystemMessageManager _smm;
 
         private readonly Dictionary<InvestitionType, InvestitionConfig> _configs = new();
-        private readonly InvestitionCalculator _investitionCalculator= new();
+        private readonly InvestitionCalculator _investitionCalculator = new();
 
-        private List<Investition> Investitions => _dataService.Investitions;
+        private List<Investition> _investitions;
         public IReadOnlyList<Investition> InvestitionsList => _dataService.Investitions;
 
-        private void Awake()
+        private void Start()
         {
             Initialize();
         }
 
         private void Initialize()
         {
+            _investitions = _dataService.Investitions;
+
             foreach (var config in list.InvestitionConfigs)
             {
                 _configs.Add(config.Type, config);
             }
 
             _timeService.OnUpdate += OnUpdate;
-            
-            if (Investitions.Count == _configs.Count) return;
-            
+
+            if (_investitions.Count == _configs.Count) return;
+
             foreach (var investitionConfig in list.InvestitionConfigs)
             {
-                var investition = Investitions.Find(investition1 => investition1.Type == investitionConfig.Type) ?? new Investition(investitionConfig.Type, investitionConfig.InitialCost);
-                Investitions.Add(investition);
+                Investition investition =
+                    _investitions.Find(investition1 => investition1.Type == investitionConfig.Type);
+                if (investition == null)
+                {
+                    investition = new Investition(investitionConfig.Type, investitionConfig.InitialCost);
+                    _investitions.Add(investition);
+                }
                 _investitionCalculator.InitializeValues(investition, investitionConfig, list.HistorySize);
             }
         }
 
         private void OnUpdate()
         {
-            foreach (var investition in Investitions)
+            foreach (var investition in _investitions)
             {
                 _investitionCalculator.UpdateInvestition(investition, _configs[investition.Type], list.HistorySize);
             }
         }
-        
+
         public void BuyInvestitions(InvestitionType type, int amount)
         {
-            var investition = Investitions.Find(investition => investition.Type == type);
+            var investition = _investitions.Find(investition => investition.Type == type);
             var config = _configs[type];
             if (amount == 0)
             {
@@ -73,31 +80,34 @@ namespace Gameplay.Investitions
                 _smm.Log("Error! Investition is not fount");
                 return;
             }
+
             if (investition.ResumptionTime > 0)
             {
                 _smm.Log("You can't buy anything now");
                 return;
             }
+
             if (investition.PurchasedAmount + amount > config.MaxAmount)
             {
                 _smm.Log("Amount is more than maximum");
                 return;
             }
+
             var cost = (int)(amount * investition.CurrentCost);
             if (!_moneyService.TrySpend(cost))
             {
                 _smm.Log("You don't have enough money");
                 return;
             }
-            
+
             investition.Add(amount, config.ResumptionTime);
         }
-        
+
         public void SellInvestitions(InvestitionType type, int amount)
         {
-            var investition = Investitions.Find(investition => investition.Type == type);
+            var investition = _investitions.Find(investition => investition.Type == type);
             var config = _configs[type];
-            if(amount==0)
+            if (amount == 0)
                 return;
             if (investition == null)
                 return;
@@ -105,7 +115,7 @@ namespace Gameplay.Investitions
                 return;
             if (investition.PurchasedAmount - amount < 0)
                 return;
-            
+
             investition.Add(-amount, config.ResumptionTime);
             _moneyService.Earn((int)(amount * investition.CurrentCost));
         }

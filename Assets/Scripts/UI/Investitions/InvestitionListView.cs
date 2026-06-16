@@ -83,7 +83,6 @@ namespace UI.Investitions
 
         private void OnTick()
         {
-            Debug.Log(_timeService.CurrentUpdateProgress);
             AnimateSlider(_timeService.CurrentUpdateProgress).Forget();
         }
 
