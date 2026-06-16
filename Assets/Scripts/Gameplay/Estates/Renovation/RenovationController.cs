@@ -5,13 +5,14 @@ using Configs;
 using Core.SaveSystem;
 using Gameplay.Estates.Generic;
 using Gameplay.Services;
+using UI.EstatePage.EstateViews.Renovation;
 using UI.EstatePage.EstateViews.Renovation.Model;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-namespace UI.EstatePage.EstateViews.Renovation
+namespace Gameplay.Estates.Renovation
 {
     public class RenovationController : MonoBehaviour
     {
@@ -22,64 +23,62 @@ namespace UI.EstatePage.EstateViews.Renovation
         [Inject] private TimeService _timeService;
         [Inject] private SystemMessageManager _smm;
 
-        private const string KeyBase = "House";
-        private const string PurchasedSubkey = "P";
-        private const string OfferSubkey = "O";
-        
-        private string _key;
+        public IReadOnlyList<House> PurchasedHouses => _estate.PurchasedHouses;
+        public IReadOnlyList<House> HouseOffers => _estate.HouseOffers;
 
-        private List<House> _purchasedHouses;
-        private List<House> _houseOffers;
+        private RenovationEstate _estate;
 
-        public IReadOnlyList<House> PurchasedHouses => _purchasedHouses;
-        public IReadOnlyList<House> HouseOffers => _houseOffers;
-        
         public int MaxPurchasedAmount => config.MaxPurchasedAmount;
 
         public event Action OnHousesUpdate;
 
         public void Initialize(Estate estate)
         {
-            _key = KeyBase + estate.Id;
+            _estate = (RenovationEstate)estate;
             Initialize();
         }
-        
+
         public bool TryBuyHouse(House house)
         {
-            if (!_houseOffers.Contains(house))
+            if (!_estate.HouseOffers.Contains(house))
             {
                 _smm.Log("Offer is not found");
                 return false;
             }
-            if (_purchasedHouses.Count >= config.MaxPurchasedAmount)
+
+            if (_estate.PurchasedHouses.Count >= config.MaxPurchasedAmount)
             {
                 _smm.Log("You can't buy any more houses");
                 return false;
             }
+
             if (!_moneyService.TrySpend(house.Cost))
             {
                 _smm.Log("You don't have enough money");
                 return false;
             }
-            _purchasedHouses.Add(house);
-            _houseOffers.Remove(house);
-            _houseOffers.Add(GenerateHouse());
+
+            _estate.PurchasedHouses.Add(house);
+            _estate.HouseOffers.Remove(house);
+            _estate.HouseOffers.Add(GenerateHouse());
             OnHousesUpdate?.Invoke();
             return true;
         }
 
         public bool TryRenovateHouse(House house)
         {
-            if (!_purchasedHouses.Contains(house))
+            if (!_estate.PurchasedHouses.Contains(house))
             {
                 _smm.Log("Error! House is not found");
                 return false;
             }
+
             if (!_moneyService.TrySpend(house.RenovationCost))
             {
                 _smm.Log("You don't have enough money");
                 return false;
             }
+
             house.HouseType = HouseType.Renovating;
             OnHousesUpdate?.Invoke();
             return true;
@@ -87,25 +86,26 @@ namespace UI.EstatePage.EstateViews.Renovation
 
         public bool TrySellHouse(House house)
         {
-            if (!_purchasedHouses.Contains(house))
+            if (!_estate.PurchasedHouses.Contains(house))
             {
                 _smm.Log("Error! House is not found");
                 return false;
             }
+
             _moneyService.Earn(house.Cost);
-            _purchasedHouses.Remove(house);
+            _estate.PurchasedHouses.Remove(house);
             OnHousesUpdate?.Invoke();
             return true;
         }
 
         private void Initialize()
         {
-            _purchasedHouses = _dataService.GetHousesList(_key+PurchasedSubkey);
-            _houseOffers = _dataService.GetHousesList(_key+OfferSubkey);
+            _estate.HouseOffers ??= new List<House>();
+            _estate.PurchasedHouses ??= new List<House>();
 
-            while (_houseOffers.Count < config.OffersAmount)
+            while (_estate.HouseOffers.Count < config.OffersAmount)
             {
-                _houseOffers.Add(GenerateHouse());
+                _estate.HouseOffers.Add(GenerateHouse());
             }
 
             CheckTime();
@@ -115,14 +115,14 @@ namespace UI.EstatePage.EstateViews.Renovation
         private void OnDestroy()
         {
             _timeService.OnTickElapsed -= RenovationStep;
-            _dataService.SetTimeData(_key, _timeService.Now());
+            _estate.TimeData = _timeService.Now();
         }
 
         private void CheckTime()
         {
-            var diff = (float)_timeService.ElapsedTimeSince(_dataService.GetTimeData(_key)).TotalSeconds;
+            var diff = (float)_timeService.ElapsedTimeSince(_estate.TimeData).TotalSeconds;
             foreach (var house in
-                     _purchasedHouses.Where(house => house.HouseType == HouseType.Renovating))
+                     _estate.PurchasedHouses.Where(house => house.HouseType == HouseType.Renovating))
             {
                 house.RenovatingTime -= diff;
                 if (house.RenovatingTime > 0) continue;
@@ -135,7 +135,7 @@ namespace UI.EstatePage.EstateViews.Renovation
         private void RenovationStep()
         {
             foreach (var house in
-                     _purchasedHouses.Where(house => house.HouseType == HouseType.Renovating)
+                     _estate.PurchasedHouses.Where(house => house.HouseType == HouseType.Renovating)
                          .Where(house => --house.RenovatingTime <= 0))
             {
                 house.HouseType = HouseType.Renovated;

@@ -10,8 +10,6 @@ namespace Core.SaveSystem
     {
         #region GeneralData
         public long Money { get; set; }
-        public DateTime? GetTimeData(string key);
-        public void SetTimeData(string key, DateTime time);
         #endregion
         #region Estates
         public List<Estate> Estates { get; }
@@ -20,10 +18,6 @@ namespace Core.SaveSystem
         #endregion
         #region Investitions
         public List<Investition> Investitions { get; }
-        #endregion
-        #region Houses
-
-        public List<House> GetHousesList(string key);
         #endregion
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Gameplay.Estates.Generic;
+using Gameplay.Estates.Renovation;
 using TMPro;
 using UI.EstatePage.EstateViews.Renovation.Model;
 using UI.EstateViews.Renovation;

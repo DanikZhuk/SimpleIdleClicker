@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Configs;
 using Core.SaveSystem;
+using Gameplay.Estates.Renovation;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
@@ -34,10 +35,10 @@ namespace Gameplay.Estates.Generic
                 _smm.Log("You don't have enough money");
                 return false;
             }
-
-            var estate = 
-                new Estate(name, config.Type, (long)(config.Price * config.SellPercentage));
-            _dataService.AddEstate(estate);
+            
+            _dataService.AddEstate(
+                GenerateEstate(name, config)
+                );
             OnEstatesChanged?.Invoke();
             return true;
         }
@@ -78,6 +79,18 @@ namespace Gameplay.Estates.Generic
             {
                 _configs.Add(estate.Type, estate);
             }
+        }
+
+        private Estate GenerateEstate(string name, EstateConfig config)
+        {
+            Estate estate = config.Type switch
+            {
+                EstateType.Renovation => new RenovationEstate(name, config.Type,
+                    (long)(config.Price * config.SellPercentage)),
+                _ => new Estate(name, config.Type, 
+                    (long)(config.Price * config.SellPercentage))
+            };
+            return estate;
         }
     }
 }

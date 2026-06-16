@@ -16,24 +16,16 @@ namespace Core.SaveSystem
         private static readonly string FilePath = Path.Combine(Application.persistentDataPath, "data.json");
         private GameData _data = new();
         
+        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+            Formatting = Formatting.Indented,
+        };
+        
         public long Money
         {
             get => _data.Money;
             set => _data.Money = value;
-        }
-
-        public DateTime? GetTimeData(string key)
-        {
-            if (_data.TimeData.TryGetValue(key, out var data))
-            {
-                return data;
-            }
-            return null;
-        }
-        
-        public void SetTimeData(string key, DateTime time)
-        {
-            _data.TimeData[key] = time;
         }
 
         public List<Estate> Estates => _data.Estates;
@@ -49,16 +41,6 @@ namespace Core.SaveSystem
         {
             Estates.Remove(estate);
             SaveData();
-        }
-        
-        public List<House> GetHousesList(string key)
-        {
-            List<House> houses;
-            if(_data.Houses.TryGetValue(key, out houses))
-                return houses;
-            houses = new List<House>();
-            _data.Houses[key] = houses;
-            return houses;
         }
 
         public void Initialize()
@@ -93,7 +75,7 @@ namespace Core.SaveSystem
 
                 using FileStream stream = File.Create(FilePath);
                 stream.Close();
-                File.WriteAllText(FilePath, JsonConvert.SerializeObject(_data));
+                File.WriteAllText(FilePath, JsonConvert.SerializeObject(_data, Settings));
             }
             catch (Exception e)
             {
@@ -118,7 +100,7 @@ namespace Core.SaveSystem
 
             try
             {
-                _data = JsonConvert.DeserializeObject<GameData>(File.ReadAllText(FilePath));
+                _data = JsonConvert.DeserializeObject<GameData>(File.ReadAllText(FilePath), Settings);
             }
             catch (Exception e)
             {

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HousesConfig
   m_EditorClassIdentifier: Assembly-CSharp::Configs.HousesConfig
   OffersAmount: 5
+  MaxPurchasedAmount: 3
   MinCost: 100
   MaxCost: 400
   MinRenovationCost: 10

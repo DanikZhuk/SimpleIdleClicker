@@ -16,5 +16,8 @@ namespace Gameplay.Estates.Generic
             Type = type;
             SellPrice = sellPrice;
         }
+
+        public Estate()
+        { }
     }
 }
