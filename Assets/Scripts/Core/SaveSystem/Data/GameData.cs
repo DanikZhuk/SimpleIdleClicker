@@ -9,11 +9,13 @@ namespace Core.SaveSystem.Data
     public class GameData
     {
         public long Money;
-        public Dictionary<string, DateTime> TimeData = new();
         
         public readonly List<Estate> Estates = new();
         public readonly List<Investition> Investitions = new();
-
+        
+        //TODO: Move to the class inheriting Estate
         public readonly Dictionary<string, List<House>> Houses = new();
+        public Dictionary<string, DateTime> TimeData = new();
+        //TODO: Move to the class inheriting Estate
     }
 }
