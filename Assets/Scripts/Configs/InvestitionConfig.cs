@@ -9,9 +9,9 @@ namespace Configs
     {
         public InvestitionType Type;
         public string Name;
-        public float MinCost;
-        public float MaxCost;
-        public float InitialCost;
+        public int MinCost;
+        public int MaxCost;
+        public int InitialCost;
         public float ResumptionTime;
         public int MaxAmount;
         public float MeanReversionStrength;

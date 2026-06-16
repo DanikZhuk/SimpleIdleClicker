@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.EstateTab
+namespace UI.EstateViews.Default
 {
     public class PurchaseView : MonoBehaviour
     {

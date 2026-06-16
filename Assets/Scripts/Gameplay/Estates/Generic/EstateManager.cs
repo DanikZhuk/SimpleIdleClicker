@@ -4,6 +4,7 @@ using System.Linq;
 using Configs;
 using Core.SaveSystem;
 using Gameplay.Services;
+using UI.Helpers.SystemMessages;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +17,7 @@ namespace Gameplay.Estates.Generic
         [Inject] private MoneyService _moneyService;
         [Inject] private OfflinePaymentService _offlinePaymentService;
         [Inject] private IDataService _dataService;
+        [Inject] private SystemMessageManager _smm;
         public event Action OnEstatesChanged;
 
         private readonly Dictionary<EstateType, EstateConfig> _configs = new();
@@ -27,7 +29,11 @@ namespace Gameplay.Estates.Generic
             if (_dataService.Estates.Count(estate1 => estate1.Type == config.Type)
                 >= config.MaxCount)
                 return false;
-            if (!_moneyService.TrySpend(config.Price)) return false;
+            if (!_moneyService.TrySpend(config.Price))
+            {
+                _smm.Log("You don't have enough money");
+                return false;
+            }
 
             var estate = 
                 new Estate(name, config.Type, (long)(config.Price * config.SellPercentage));
@@ -38,7 +44,11 @@ namespace Gameplay.Estates.Generic
 
         public void SellEstate(Estate estate)
         {
-            if (estate == null) return;
+            if (estate == null)
+            {
+                _smm.Log("Error! Estate not found");
+                return;
+            }
             _moneyService.Earn(estate.SellPrice);
             _dataService.RemoveEstate(estate);
             OnEstatesChanged?.Invoke();

@@ -7,7 +7,15 @@ namespace Gameplay.Investitions
     {
         private float _maxAllowedChange;
 
-
+        public void InitializeValues(Investition investition, InvestitionConfig config, int historySize)
+        {
+            while (investition.History.Count < historySize)
+            {
+                GetNewValue(investition, config);
+                investition.History.Add(investition.CurrentCost);
+            }
+        }
+        
         public void UpdateInvestition(Investition investition, InvestitionConfig config, int historySize)
         {
             GetNewValue(investition, config);
@@ -31,28 +39,28 @@ namespace Gameplay.Investitions
             if (investition.CurrentCost > config.MaxCost)
             {
                 change = -Mathf.Abs(change);
-                investition.CurrentCost += change;
+                investition.CurrentCost += (int)change;
                 return;
             }
 
             if (investition.CurrentCost < config.MinCost)
             {
                 change = Mathf.Abs(change);
-                investition.CurrentCost += change;
+                investition.CurrentCost += (int)change;
                 return;
             }
 
-            var newValue = investition.CurrentCost + change;
+            var newValue = investition.CurrentCost + (int)change;
 
             if (newValue < config.MinCost)
             {
                 var delta = investition.CurrentCost - config.MinCost;
-                newValue = investition.CurrentCost - Mathf.Lerp(0, delta, (investition.CurrentCost - newValue) / _maxAllowedChange);
+                newValue = (int)(investition.CurrentCost - Mathf.Lerp(0, delta, (investition.CurrentCost - newValue) / _maxAllowedChange));
             }
             else if (newValue > config.MaxCost)
             {
                 var delta = config.MaxCost - investition.CurrentCost;
-                newValue = investition.CurrentCost + Mathf.Lerp(0, delta, (newValue - investition.CurrentCost) / _maxAllowedChange);
+                newValue = (int)(investition.CurrentCost + Mathf.Lerp(0, delta, (newValue - investition.CurrentCost) / _maxAllowedChange));
             }
 
             investition.CurrentCost = newValue;

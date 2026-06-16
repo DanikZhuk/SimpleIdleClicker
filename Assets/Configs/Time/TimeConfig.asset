@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a682a8253e94185a6467aedfaec4981, type: 3}
   m_Name: TimeConfig
   m_EditorClassIdentifier: Assembly-CSharp::Configs.TimeConfig
-  IncomeSeconds: 5
-  InvestitionUpdateSeconds: 10
+  RealSecondsInSecond: 1
+  HourInSeconds: 10
+  UpdateSeconds: 5

@@ -1,6 +1,7 @@
 using Gameplay.Estates.Generic;
 using Gameplay.Investitions;
 using Gameplay.Services;
+using UI.Helpers.SystemMessages;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,7 @@ namespace Core.SceneInstallers
         [SerializeField] private InvestitionManager im;
         [SerializeField] private MoneyService ms;
         [SerializeField] private TimeService ts;
+        [SerializeField] private SystemMessageManager smm;
         public override void InstallBindings()
         {
             Container
@@ -32,6 +34,10 @@ namespace Core.SceneInstallers
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<OfflinePaymentService>()
+                .AsSingle();
+            Container
+                .BindInterfacesAndSelfTo<SystemMessageManager>()
+                .FromInstance(smm)
                 .AsSingle();
         }
     }

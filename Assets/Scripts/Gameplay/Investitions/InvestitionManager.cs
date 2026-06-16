@@ -5,6 +5,7 @@ using Configs;
 using Core.SaveSystem;
 using Gameplay.Estates.Generic;
 using Gameplay.Services;
+using UI.Helpers.SystemMessages;
 using UnityEngine;
 using Zenject;
 
@@ -17,6 +18,7 @@ namespace Gameplay.Investitions
         [Inject] private TimeService _timeService;
         [Inject]  private MoneyService _moneyService;
         [Inject] private IDataService _dataService;
+        [Inject] private SystemMessageManager _smm;
 
         private readonly Dictionary<InvestitionType, InvestitionConfig> _configs = new();
         private readonly InvestitionCalculator _investitionCalculator= new();
@@ -35,20 +37,20 @@ namespace Gameplay.Investitions
             {
                 _configs.Add(config.Type, config);
             }
-            
-            _timeService.OnInvestitionUpdate += OnInvestitionsUpdate;
-            
-            Debug.Log(Investitions.Count);
+
+            _timeService.OnUpdate += OnUpdate;
             
             if (Investitions.Count == _configs.Count) return;
-            foreach (var investition in list.InvestitionConfigs.Where(investition => Investitions.Find(investition1 => investition1.Type == investition.Type) == null))
+            
+            foreach (var investitionConfig in list.InvestitionConfigs)
             {
-                Investitions.Add(new Investition(investition.Type, investition.InitialCost));
+                var investition = Investitions.Find(investition1 => investition1.Type == investitionConfig.Type) ?? new Investition(investitionConfig.Type, investitionConfig.InitialCost);
+                Investitions.Add(investition);
+                _investitionCalculator.InitializeValues(investition, investitionConfig, list.HistorySize);
             }
-            Debug.Log(Investitions.Count);
         }
 
-        private void OnInvestitionsUpdate()
+        private void OnUpdate()
         {
             foreach (var investition in Investitions)
             {
@@ -60,14 +62,33 @@ namespace Gameplay.Investitions
         {
             var investition = Investitions.Find(investition => investition.Type == type);
             var config = _configs[type];
+            if (amount == 0)
+            {
+                _smm.Log("The amount to buy equals 0");
+                return;
+            }
+
             if (investition == null)
+            {
+                _smm.Log("Error! Investition is not fount");
                 return;
+            }
             if (investition.ResumptionTime > 0)
+            {
+                _smm.Log("You can't buy anything now");
                 return;
+            }
             if (investition.PurchasedAmount + amount > config.MaxAmount)
+            {
+                _smm.Log("Amount is more than maximum");
                 return;
+            }
             var cost = (int)(amount * investition.CurrentCost);
-            if (!_moneyService.TrySpend(cost)) return;
+            if (!_moneyService.TrySpend(cost))
+            {
+                _smm.Log("You don't have enough money");
+                return;
+            }
             
             investition.Add(amount, config.ResumptionTime);
         }
@@ -76,6 +97,8 @@ namespace Gameplay.Investitions
         {
             var investition = Investitions.Find(investition => investition.Type == type);
             var config = _configs[type];
+            if(amount==0)
+                return;
             if (investition == null)
                 return;
             if (investition.ResumptionTime > 0)

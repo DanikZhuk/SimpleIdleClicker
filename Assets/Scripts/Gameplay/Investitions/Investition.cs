@@ -10,17 +10,18 @@ namespace Gameplay.Investitions
         public InvestitionType Type;
         public List<float> History = new();
 
-        private float _currentCost;
+        private int _currentCost;
         private float _lastChange;
         private int _purchasedAmount;
         private float _resumptionTime;
 
-        public float CurrentCost
+        public int CurrentCost
         {
             get => _currentCost;
             set
             {
-                _lastChange = value - _currentCost;
+                _lastChange = (value*100) / (float)_currentCost;
+                _lastChange -= 100f;
                 _currentCost = value;
             }
         }
@@ -29,7 +30,7 @@ namespace Gameplay.Investitions
         public float ResumptionTime => _resumptionTime;
         public int PurchasedAmount => _purchasedAmount;
 
-        public Investition(InvestitionType type, float initialCost)
+        public Investition(InvestitionType type, int initialCost)
         {
             Type = type;
             _currentCost = initialCost;

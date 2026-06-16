@@ -2,6 +2,7 @@ namespace Gameplay.Investitions
 {
     public enum InvestitionType
     {
-        DodgeCoin
+        DodgeCoin,
+        BitCoin
     }
 }

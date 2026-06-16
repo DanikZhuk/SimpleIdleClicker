@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Gameplay.Estates.Generic;
-using UI.EstateTab;
+using UI.EstateViews.Default;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 using Zenject;
@@ -9,13 +10,21 @@ namespace UI.EstateList.Purchased
 {
     public class PurchasedListView : MonoBehaviour
     {
+        [Serializable]
+        private class CustomView{
+            public EstateType Type;
+            public ReviseView View;
+        }
+        
+        
         [Header("Instance Settings")]
         [SerializeField] private PurchasedLineView estateLinePrefab;
         [SerializeField] private Transform lineContainer;
         [SerializeField] private SpriteLibrary library;
 
         [Header("PopUp Settings")]
-        [SerializeField] private ReviseView reviseView;
+        [SerializeField] private ReviseView defaultReviseView;
+        [SerializeField] private CustomView[] customViews;
         [SerializeField] private Transform popUpContainer;
 
         [Inject] private EstateManager _estateManager;
@@ -72,7 +81,14 @@ namespace UI.EstateList.Purchased
 
         private void ShowPopUp(Estate estate)
         {
-            Instantiate(reviseView, popUpContainer)
+            var view = defaultReviseView;
+            foreach (var cv in customViews)
+            {
+                if (cv.Type != estate.Type) continue;
+                view = cv.View;
+                break;
+            }
+            Instantiate(view, popUpContainer)
                 .Initialize(
                     library.GetSprite(Category, estate.Type.ToString()),
                     estate,

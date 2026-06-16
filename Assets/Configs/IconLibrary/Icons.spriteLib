@@ -29,6 +29,38 @@ MonoBehaviour:
       m_SpriteOverride: {fileID: 21300000, guid: ef62f390eee21ef46addc4d6cec03885, type: 3}
     m_FromMain: 0
     m_EntryOverrideCount: 2
+  - m_Name: House
+    m_Hash: 638850713
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Broken
+      m_Hash: 621259074
+      m_Sprite: {fileID: 21300000, guid: 757f96f443da8794c80b410a005ffa7d, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300000, guid: 757f96f443da8794c80b410a005ffa7d, type: 3}
+    - m_Name: Renovated
+      m_Hash: 875046544
+      m_Sprite: {fileID: 21300000, guid: d889a922215864d4798bd4ae1e2c3a9e, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300000, guid: d889a922215864d4798bd4ae1e2c3a9e, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 2
+  - m_Name: Crypt
+    m_Hash: 993010335
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: DodgeCoin
+      m_Hash: 58309860
+      m_Sprite: {fileID: 21300000, guid: 62983eec45222cf43ac53e54676be62c, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300000, guid: 62983eec45222cf43ac53e54676be62c, type: 3}
+    - m_Name: BitCoin
+      m_Hash: 961430732
+      m_Sprite: {fileID: 21300000, guid: 02d16eb01c5efac4e9ee18c6f4f1be54, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 21300000, guid: 02d16eb01c5efac4e9ee18c6f4f1be54, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 2
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 639171211115103815
+  m_ModificationHash: 639172135142342075
   m_Version: 1

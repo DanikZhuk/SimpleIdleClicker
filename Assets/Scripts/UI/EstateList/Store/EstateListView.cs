@@ -1,5 +1,5 @@
 using Gameplay.Estates.Generic;
-using UI.EstateTab;
+using UI.EstateViews.Default;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 

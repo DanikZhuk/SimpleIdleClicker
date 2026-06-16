@@ -23,8 +23,11 @@ public class IntInputManager : MonoBehaviour
         _minValue = minValue;
         _maxValue = maxValue;
         _lastValue = _minValue;
+        if (_lastValue > maxValue)
+        {
+            _lastValue = maxValue;
+        }
         inputField.SetTextWithoutNotify(_lastValue.ToString());
-
     }
 
     public void ChangeBounds(int minValue, int maxValue)

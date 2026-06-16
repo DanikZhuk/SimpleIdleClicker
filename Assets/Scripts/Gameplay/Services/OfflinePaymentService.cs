@@ -12,7 +12,7 @@ namespace Gameplay.Services
 
         public void Initialize()
         {
-            _timeService.OnTick += AddIncomes;
+            _timeService.OnHourElapsed += AddIncomes;
         }
 
         private void AddIncomes()

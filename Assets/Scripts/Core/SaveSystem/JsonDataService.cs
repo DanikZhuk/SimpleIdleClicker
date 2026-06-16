@@ -5,6 +5,7 @@ using Core.SaveSystem.Data;
 using Gameplay.Estates.Generic;
 using Gameplay.Investitions;
 using Newtonsoft.Json;
+using UI.EstatePage.EstateViews.Renovation;
 using UnityEngine;
 using Zenject;
 
@@ -14,8 +15,28 @@ namespace Core.SaveSystem
     {
         private static readonly string FilePath = Path.Combine(Application.persistentDataPath, "data.json");
         private GameData _data = new();
-        public List<Estate> Estates => _data.Estates;
+        
+        public long Money
+        {
+            get => _data.Money;
+            set => _data.Money = value;
+        }
 
+        public DateTime? GetTimeData(string key)
+        {
+            if (_data.TimeData.TryGetValue(key, out var data))
+            {
+                return data;
+            }
+            return null;
+        }
+        
+        public void SetTimeData(string key, DateTime time)
+        {
+            _data.TimeData[key] = time;
+        }
+
+        public List<Estate> Estates => _data.Estates;
         public List<Investition> Investitions => _data.Investitions;
 
         public void AddEstate(Estate estate)
@@ -23,19 +44,23 @@ namespace Core.SaveSystem
             Estates.Add(estate);
             SaveData();
         }
-        
+
         public void RemoveEstate(Estate estate)
         {
             Estates.Remove(estate);
             SaveData();
         }
-
-        public long Money
-        {
-            get => _data.Money;
-            set => _data.Money = value;
-        }
         
+        public List<House> GetHousesList(string key)
+        {
+            List<House> houses;
+            if(_data.Houses.TryGetValue(key, out houses))
+                return houses;
+            houses = new List<House>();
+            _data.Houses[key] = houses;
+            return houses;
+        }
+
         public void Initialize()
         {
             LoadData();
@@ -45,7 +70,7 @@ namespace Core.SaveSystem
         {
             SaveData();
         }
-        
+
         private void SaveData()
         {
             try
@@ -58,7 +83,7 @@ namespace Core.SaveSystem
                 else
                 {
                     Debug.Log("Writing file for the first time!");
-                    
+
                     string directory = Path.GetDirectoryName(FilePath);
                     if (!Directory.Exists(directory))
                     {
@@ -84,7 +109,7 @@ namespace Core.SaveSystem
                 Debug.Log($"Cannot load file at {FilePath}. Directory does not exist yet");
                 return;
             }
-            
+
             if (!File.Exists(FilePath))
             {
                 Debug.Log($"Cannot load file at {FilePath}. File does not exist yet");
