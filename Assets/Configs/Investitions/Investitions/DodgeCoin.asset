@@ -16,11 +16,11 @@ MonoBehaviour:
   Name: Dodge Coin
   MinCost: 2
   MaxCost: 100
+  InitialCost: 4
+  ResumptionTime: 10
+  MaxAmount: 1000
   MeanReversionStrength: 0.15
   MaxAllowedChangeCoeff: 0.2
   BaseStep: 5
   NoiseAmplitude: 2
   NoiseFrequency: 0.1
-  InitialCost: 4
-  ResumptionTime: 10
-  MaxAmount: 100

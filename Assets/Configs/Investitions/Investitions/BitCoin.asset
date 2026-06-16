@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d6cf309a23462ba92aa304e7b3f6cc, type: 3}
   m_Name: BitCoin
   m_EditorClassIdentifier: Assembly-CSharp::Configs.InvestitionConfig
-  Type: 0
-  Name: Dodge Coin
-  MinCost: 2
-  MaxCost: 100
-  MeanReversionStrength: 0.15
-  MaxAllowedChangeCoeff: 0.2
-  BaseStep: 5
-  NoiseAmplitude: 2
-  NoiseFrequency: 0.1
-  InitialCost: 4
-  ResumptionTime: 10
+  Type: 1
+  Name: BitCoin
+  MinCost: 50
+  MaxCost: 1000
+  InitialCost: 67
+  ResumptionTime: 30
   MaxAmount: 100
+  MeanReversionStrength: 0.3
+  MaxAllowedChangeCoeff: 0.05
+  BaseStep: 30
+  NoiseAmplitude: 15
+  NoiseFrequency: 0.05
