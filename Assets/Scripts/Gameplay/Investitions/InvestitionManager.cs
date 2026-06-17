@@ -53,6 +53,7 @@ namespace Gameplay.Investitions
                     investition = new Investition(investitionConfig.Type, investitionConfig.InitialCost);
                     _investitions.Add(investition);
                 }
+
                 _investitionCalculator.InitializeValues(investition, investitionConfig, list.HistorySize);
             }
         }
@@ -77,7 +78,7 @@ namespace Gameplay.Investitions
 
             if (investition == null)
             {
-                _smm.Log("Error! Investition is not fount");
+                _smm.Log("Error! Investment is not fount");
                 return;
             }
 
@@ -101,6 +102,7 @@ namespace Gameplay.Investitions
             }
 
             investition.Add(amount, config.ResumptionTime);
+            _smm.Log($"You successfully bought {amount} {config.Name}");
         }
 
         public void SellInvestitions(InvestitionType type, int amount)
@@ -108,16 +110,32 @@ namespace Gameplay.Investitions
             var investition = _investitions.Find(investition => investition.Type == type);
             var config = _configs[type];
             if (amount == 0)
+            {
+                _smm.Log("The amount to sell equals 0");
                 return;
+            }
+
             if (investition == null)
+            {
+                _smm.Log("Error! Investment is not found");
                 return;
+            }
+
             if (investition.ResumptionTime > 0)
+            {
+                _smm.Log("You can't sell anything now. You should wait.");
                 return;
+            }
+
             if (investition.PurchasedAmount - amount < 0)
+            {
+                _smm.Log("You can't sell more than you have");
                 return;
+            }
 
             investition.Add(-amount, config.ResumptionTime);
             _moneyService.Earn((int)(amount * investition.CurrentCost));
+            _smm.Log($"You successfully sold {amount} {config.Name}");
         }
 
         public InvestitionConfig GetConfig(InvestitionType type)

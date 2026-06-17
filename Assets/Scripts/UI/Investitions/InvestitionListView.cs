@@ -54,6 +54,9 @@ namespace UI.Investitions
                 investitionLineView.OnClick += InitializeView;
                 _investitionViews.Add(investitionLineView);
             }
+            
+            UpdateList();
+            OnTick();
         }
 
         private Sprite GetSprite(InvestitionType type)

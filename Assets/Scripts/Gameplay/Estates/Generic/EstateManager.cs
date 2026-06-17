@@ -35,11 +35,12 @@ namespace Gameplay.Estates.Generic
                 _smm.Log("You don't have enough money");
                 return false;
             }
-            
+
             _dataService.AddEstate(
                 GenerateEstate(name, config)
-                );
+            );
             OnEstatesChanged?.Invoke();
+            _smm.Log($"You bought {config.EstateName}");
             return true;
         }
 
@@ -50,8 +51,10 @@ namespace Gameplay.Estates.Generic
                 _smm.Log("Error! Estate not found");
                 return;
             }
+
             _moneyService.Earn(estate.SellPrice);
             _dataService.RemoveEstate(estate);
+            _smm.Log($"You sold {estate.Name}");
             OnEstatesChanged?.Invoke();
         }
 
@@ -87,7 +90,7 @@ namespace Gameplay.Estates.Generic
             {
                 EstateType.Renovation => new RenovationEstate(name, config.Type,
                     (long)(config.Price * config.SellPercentage)),
-                _ => new Estate(name, config.Type, 
+                _ => new Estate(name, config.Type,
                     (long)(config.Price * config.SellPercentage))
             };
             return estate;

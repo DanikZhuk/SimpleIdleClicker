@@ -61,6 +61,7 @@ namespace Gameplay.Estates.Renovation
             _estate.PurchasedHouses.Add(house);
             _estate.HouseOffers.Remove(house);
             _estate.HouseOffers.Add(GenerateHouse());
+            _smm.Log($"You bought a new house");
             OnHousesUpdate?.Invoke();
             return true;
         }
@@ -81,6 +82,7 @@ namespace Gameplay.Estates.Renovation
 
             house.HouseType = HouseType.Renovating;
             OnHousesUpdate?.Invoke();
+            _smm.Log($"Renovation has started");
             return true;
         }
 
@@ -95,6 +97,7 @@ namespace Gameplay.Estates.Renovation
             _moneyService.Earn(house.Cost);
             _estate.PurchasedHouses.Remove(house);
             OnHousesUpdate?.Invoke();
+            _smm.Log($"You sold the house");
             return true;
         }
 
