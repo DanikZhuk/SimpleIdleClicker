@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c073ddebfdaf4a24a451533214049424, type: 3}
-  m_Name: InvestitionListConfig
+  m_Name: InvestmentListConfig
   m_EditorClassIdentifier: Assembly-CSharp::Configs.InvestitionListConfig
-  InvestitionConfigs:
+  InvestmentConfigs:
   - {fileID: 11400000, guid: bd66eb060700f2c42b3e247818381ae9, type: 2}
   - {fileID: 11400000, guid: 8ecd04c7d38892e41aaa58c4160c262e, type: 2}
-  HistorySize: 200
+  UpdateTime: 5

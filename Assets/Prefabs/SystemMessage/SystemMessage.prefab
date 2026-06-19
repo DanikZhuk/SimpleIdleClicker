@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d7086151834f62a68ed50d5f8ce975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.Helpers.SystemMessages.SystemMessageView
+  rectTransform: {fileID: 1606152455748788060}
   messageText: {fileID: 8771423247903208048}
   canvasGroup: {fileID: 1690448756296016218}
   slidingTime: 0.3

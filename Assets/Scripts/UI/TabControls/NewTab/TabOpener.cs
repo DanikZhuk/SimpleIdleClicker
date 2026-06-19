@@ -5,12 +5,9 @@ namespace UI.TabControls.NewTab
 {
     public class TabOpener: MonoBehaviour
     {
-        [SerializeField]
-        private GameObject tabPrefab;
-        [SerializeField]
-        private Transform container;
-        [SerializeField]
-        private Button openButton;
+        [SerializeField] private GameObject tabPrefab;
+        [SerializeField] private Transform container;
+        [SerializeField] private Button openButton;
 
         private void Start()
         {

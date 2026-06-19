@@ -17,7 +17,6 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
         private readonly RepairShopBusinessModel _businessModel;
         private readonly RepairShopBusinessConfig _businessConfig;
 
-
         public BusinessModel BusinessModel => _businessModel;
         public BusinessConfig BusinessConfig => _businessConfig;
 
@@ -78,6 +77,8 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
                          new PurchasedHouseController(houseModel)))
             {
                 _purchasedHouses.Add(houseController);
+                if (houseController.HouseModel.Condition == HouseCondition.UnderRepair)
+                    _repairHouses.Add(houseController);
             }
 
             while (_businessModel.HouseOffers.Count < _businessConfig.HouseOffersAmount)
@@ -117,16 +118,7 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
         }
 
         public void OnRemove()
-        {
-        }
-
-        public void OnBuy()
-        {
-        }
-
-        public void OnSell()
-        {
-        }
+        { }
 
         public void Update(float deltaTime)
         {

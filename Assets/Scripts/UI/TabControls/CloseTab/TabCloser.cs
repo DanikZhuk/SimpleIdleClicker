@@ -5,10 +5,8 @@ namespace UI.TabControls.CloseTab
 {
     public class TabCloser: MonoBehaviour
     {
-        [SerializeField]
-        private GameObject tab;
-        [SerializeField]
-        private Button closeButton;
+        [SerializeField] private GameObject tab;
+        [SerializeField] private Button closeButton;
 
         private void Start()
         {

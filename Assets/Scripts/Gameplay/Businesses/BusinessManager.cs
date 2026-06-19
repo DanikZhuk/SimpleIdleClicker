@@ -18,8 +18,7 @@ namespace Gameplay.Businesses
 {
     public class BusinessManager : MonoBehaviour
     {
-        [FormerlySerializedAs("estateListConfig")] [SerializeField]
-        private BusinessListConfig businessListConfig;
+        [SerializeField] private BusinessListConfig businessListConfig;
 
         [Inject] private MoneyService _moneyService;
         [Inject] private OfflinePaymentService _offlinePaymentService;

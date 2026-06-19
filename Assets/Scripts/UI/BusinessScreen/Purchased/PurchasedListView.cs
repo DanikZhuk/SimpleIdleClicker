@@ -5,11 +5,10 @@ using Gameplay.Businesses.Enums;
 using Gameplay.Businesses.Generic;
 using UI.BusinessViews.Default;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.U2D.Animation;
 using Zenject;
 
-namespace UI.EstateList.Purchased
+namespace UI.BusinessScreen.Purchased
 {
     public class PurchasedListView : MonoBehaviour
     {
@@ -19,8 +18,6 @@ namespace UI.EstateList.Purchased
             public ReviseView View;
         }
         
-        
-        [FormerlySerializedAs("estateLinePrefab")]
         [Header("Instance Settings")]
         [SerializeField] private PurchasedLineView businessLinePrefab;
         [SerializeField] private Transform lineContainer;

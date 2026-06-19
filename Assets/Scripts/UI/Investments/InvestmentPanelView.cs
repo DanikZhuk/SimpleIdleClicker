@@ -13,7 +13,6 @@ namespace UI.Investments
 {
     public class InvestmentPanelView : MonoBehaviour
     {
-        [FormerlySerializedAs("investitionName")]
         [Header("General")]
         [SerializeField] private TMP_Text investmentName;
         [SerializeField] private AbsoluteLineChartManager chartManager;

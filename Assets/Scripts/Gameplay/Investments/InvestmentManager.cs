@@ -13,8 +13,7 @@ namespace Gameplay.Investments
 {
     public class InvestmentManager : MonoBehaviour
     {
-        [FormerlySerializedAs("list")] [SerializeField]
-        private InvestitionListConfig investmentListConfig;
+        [SerializeField] private InvestmentListConfig investmentListConfig;
 
         [Inject] private TimeService _timeService;
         [Inject] private MoneyService _moneyService;
@@ -46,8 +45,9 @@ namespace Gameplay.Investments
             {
                 foreach (var investmentConfig in configs.Values)
                 {
-                    var investment = new InvestmentModel(investmentConfig.Type, investmentConfig.InitialCost);
-                    _investmentControllers.Add(new InvestmentController(investment, investmentConfig));
+                    var investmentModel = new InvestmentModel(investmentConfig.Type, investmentConfig.InitialCost);
+                    _saveDataService.Investments.Add(investmentModel);
+                    _investmentControllers.Add(new InvestmentController(investmentModel, investmentConfig));
                 }
             }
             

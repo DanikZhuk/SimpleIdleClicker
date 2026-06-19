@@ -2,11 +2,10 @@ using System;
 using Gameplay.Businesses.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
-namespace UI.EstateList.Purchased
+namespace UI.BusinessScreen.Purchased
 {
     public class PurchasedLineView : MonoBehaviour
     {
@@ -14,7 +13,7 @@ namespace UI.EstateList.Purchased
         [SerializeField] private Image image;
         [SerializeField] private TMP_Text estateName;
         [SerializeField] private TMP_Text income;
-        [FormerlySerializedAs("button")] [SerializeField] private Button panelAreaButton;
+        [SerializeField] private Button panelAreaButton;
 
         public event Action<IBusinessController> OnClick;
 
@@ -29,7 +28,8 @@ namespace UI.EstateList.Purchased
         {
             image.sprite = icon;
             estateName.text = businessController.BusinessModel.Name;
-            income.text = StringFormatUtility.MoneyString(businessController.BusinessModel.Income);
+            income.text = businessController.BusinessModel.Income > 0 ?
+                StringFormatUtility.MoneySpeedString(businessController.BusinessModel.Income) : "";
             _businessController = businessController;
         }
 

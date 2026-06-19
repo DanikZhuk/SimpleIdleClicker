@@ -2,14 +2,13 @@ using System;
 using Configs;
 using Core.SaveSystem;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Gameplay.Services
 {
     public class MoneyService : MonoBehaviour
     {
-        [FormerlySerializedAs("click")] [SerializeField] private ClickConfig clickConfig;
+        [SerializeField] private ClickConfig clickConfig;
 
         [Inject] private SaveDataService _saveDataService;
 

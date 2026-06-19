@@ -14,10 +14,8 @@ namespace UI.Helpers.Switcher
             public GameObject panel;
         }
     
-        [SerializeField]
-        private List<SwitchPair> switches;
-        [SerializeField]
-        private GameObject initial;
+        [SerializeField] private List<SwitchPair> switches;
+        [SerializeField] private GameObject initial;
         private SwitchPair _current;
 
         private void Start()

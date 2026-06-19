@@ -2,11 +2,10 @@ using System;
 using Gameplay.Businesses.BusinessControllers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
-namespace UI.EstateList.Store
+namespace UI.BusinessScreen.Store
 {
     public class BusinessLineView : MonoBehaviour
     {
@@ -14,7 +13,7 @@ namespace UI.EstateList.Store
         [SerializeField] private Image image;
         [SerializeField] private TMP_Text estateName;
         [SerializeField] private TMP_Text price;
-        [FormerlySerializedAs("button")] [SerializeField] private Button panelAreaButton;
+        [SerializeField] private Button panelAreaButton;
 
         public event Action<AvailableBusinessController> OnClick;
         

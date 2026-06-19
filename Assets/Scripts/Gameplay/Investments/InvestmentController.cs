@@ -35,12 +35,10 @@ namespace Gameplay.Investments
 
         private long _amount;
         private long _maxAmountCanBuy;
-        private bool _canBuy;
-        private bool _canSell;
         private long _userInput;
 
-        public bool CanBuy => _canBuy;
-        public bool CanSell => _canSell;
+        public bool CanBuy { get; private set; }
+        public bool CanSell{ get; private set; }
 
         public InvestmentController(InvestmentModel investmentModel, InvestmentConfig investmentConfig)
         {
@@ -58,19 +56,19 @@ namespace Gameplay.Investments
         {
             if (InvestmentModel.ResumptionTime > 0)
             {
-                _canBuy = false;
-                _canSell = false;
+                CanBuy = false;
+                CanSell = false;
             }
             else
             {
                 if (MaxAmountCanBuy > 0)
                 {
-                    _canBuy = true;
+                    CanBuy = true;
                 }
 
                 if (Amount > 0)
                 {
-                    _canSell = true;
+                    CanSell = true;
                 }
             }
 
@@ -124,13 +122,13 @@ namespace Gameplay.Investments
 
         private void GetNewValue()
         {
-            float currentStep = CalculateCurrentStep();
-            float change = GenerateRandomChange(currentStep);
+            var currentStep = CalculateCurrentStep();
+            var change = GenerateRandomChange(currentStep);
             _maxAllowedChange = Mathf.Abs(InvestmentConfig.MinCost - InvestmentConfig.MaxCost) *
                                 InvestmentConfig.MaxAllowedChangeCoeff;
 
-            float targetMean = (InvestmentConfig.MinCost + InvestmentConfig.MaxCost) / 2f;
-            float meanReversion = (targetMean - InvestmentModel.CurrentCost) * InvestmentConfig.MeanReversionStrength;
+            var targetMean = (InvestmentConfig.MinCost + InvestmentConfig.MaxCost) / 2f;
+            var meanReversion = (targetMean - InvestmentModel.CurrentCost) * InvestmentConfig.MeanReversionStrength;
 
             change += meanReversion;
 

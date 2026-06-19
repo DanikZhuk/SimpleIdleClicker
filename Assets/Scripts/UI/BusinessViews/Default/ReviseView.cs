@@ -15,23 +15,26 @@ namespace UI.BusinessViews.Default
         [SerializeField] private TMP_Text incomeText;
         [SerializeField] private TMP_Text priceText;
         [SerializeField] private Button sellButton;
-        
+
         [Inject] private BusinessManager _businessManager;
-        
+
         protected IBusinessController BusinessController;
 
         public virtual void Initialize(Sprite icon, IBusinessController businessController)
         {
-            if(nameText)
+            if (nameText)
                 nameText.text = businessController.BusinessModel.Name;
-            if(image)
+            if (image)
                 image.sprite = icon;
-            if(incomeText)
-                incomeText.text = StringFormatUtility.MoneyString(businessController.BusinessModel.Income);
-            if(priceText)
+            if (incomeText)
+                incomeText.text = BusinessController.BusinessModel.Income > 0
+                    ? StringFormatUtility.MoneySpeedString(businessController.BusinessModel.Income)
+                    : "";
+            if (priceText)
                 priceText.text = StringFormatUtility.MoneyString(businessController.BusinessModel.Cost);
             BusinessController = businessController;
         }
+
         protected virtual void Start()
         {
             sellButton.onClick.AddListener(SellButton_OnClick);

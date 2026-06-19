@@ -11,17 +11,15 @@ namespace UI.BusinessViews.RepairShop.HouseManager
 {
     public class HouseManagerView : MonoBehaviour
     {
-        [Header("Offers")] [SerializeField] OfferLineView offerLineViewPrefab;
+        [Header("Offers")]
+        [SerializeField] OfferLineView offerLineViewPrefab;
         [SerializeField] Transform offerLineContainer;
         [SerializeField] SpriteLibrary library;
-
-        [FormerlySerializedAs("renovationLineViewPrefab")] [Header("Renovation")] [SerializeField]
-        RepairLineView repairLineViewPrefab;
-
+        [Header("Renovation")]
+        [SerializeField] RepairLineView repairLineViewPrefab;
         [SerializeField] Transform renovationLineContainer;
-
-        [Header("Info Elements")] [SerializeField]
-        TMP_Text counter;
+        [Header("Info Elements")]
+        [SerializeField] TMP_Text counter;
 
         private const string Category = "House";
 

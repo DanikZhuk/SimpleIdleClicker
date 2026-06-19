@@ -2,23 +2,19 @@ using Gameplay.Businesses;
 using Gameplay.Businesses.BusinessControllers;
 using UI.BusinessViews.Default;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.U2D.Animation;
 using Zenject;
 
-namespace UI.EstateList.Store
+namespace UI.BusinessScreen.Store
 {
     public class BusinessListView : MonoBehaviour
     {
-        [FormerlySerializedAs("estateLinePrefab")] [Header("Instance Settings")] [SerializeField]
-        private BusinessLineView businessLinePrefab;
-
+        [Header("Instance Settings")]
+        [SerializeField] private BusinessLineView businessLinePrefab;
         [SerializeField] private Transform lineContainer;
         [SerializeField] private SpriteLibrary library;
-
-        [Header("PopUp Settings")] [SerializeField]
-        private PurchaseView purchaseView;
-
+        [Header("PopUp Settings")]
+        [SerializeField] private PurchaseView purchaseView;
         [SerializeField] private Transform popUpContainer;
 
         [Inject] BusinessManager _businessManager;

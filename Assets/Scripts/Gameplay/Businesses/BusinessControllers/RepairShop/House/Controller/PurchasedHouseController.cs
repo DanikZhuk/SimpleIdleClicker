@@ -32,6 +32,9 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
 
         public PurchasedHouseController(HouseModel houseModel) : base(houseModel)
         {
+            if (houseModel.Condition != HouseCondition.UnderRepair) return;
+            CanRepair = false;
+            CanSell = false;
         }
 
         public PurchasedHouseController(HouseController houseController) : base(houseController)

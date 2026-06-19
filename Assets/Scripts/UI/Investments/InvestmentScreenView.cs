@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Gameplay.Investments;
 using Gameplay.Services;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.U2D.Animation;
 using UnityEngine.UI;
 using Zenject;
@@ -15,11 +13,9 @@ namespace UI.Investments
         [Header("General")]
         [SerializeField] private SpriteLibrary library;
         [SerializeField] private Slider timeSlider;
-        [FormerlySerializedAs("investitionLineViewPrefab")]
         [Header("InvestmentModel List  Line")]
         [SerializeField] private InvestmentLineView investmentLineViewPrefab;
         [SerializeField] private Transform viewsContainer;
-        [FormerlySerializedAs("investitionViewPrefab")]
         [Header("InvestmentModel View")]
         [SerializeField] private InvestmentPanelView investmentPanelViewPrefab;
         [SerializeField] private Transform popUpContainer;

@@ -7,20 +7,18 @@ namespace UI.Helpers.SystemMessages
 {
     public class SystemMessageView : MonoBehaviour
     {
+        [SerializeField] private RectTransform rectTransform;
         [SerializeField] private TMP_Text messageText;
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private float slidingTime;
         [SerializeField] private float overallTime;
         [SerializeField] private Vector2 initialOffset;
         [SerializeField] private Vector2 offset;
-
-        private RectTransform rectTransform;
         
         public bool IsRunning {get; private set;}
 
         private void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
             rectTransform.anchoredPosition = initialOffset;
         }
 

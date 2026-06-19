@@ -10,8 +10,8 @@ namespace Core.SceneInstallers
 {
     public class GameplaySceneMonoInstaller: MonoInstaller
     {
-        [FormerlySerializedAs("estateManager")] [SerializeField] private BusinessManager businessManager;
-        [FormerlySerializedAs("investitionManager")] [SerializeField] private InvestmentManager investmentManager;
+        [SerializeField] private BusinessManager businessManager;
+        [SerializeField] private InvestmentManager investmentManager;
         [SerializeField] private MoneyService moneyService;
         [SerializeField] private TimeService timeService;
         [SerializeField] private SystemMessageManager systemMessageManager;

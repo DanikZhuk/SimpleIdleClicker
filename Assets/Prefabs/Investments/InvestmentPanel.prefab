@@ -21373,7 +21373,7 @@ GameObject:
   - component: {fileID: 1109518453390203113}
   - component: {fileID: 3258021774649359273}
   m_Layer: 5
-  m_Name: InvestmentView
+  m_Name: InvestmentPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

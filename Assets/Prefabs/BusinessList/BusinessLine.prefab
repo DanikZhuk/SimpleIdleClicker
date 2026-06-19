@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2063526150527795464}
   - component: {fileID: 563113749732004091}
   m_Layer: 5
-  m_Name: Income
+  m_Name: Price
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -100, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
+  m_SizeDelta: {x: 300, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2063526150527795464
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +0$/hour
+  m_text: 0$
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280327424
-  m_fontColor: {r: 0, g: 0.6150943, b: 0.12455446, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,13 +92,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 88
+  m_fontSizeBase: 88
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -283,12 +283,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2621316089057770252}
-  - component: {fileID: 6318964972959091876}
+  - component: {fileID: -5916038710499051395}
   - component: {fileID: 7525531141791202509}
   - component: {fileID: 3895771248849225498}
   - component: {fileID: 953382709051695419}
   m_Layer: 5
-  m_Name: PurchasedLine
+  m_Name: BusinessLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,7 +316,7 @@ RectTransform:
   m_AnchoredPosition: {x: 585, y: 0}
   m_SizeDelta: {x: 1170, y: 325}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &6318964972959091876
+--- !u!114 &-5916038710499051395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -325,13 +325,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8355571134092567001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d5229988624ee8879fa4f8f26ac0c2, type: 3}
+  m_Script: {fileID: 11500000, guid: f5584e4d0be962c4399a1906c7e5dc69, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.EstateList.PurchasedLineController
+  m_EditorClassIdentifier: '::'
   image: {fileID: 1134648988862916486}
   estateName: {fileID: 5183379435490678415}
-  income: {fileID: 563113749732004091}
-  button: {fileID: 953382709051695419}
+  price: {fileID: 563113749732004091}
+  panelAreaButton: {fileID: 953382709051695419}
 --- !u!222 &7525531141791202509
 CanvasRenderer:
   m_ObjectHideFlags: 0
