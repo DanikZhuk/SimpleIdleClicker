@@ -75,13 +75,15 @@ namespace Gameplay.Businesses
 
             var configDict = businessListConfig.Businesses.ToDictionary(config => config.Type);
             
-            foreach (var businessModel in _saveDataService.BusinessModels)
+            foreach (var businessController in 
+                     _saveDataService.BusinessModels.Select(
+                         businessModel => CreateBusinessController(
+                             configDict[businessModel.BusinessType],businessModel)))
             {
-                var businessController = CreateBusinessController(configDict[businessModel.BusinessType],businessModel);
-                Debug.Log($"Business controller created: {businessController.GetType()}");
-                Debug.Log($"Business controller created: {businessModel.BusinessType}");
                 _purchasedBusinessControllers.Add(businessController);
             }
+            
+            configDict.Clear();
 
             UpdateBusinessTypeCounts();
             OnMoneyChanged();

@@ -21,9 +21,6 @@ namespace Gameplay.Businesses.Generic.Models
             BusinessType = businessConfig.Type;
             Cost = (long)(businessConfig.Price * businessConfig.SellPercentage);
             Income = businessConfig.Income;
-            
-            Debug.Log(Id);
-            Debug.Log(businessConfig.Type);
         }
 
         public BusinessModel()

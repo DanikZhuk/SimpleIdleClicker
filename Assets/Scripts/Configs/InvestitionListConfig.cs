@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Configs
 {
     [CreateAssetMenu(fileName = "InvestitionListConfig", menuName = "Configs/InvestitionListConfig")]
     public class InvestitionListConfig: ScriptableObject
     {
-        public InvestitionConfig[] InvestitionConfigs;
-        public int HistorySize;
+        [FormerlySerializedAs("InvestitionConfigs")] public InvestmentConfig[] InvestmentConfigs;
+        public float UpdateTime;
     }
 }

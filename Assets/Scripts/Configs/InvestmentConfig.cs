@@ -1,18 +1,19 @@
-using Gameplay.Investitions;
+using Gameplay.Investments;
 using UnityEngine;
 
 namespace Configs
 {
-    [CreateAssetMenu(fileName = "InvestitionConfig", menuName = "Configs/InvestitionConfig")]
-    public class InvestitionConfig: ScriptableObject
+    [CreateAssetMenu(fileName = "InvestmentConfig", menuName = "Configs/InvestmentConfig")]
+    public class InvestmentConfig: ScriptableObject
     {
-        public InvestitionType Type;
+        public InvestmentType Type;
         public string Name;
         public long MinCost;
         public long MaxCost;
         public long InitialCost;
         public float ResumptionTime;
         public int MaxAmount;
+        public int HistorySize=200;
         public float MeanReversionStrength;
         public float MaxAllowedChangeCoeff;
         public float BaseStep;

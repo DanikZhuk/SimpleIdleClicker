@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Gameplay.Businesses.Generic.Models;
-using Gameplay.Investitions;
+using Gameplay.Investments;
 
 namespace Core.SaveSystem.Data
 {
@@ -9,6 +9,6 @@ namespace Core.SaveSystem.Data
         public long Money;
         
         public readonly List<BusinessModel> BusinessModels = new();
-        public readonly List<Investition> Investitions = new();
+        public readonly List<InvestmentModel> Investments = new();
     }
 }

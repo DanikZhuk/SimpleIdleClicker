@@ -1,5 +1,5 @@
 using Gameplay.Businesses;
-using Gameplay.Investitions;
+using Gameplay.Investments;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Core.SceneInstallers
     public class GameplaySceneMonoInstaller: MonoInstaller
     {
         [FormerlySerializedAs("estateManager")] [SerializeField] private BusinessManager businessManager;
-        [SerializeField] private InvestitionManager investitionManager;
+        [FormerlySerializedAs("investitionManager")] [SerializeField] private InvestmentManager investmentManager;
         [SerializeField] private MoneyService moneyService;
         [SerializeField] private TimeService timeService;
         [SerializeField] private SystemMessageManager systemMessageManager;
@@ -22,8 +22,8 @@ namespace Core.SceneInstallers
                 .FromInstance(businessManager)
                 .AsSingle();
             Container
-                .BindInterfacesAndSelfTo<InvestitionManager>()
-                .FromInstance(investitionManager)
+                .BindInterfacesAndSelfTo<InvestmentManager>()
+                .FromInstance(investmentManager)
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<MoneyService>()

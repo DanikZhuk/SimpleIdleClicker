@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Core.SaveSystem.Data;
 using Gameplay.Businesses.Generic.Models;
-using Gameplay.Investitions;
+using Gameplay.Investments;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -28,7 +28,7 @@ namespace Core.SaveSystem
         }
 
         public List<BusinessModel> BusinessModels => _data.BusinessModels;
-        public List<Investition> Investitions => _data.Investitions;
+        public List<InvestmentModel> Investments => _data.Investments;
 
         public void AddBusiness(BusinessModel businessModel)
         {
@@ -64,8 +64,6 @@ namespace Core.SaveSystem
 
         private void SaveData()
         {
-            if (_data.BusinessModels.Count > 0)
-                Debug.Log("REWRITING" + _data.BusinessModels.First().Id);
             try
             {
                 File.WriteAllText(_filePath, JsonConvert.SerializeObject(_data, Settings));
@@ -88,11 +86,6 @@ namespace Core.SaveSystem
             {
                 var data = JsonConvert.DeserializeObject<GameData>(File.ReadAllText(_filePath), Settings);
                 _data = data;
-                foreach (var businessModel in data.BusinessModels)
-                {
-                    Debug.Log(businessModel.GetType());
-                    Debug.Log(businessModel.BusinessType);
-                }
             }
             catch (Exception e)
             {
