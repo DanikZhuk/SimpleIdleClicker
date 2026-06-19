@@ -3,7 +3,7 @@ using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
 
 namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
 {
-    public class AvailableHouseController: HouseController
+    public class AvailableHouseController: BaseHouseController
     {
         public AvailableHouseController(HouseModel houseModel) : base(houseModel) {}
 

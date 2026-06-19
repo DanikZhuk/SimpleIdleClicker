@@ -3,7 +3,7 @@ using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
 
 namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
 {
-    public class PurchasedHouseController : HouseController
+    public class PurchasedHouseController : BaseHouseController
     {
         public bool CanRepair
         {
@@ -37,7 +37,7 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
             CanSell = false;
         }
 
-        public PurchasedHouseController(HouseController houseController) : base(houseController)
+        public PurchasedHouseController(BaseHouseController houseController) : base(houseController)
         {
         }
 
