@@ -1,0 +1,32 @@
+using Configs;
+using Gameplay.Businesses.Enums;
+using UnityEngine;
+
+namespace Gameplay.Businesses.Generic.Models
+{
+    public class BusinessModel
+    {
+        public string Id;
+        public BusinessType BusinessType;
+        public string Name;
+        public long Cost;
+        public long Income;
+
+        private static long _nextId = 0;
+
+        public BusinessModel(BusinessConfig businessConfig, string businessName)
+        {
+            Id = _nextId++.ToString();
+            Name = businessName;
+            BusinessType = businessConfig.Type;
+            Cost = (long)(businessConfig.Price * businessConfig.SellPercentage);
+            Income = businessConfig.Income;
+            
+            Debug.Log(Id);
+            Debug.Log(businessConfig.Type);
+        }
+
+        public BusinessModel()
+        { }
+    }
+}

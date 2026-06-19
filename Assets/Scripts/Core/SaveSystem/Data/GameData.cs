@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Gameplay.Estates.Generic;
+using Gameplay.Businesses.Generic.Models;
 using Gameplay.Investitions;
 
 namespace Core.SaveSystem.Data
@@ -8,7 +8,7 @@ namespace Core.SaveSystem.Data
     {
         public long Money;
         
-        public readonly List<Estate> Estates = new();
+        public readonly List<BusinessModel> BusinessModels = new();
         public readonly List<Investition> Investitions = new();
     }
 }

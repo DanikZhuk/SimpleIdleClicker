@@ -6,7 +6,7 @@ using TMPro;
 using UI.Graph;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.String;
+using Utils;
 
 public class InvestitionView : MonoBehaviour
 {
@@ -55,7 +55,7 @@ public class InvestitionView : MonoBehaviour
     public void UpdateValues()
     {
         chartManager.UpdateValue(_investition.History);
-        currentCost.text = StringCreator.MoneyString(_investition.CurrentCost);
+        currentCost.text = StringFormatUtility.MoneyString(_investition.CurrentCost);
         lastChange.text = $"{_investition.LastChange:F1}%";
         lastChange.color = _investition.LastChange > 0 ? Color.green : Color.red;
     }
@@ -64,7 +64,7 @@ public class InvestitionView : MonoBehaviour
     {
         if (_investition.ResumptionTime > 0)
         {
-            var time = StringCreator.TimeString(_investition.ResumptionTime);
+            var time = StringFormatUtility.TimeString(_investition.ResumptionTime);
             buyTimerText.text = time;
             sellTimerText.text = time;
         }

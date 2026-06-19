@@ -4,7 +4,7 @@ using Gameplay.Investitions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils.String;
+using Utils;
 
 public class InvestitionLineView : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class InvestitionLineView : MonoBehaviour
 
     public void UpdateValues()
     {
-        currentCost.text = StringCreator.MoneyString(_investition.CurrentCost);
+        currentCost.text = StringFormatUtility.MoneyString(_investition.CurrentCost);
     }
     
     private void Awake()

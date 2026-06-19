@@ -22,8 +22,8 @@ MonoBehaviour:
       m_Sprite: {fileID: 21300000, guid: c5e4378800ab2f1458908331149caf0c, type: 3}
       m_FromMain: 0
       m_SpriteOverride: {fileID: 21300000, guid: c5e4378800ab2f1458908331149caf0c, type: 3}
-    - m_Name: Renovation
-      m_Hash: 572340255
+    - m_Name: RepairShop
+      m_Hash: 150732180
       m_Sprite: {fileID: 21300000, guid: ef62f390eee21ef46addc4d6cec03885, type: 3}
       m_FromMain: 0
       m_SpriteOverride: {fileID: 21300000, guid: ef62f390eee21ef46addc4d6cec03885, type: 3}
@@ -33,13 +33,13 @@ MonoBehaviour:
     m_Hash: 638850713
     m_CategoryList: []
     m_OverrideEntries:
-    - m_Name: Broken
-      m_Hash: 621259074
+    - m_Name: NeedRepair
+      m_Hash: 712363283
       m_Sprite: {fileID: 21300000, guid: 757f96f443da8794c80b410a005ffa7d, type: 3}
       m_FromMain: 0
       m_SpriteOverride: {fileID: 21300000, guid: 757f96f443da8794c80b410a005ffa7d, type: 3}
-    - m_Name: Renovated
-      m_Hash: 875046544
+    - m_Name: FullyRepaired
+      m_Hash: 18059598
       m_Sprite: {fileID: 21300000, guid: d889a922215864d4798bd4ae1e2c3a9e, type: 3}
       m_FromMain: 0
       m_SpriteOverride: {fileID: 21300000, guid: d889a922215864d4798bd4ae1e2c3a9e, type: 3}
@@ -62,5 +62,5 @@ MonoBehaviour:
     m_FromMain: 0
     m_EntryOverrideCount: 2
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 639172135142342075
+  m_ModificationHash: 639173958070170598
   m_Version: 1

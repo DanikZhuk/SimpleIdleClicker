@@ -65,6 +65,7 @@ namespace Gameplay.Services
             _hourTime = config.HourInSeconds;
             _updateTime= config.UpdateSeconds;
             OnTickElapsed+=OnTick;
+            StartTicking();
         }
 
         private async UniTask Ticking()

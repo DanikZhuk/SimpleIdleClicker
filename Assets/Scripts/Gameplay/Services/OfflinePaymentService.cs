@@ -1,14 +1,14 @@
+using System.Linq;
+using Gameplay.Businesses;
 using Zenject;
 
 namespace Gameplay.Services
 {
-    public class OfflinePaymentService: IInitializable
+    public class OfflinePaymentService : IInitializable
     {
         [Inject] private TimeService _timeService;
         [Inject] private MoneyService _moneyService;
-
-        public long EstateIncome = 0;
-
+        [Inject] BusinessManager _businessManager;
 
         public void Initialize()
         {
@@ -17,7 +17,10 @@ namespace Gameplay.Services
 
         private void AddIncomes()
         {
-            _moneyService.Earn(EstateIncome);
+            var incomes = _businessManager.PurchasedBusinessControllers
+                .Sum(controller => controller.BusinessModel.Income);
+
+            _moneyService.Money += incomes;
         }
     }
 }

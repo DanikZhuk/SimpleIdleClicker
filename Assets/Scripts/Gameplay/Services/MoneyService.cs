@@ -2,47 +2,32 @@ using System;
 using Configs;
 using Core.SaveSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Gameplay.Services
 {
     public class MoneyService : MonoBehaviour
     {
-        [SerializeField] private ClickConfig click;
-        
-        [Inject] private IDataService _dataService;
+        [FormerlySerializedAs("click")] [SerializeField] private ClickConfig clickConfig;
+
+        [Inject] private SaveDataService _saveDataService;
 
         public event Action OnMoneyChanged;
-        
+
         public long Money
         {
-            get=>_dataService.Money;
-            set=>_dataService.Money = value;
+            get => _saveDataService.Money;
+            set
+            {
+                _saveDataService.Money = value;
+                OnMoneyChanged?.Invoke();
+            }
         }
 
         public void TapEarn()
         {
-            Money += click.TapAmount;
-            OnMoneyChanged?.Invoke();
-        }
-
-        public void Earn(long amount)
-        {
-            Money += amount;
-            OnMoneyChanged?.Invoke();
-        }
-
-        public bool TrySpend(long amount)
-        {
-            if (Money < amount) return false;
-            Money -= amount;
-            OnMoneyChanged?.Invoke();
-            return true;
-        }
-
-        public bool CanSpend(long amount)
-        {
-            return Money >= amount;
+            Money += clickConfig.TapAmount;
         }
     }
 }

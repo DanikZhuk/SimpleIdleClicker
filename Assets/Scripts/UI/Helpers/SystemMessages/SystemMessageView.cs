@@ -15,10 +15,13 @@ namespace UI.Helpers.SystemMessages
         [SerializeField] private Vector2 offset;
 
         private RectTransform rectTransform;
+        
+        public bool IsRunning {get; private set;}
 
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = initialOffset;
         }
 
         public void Initialize(string message, Color textColor)
@@ -30,6 +33,7 @@ namespace UI.Helpers.SystemMessages
 
         private async UniTask Moving()
         {
+            IsRunning = true;
             var delay = overallTime - slidingTime * 2f;
 
             rectTransform.anchoredPosition = initialOffset;
@@ -68,8 +72,7 @@ namespace UI.Helpers.SystemMessages
 
             rectTransform.anchoredPosition = initialOffset;
             canvasGroup.alpha = 0f;
-
-            Destroy(gameObject);
+            IsRunning = false;
         }
 
         private float EaseInOut(float t)

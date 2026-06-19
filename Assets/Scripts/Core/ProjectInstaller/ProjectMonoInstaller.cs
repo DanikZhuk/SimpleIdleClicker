@@ -1,14 +1,16 @@
 using Core.SaveSystem;
+using UnityEngine;
 using Zenject;
 
 namespace Core.ProjectInstaller
 {
     public class ProjectMonoInstaller: MonoInstaller
     {
+        [SerializeField] private SaveDataService saveDataServicePrefab;
         public override void InstallBindings()
         {
-            Container
-                .BindInterfacesAndSelfTo<JsonDataService>()
+            Container.Bind<SaveDataService>()
+                .FromComponentInNewPrefab(saveDataServicePrefab)
                 .AsSingle()
                 .NonLazy();
         }

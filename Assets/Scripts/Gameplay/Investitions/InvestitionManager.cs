@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Configs;
 using Core.SaveSystem;
-using Gameplay.Estates.Generic;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
@@ -17,14 +14,14 @@ namespace Gameplay.Investitions
 
         [Inject] private TimeService _timeService;
         [Inject] private MoneyService _moneyService;
-        [Inject] private IDataService _dataService;
+        [Inject] private SaveDataService _saveDataService;
         [Inject] private SystemMessageManager _smm;
 
         private readonly Dictionary<InvestitionType, InvestitionConfig> _configs = new();
         private readonly InvestitionCalculator _investitionCalculator = new();
 
         private List<Investition> _investitions;
-        public IReadOnlyList<Investition> InvestitionsList => _dataService.Investitions;
+        public IReadOnlyList<Investition> InvestitionsList => _saveDataService.Investitions;
 
         private void Start()
         {
@@ -33,7 +30,7 @@ namespace Gameplay.Investitions
 
         private void Initialize()
         {
-            _investitions = _dataService.Investitions;
+            _investitions = _saveDataService.Investitions;
 
             foreach (var config in list.InvestitionConfigs)
             {
@@ -95,11 +92,13 @@ namespace Gameplay.Investitions
             }
 
             var cost = (int)(amount * investition.CurrentCost);
-            if (!_moneyService.TrySpend(cost))
+            if (_moneyService.Money < cost)
             {
                 _smm.Log("You don't have enough money");
                 return;
             }
+
+            _moneyService.Money -= cost;
 
             investition.Add(amount, config.ResumptionTime);
             _smm.Log($"You successfully bought {amount} {config.Name}");
@@ -134,7 +133,7 @@ namespace Gameplay.Investitions
             }
 
             investition.Add(-amount, config.ResumptionTime);
-            _moneyService.Earn((int)(amount * investition.CurrentCost));
+            _moneyService.Money += (int)(amount * investition.CurrentCost);
             _smm.Log($"You successfully sold {amount} {config.Name}");
         }
 

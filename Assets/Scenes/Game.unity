@@ -1195,7 +1195,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 713788460}
-  - component: {fileID: 713788459}
   - component: {fileID: 713788463}
   - component: {fileID: 713788462}
   - component: {fileID: 713788461}
@@ -1208,18 +1207,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &713788459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713788458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b11ff7d0b72749ab9d7e0298afe4072b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.GameManager.GameManager
 --- !u!4 &713788460
 Transform:
   m_ObjectHideFlags: 0
@@ -1229,7 +1216,7 @@ Transform:
   m_GameObject: {fileID: 713788458}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 71.91482, y: 1549.1898, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1247,7 +1234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8238bdcf4d524d8cb8c9a848a05a7431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Estates.Generic.EstateManager
-  list: {fileID: 11400000, guid: e78e28a10baccf24d9f3dd99c286a856, type: 2}
+  businessListConfig: {fileID: 11400000, guid: e78e28a10baccf24d9f3dd99c286a856, type: 2}
 --- !u!114 &713788462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,7 +1247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f0b9eb3bf5943d6a4d3bee9dc44823d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.MoneyService
-  click: {fileID: 11400000, guid: 35c9f1874abe0d442add779e521c6297, type: 2}
+  clickConfig: {fileID: 11400000, guid: 35c9f1874abe0d442add779e521c6297, type: 2}
 --- !u!114 &713788463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2196,7 +2183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80a3820acc3c8d342806662785026827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Click.ClickHandler
-  button: {fileID: 1097951702}
+  tapAreaButton: {fileID: 1097951702}
 --- !u!114 &1097951702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2330,7 +2317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961d49d0eb9b4ca8a746cb5d45bb8935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.EstateList.PurchasedEstatesGenerator
-  estateLinePrefab: {fileID: 6318964972959091876, guid: 429ddc6a04dbcf64e8e1422f2cf29f22, type: 3}
+  businessLinePrefab: {fileID: 6318964972959091876, guid: 429ddc6a04dbcf64e8e1422f2cf29f22, type: 3}
   lineContainer: {fileID: 1322503680}
   library: {fileID: 1148385895}
   defaultReviseView: {fileID: 4920001572597515464, guid: 7ded2dc23b7a0dd4e8d74f115436a70f, type: 3}
@@ -2543,11 +2530,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec1f142e3b540cc92c2c32f98de61f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Installers.GameplaySceneInstaller
-  em: {fileID: 713788461}
-  im: {fileID: 713788464}
-  ms: {fileID: 713788462}
-  ts: {fileID: 713788463}
-  smm: {fileID: 713788465}
+  businessManager: {fileID: 713788461}
+  investitionManager: {fileID: 713788464}
+  moneyService: {fileID: 713788462}
+  timeService: {fileID: 713788463}
+  systemMessageManager: {fileID: 713788465}
 --- !u!114 &1243805343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3722,8 +3709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727a85e84769ec7478a27f97e3838253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  config: {fileID: 11400000, guid: e78e28a10baccf24d9f3dd99c286a856, type: 2}
-  estateLinePrefab: {fileID: -5916038710499051395, guid: 50f964cd58892e54b90a4465b2ebb69c, type: 3}
+  businessLinePrefab: {fileID: -5916038710499051395, guid: 50f964cd58892e54b90a4465b2ebb69c, type: 3}
   lineContainer: {fileID: 1212922544}
   library: {fileID: 1929359905}
   purchaseView: {fileID: 6703067795351227166, guid: e063c29a29a0c6345a3a43b1b8c6bb26, type: 3}

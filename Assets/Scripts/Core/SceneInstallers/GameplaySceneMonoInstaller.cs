@@ -1,43 +1,44 @@
-using Gameplay.Estates.Generic;
+using Gameplay.Businesses;
 using Gameplay.Investitions;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace Core.SceneInstallers
 {
     public class GameplaySceneMonoInstaller: MonoInstaller
     {
-        [SerializeField] private EstateManager em;
-        [SerializeField] private InvestitionManager im;
-        [SerializeField] private MoneyService ms;
-        [SerializeField] private TimeService ts;
-        [SerializeField] private SystemMessageManager smm;
+        [FormerlySerializedAs("estateManager")] [SerializeField] private BusinessManager businessManager;
+        [SerializeField] private InvestitionManager investitionManager;
+        [SerializeField] private MoneyService moneyService;
+        [SerializeField] private TimeService timeService;
+        [SerializeField] private SystemMessageManager systemMessageManager;
         public override void InstallBindings()
         {
             Container
-                .BindInterfacesAndSelfTo<EstateManager>()
-                .FromInstance(em)
+                .BindInterfacesAndSelfTo<BusinessManager>()
+                .FromInstance(businessManager)
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<InvestitionManager>()
-                .FromInstance(im)
+                .FromInstance(investitionManager)
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<MoneyService>()
-                .FromInstance(ms)
+                .FromInstance(moneyService)
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<TimeService>()
-                .FromInstance(ts)
+                .FromInstance(timeService)
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<OfflinePaymentService>()
                 .AsSingle();
             Container
                 .BindInterfacesAndSelfTo<SystemMessageManager>()
-                .FromInstance(smm)
+                .FromInstance(systemMessageManager)
                 .AsSingle();
         }
     }
