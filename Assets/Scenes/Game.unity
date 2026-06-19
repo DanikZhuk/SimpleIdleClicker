@@ -1273,7 +1273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 901b747975fa415bab6194ac2d6903ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Investitions.InvestitionManager
-  list: {fileID: 11400000, guid: f6fb22f4d4efd97438f37905f930d104, type: 2}
+  investmentListConfig: {fileID: 11400000, guid: f6fb22f4d4efd97438f37905f930d104, type: 2}
 --- !u!114 &713788465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1809,9 +1809,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Investitions.InvestitionListView
   library: {fileID: 993795572}
   timeSlider: {fileID: 1999648442}
-  investitionLineViewPrefab: {fileID: 2079741776098098916, guid: dceba1367ddeb6e4eb5f1de3e9160d52, type: 3}
+  investmentLineViewPrefab: {fileID: 2079741776098098916, guid: dceba1367ddeb6e4eb5f1de3e9160d52, type: 3}
   viewsContainer: {fileID: 1567412437}
-  investitionViewPrefab: {fileID: 452052646751022596, guid: 91a0c97868fce524684b961be21e9b30, type: 3}
+  investmentPanelViewPrefab: {fileID: 452052646751022596, guid: 91a0c97868fce524684b961be21e9b30, type: 3}
   popUpContainer: {fileID: 198493398}
 --- !u!1 &1005532521
 GameObject:
@@ -2531,7 +2531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Installers.GameplaySceneInstaller
   businessManager: {fileID: 713788461}
-  investitionManager: {fileID: 713788464}
+  investmentManager: {fileID: 713788464}
   moneyService: {fileID: 713788462}
   timeService: {fileID: 713788463}
   systemMessageManager: {fileID: 713788465}
