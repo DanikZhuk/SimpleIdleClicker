@@ -27,7 +27,7 @@ namespace UI.BusinessViews.RepairShop
         public void Initialize(PurchasedHouseController houseController)
         {
             _houseController = houseController;
-            _houseController.OnStatusChanged += UpdateButtons;
+            _houseController.OnStatusChanged += UpdateInfo;
             UpdateButtons();
         }
 
@@ -40,13 +40,6 @@ namespace UI.BusinessViews.RepairShop
         {
             sellButton.onClick.AddListener(() => OnSellButtonClick?.Invoke(this));
             repairButton.onClick.AddListener(() => OnRenovationButtonClick?.Invoke(this));
-        }
-
-        private void UpdateButtons()
-        {
-            sellButton.interactable = _houseController.CanSell;
-            repairButton.interactable = _houseController.CanRepair;
-            UpdateInfo();
         }
 
         private void UpdateInfo()
@@ -76,6 +69,14 @@ namespace UI.BusinessViews.RepairShop
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            UpdateButtons();
+        }
+        
+        private void UpdateButtons()
+        {
+            sellButton.interactable = _houseController.CanSell;
+            repairButton.interactable = _houseController.CanRepair;
         }
 
         private void Update()
@@ -93,7 +94,7 @@ namespace UI.BusinessViews.RepairShop
 
         public void Clear()
         {
-            _houseController.OnStatusChanged -= UpdateButtons;
+            _houseController.OnStatusChanged -= UpdateInfo;
         }
 
         private void OnDestroy()

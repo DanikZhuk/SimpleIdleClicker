@@ -23,8 +23,8 @@ namespace UI.BusinessViews.RepairShop.HouseManager
 
         private const string Category = "House";
 
-        private List<RepairLineView> _repairLines = new();
-        private List<OfferLineView> _offerLines = new();
+        private readonly List<RepairLineView> _repairLines = new();
+        private readonly List<OfferLineView> _offerLines = new();
         private RepairShopBusinessController _businessController;
 
         public void Initialize(IBusinessController businessController)
