@@ -26,18 +26,18 @@ namespace Core.SaveSystem
             set => _data.Money = value;
         }
 
-        public List<BusinessModel> BusinessModels => _data.BusinessModels;
+        public IReadOnlyList<BusinessModel> BusinessModels => _data.BusinessModels;
         public List<InvestmentModel> Investments => _data.Investments;
 
         public void AddBusiness(BusinessModel businessModel)
         {
-            BusinessModels.Add(businessModel);
+            _data.BusinessModels.Add(businessModel);
             SaveData();
         }
 
         public void RemoveBusiness(BusinessModel businessModel)
         {
-            BusinessModels.Remove(businessModel);
+            _data.BusinessModels.Remove(businessModel);
             SaveData();
         }
 
