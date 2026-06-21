@@ -1,5 +1,8 @@
+using System;
 using Configs;
 using Gameplay.Businesses.Generic.Models;
+using Gameplay.Services;
+using UI.Helpers.SystemMessages;
 
 namespace Gameplay.Businesses.Generic
 {
@@ -7,9 +10,9 @@ namespace Gameplay.Businesses.Generic
     {
         public BusinessModel BusinessModel { get; }
         public BusinessConfig BusinessConfig { get; }
-        
-        public void Setup(BusinessManager businessManager);
-        public void OnMoneyChanged(long money);
+
+        public void Setup(MoneyService moneyService, SystemMessageManager systemMessageManager);
+        public void CalculateOfflineImpact(TimeSpan offlineTime);
         public void OnRemove();
         public void Update(float deltaTime);
     }

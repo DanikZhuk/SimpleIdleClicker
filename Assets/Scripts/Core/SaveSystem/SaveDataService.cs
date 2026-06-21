@@ -4,13 +4,17 @@ using System.IO;
 using Core.SaveSystem.Data;
 using Gameplay.Businesses.Generic.Models;
 using Gameplay.Investments;
+using Gameplay.Services;
 using Newtonsoft.Json;
 using UnityEngine;
+using Zenject;
 
 namespace Core.SaveSystem
 {
     public class SaveDataService : MonoBehaviour
     {
+        [Inject] private TimeService _timeService;
+
         private string _filePath;
         private GameData _data;
 
@@ -28,6 +32,8 @@ namespace Core.SaveSystem
 
         public IReadOnlyList<BusinessModel> BusinessModels => _data.BusinessModels;
         public List<InvestmentModel> Investments => _data.Investments;
+
+        public DateTime RecordTime => _data.RecordTime;
 
         public void AddBusiness(BusinessModel businessModel)
         {
@@ -65,6 +71,7 @@ namespace Core.SaveSystem
         {
             try
             {
+                _data.RecordTime = _timeService.Now();
                 File.WriteAllText(_filePath, JsonConvert.SerializeObject(_data, Settings));
             }
             catch (Exception e)
@@ -91,6 +98,8 @@ namespace Core.SaveSystem
                 Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
                 _data = new GameData();
             }
+            
+            _timeService.SetLastRunTime(RecordTime);
         }
     }
 }

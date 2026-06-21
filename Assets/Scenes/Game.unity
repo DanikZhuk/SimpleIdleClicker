@@ -1200,6 +1200,7 @@ GameObject:
   - component: {fileID: 713788461}
   - component: {fileID: 713788464}
   - component: {fileID: 713788465}
+  - component: {fileID: 713788466}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1260,7 +1261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5150992a7c432f981e8b236180747e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.TimeService
-  config: {fileID: 11400000, guid: da4c2ac90e5d3de498777a31588409e8, type: 2}
 --- !u!114 &713788464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1288,6 +1288,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Helpers.SystemMessages.SystemMessageManager
   systemMessageViewPrefab: {fileID: 7841634343137629276, guid: 3de6a74e3dc589c47a0076aa8c844757, type: 3}
   rectTransform: {fileID: 1645531956}
+--- !u!114 &713788466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713788458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ceddf6b4d5144ca96a717e9a0700d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.OfflinePaymentService
+  paymentConfig: {fileID: 11400000, guid: e6267694c8c0b2f4ba8a47072cfeefbb, type: 2}
 --- !u!1 &803745199
 GameObject:
   m_ObjectHideFlags: 0

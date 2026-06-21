@@ -12,7 +12,7 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Model
         public HouseCondition Condition;
         public long Cost;
         public long RepairCost;
-        public float RepairTime;
+        public float RepairTimeSeconds;
         private static long _nextId = 0;
 
         public HouseModel()

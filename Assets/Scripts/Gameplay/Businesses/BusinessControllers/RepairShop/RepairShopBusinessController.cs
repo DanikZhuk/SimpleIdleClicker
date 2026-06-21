@@ -8,6 +8,8 @@ using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
 using Gameplay.Businesses.BusinessModels;
 using Gameplay.Businesses.Generic;
 using Gameplay.Businesses.Generic.Models;
+using Gameplay.Services;
+using UI.Helpers.SystemMessages;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Businesses.BusinessControllers.RepairShop
@@ -16,14 +18,14 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
     {
         private readonly RepairShopBusinessModel _businessModel;
         private readonly RepairShopBusinessConfig _businessConfig;
-
-        public BusinessModel BusinessModel => _businessModel;
-        public BusinessConfig BusinessConfig => _businessConfig;
-
         private readonly List<AvailableHouseController> _houseOffers = new();
         private readonly List<PurchasedHouseController> _purchasedHouses = new();
         private readonly List<PurchasedHouseController> _repairHouses = new();
-        private BusinessManager _businessManager;
+        private MoneyService _moneyService;
+        private SystemMessageManager _systemMessageManager;
+        
+        public BusinessModel BusinessModel => _businessModel;
+        public BusinessConfig BusinessConfig => _businessConfig;
 
         public IReadOnlyList<AvailableHouseController> HouseOffers => _houseOffers;
         public IReadOnlyList<PurchasedHouseController> PurchasedHouses => _purchasedHouses;
@@ -52,14 +54,13 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
             if (businessModel is RepairShopBusinessModel repairShopModel)
                 _businessModel = repairShopModel;
             else
-            {
                 throw new ArgumentException("businessModel is not a repair shop model");
-            }
         }
 
-        public void Setup(BusinessManager businessManager)
+        public void Setup(MoneyService moneyService, SystemMessageManager systemMessageManager)
         {
-            _businessManager = businessManager;
+            _moneyService = moneyService;
+            _systemMessageManager = systemMessageManager;
             Setup();
         }
 
@@ -88,15 +89,16 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
                 _houseOffers.Add(new AvailableHouseController(house));
             }
 
-            OnMoneyChanged(_businessManager.MoneyService.Money);
+            _moneyService.OnMoneyChanged += OnMoneyChanged;
+            OnMoneyChanged();
         }
 
-        public void OnMoneyChanged(long money)
+        private void OnMoneyChanged()
         {
             foreach (var houseController in _houseOffers)
             {
                 if (_purchasedHouses.Count >= _businessConfig.MaxPurchasedHousesAmount
-                    || money < houseController.HouseModel.Cost)
+                    || _moneyService.Money < houseController.HouseModel.Cost)
                 {
                     houseController.CanBuy = false;
                     continue;
@@ -107,7 +109,7 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
 
             foreach (var houseController in _purchasedHouses)
             {
-                if (houseController.HouseModel.Condition!=HouseCondition.NeedRepair||money < houseController.HouseModel.RepairCost)
+                if (houseController.HouseModel.Condition!=HouseCondition.NeedRepair||_moneyService.Money < houseController.HouseModel.RepairCost)
                 {
                     houseController.CanRepair = false;
                     continue;
@@ -116,22 +118,18 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
                 houseController.CanRepair = true;
             }
         }
+        
+        public void CalculateOfflineImpact(TimeSpan offlineTime)
+        {
+            RepairHouses((float)offlineTime.TotalSeconds);
+        }
 
         public void OnRemove()
         { }
 
         public void Update(float deltaTime)
         {
-            foreach (var houseController in _repairHouses.ToArray())
-            {
-                if (houseController.FinishRepair(deltaTime))
-                {
-                    houseController.HouseModel.Cost =
-                        (long)(houseController.HouseModel.Cost * _businessConfig.AfterRepairCostCoeff);
-                    OnHousesUpdate?.Invoke();
-                    _repairHouses.Remove(houseController);
-                }
-            }
+            RepairHouses(deltaTime);
         }
 
         public void BuyHouse(AvailableHouseController houseController)
@@ -148,7 +146,7 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
             var availableHouseController = new AvailableHouseController(houseModel);
             _houseOffers.Add(availableHouseController);
             
-            _businessManager.MoneyService.Money -= houseController.HouseModel.Cost;
+            _moneyService.Money -= houseController.HouseModel.Cost;
             OnHousesUpdate?.Invoke();
         }
 
@@ -160,20 +158,31 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop
             _repairHouses.Add(houseController);
             
             
-            _businessManager.MoneyService.Money -= houseController.HouseModel.RepairCost;
+            _moneyService.Money -= houseController.HouseModel.RepairCost;
             OnHousesUpdate?.Invoke();
-            _businessManager.SystemMessageManager.Log($"Renovation has started");
+            _systemMessageManager.Log($"Renovation has started");
+        }
+
+        private void RepairHouses(float seconds)
+        {
+            foreach (var houseController in _repairHouses.ToArray())
+            {
+                if (!houseController.FinishRepair(seconds)) continue;
+                houseController.HouseModel.Cost =
+                    (long)(houseController.HouseModel.Cost * _businessConfig.AfterRepairCostCoeff);
+                OnHousesUpdate?.Invoke();
+                _repairHouses.Remove(houseController);
+            }
         }
 
         public void SellHouse(PurchasedHouseController houseController)
         {
             _businessModel.PurchasedHouses.Remove(houseController.HouseModel);
             _purchasedHouses.Remove(houseController);
-
             
-            _businessManager.MoneyService.Money += houseController.HouseModel.Cost;
+            _moneyService.Money += houseController.HouseModel.Cost;
             OnHousesUpdate?.Invoke();
-            _businessManager.SystemMessageManager.Log($"You sold the house");
+            _systemMessageManager.Log($"You sold the house");
         }
 
         private HouseModel GenerateHouseModel()

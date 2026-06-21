@@ -20,12 +20,12 @@ namespace Gameplay.Investments
         [Inject] private SaveDataService _saveDataService;
         [Inject] private SystemMessageManager _smm;
 
-        private readonly List<InvestmentController> _investmentControllers = new();
-        public IReadOnlyList<InvestmentController> InvestmentControllersList => _investmentControllers;
         public event Action OnInvestmentsUpdate;
-
+        
+        private readonly List<InvestmentController> _investmentControllers = new();
         private float _runningUpdateTime;
-
+        public IReadOnlyList<InvestmentController> InvestmentControllersList => _investmentControllers;
+        
         private void Start()
         {
             Initialize();
@@ -55,6 +55,9 @@ namespace Gameplay.Investments
             
             _moneyService.OnMoneyChanged += InvestmentUpdate;
             InvestmentUpdate();
+
+            CalculateOfflineImpact();
+            _timeService.OnOfflineTime += CalculateOfflineImpact;
         }
 
         private void UpdateValues()
@@ -74,6 +77,14 @@ namespace Gameplay.Investments
                 investmentController.OnInvestmentUpdate(_moneyService.Money);
             }
             OnInvestmentsUpdate?.Invoke();
+        }
+
+        private void CalculateOfflineImpact()
+        {
+            foreach (var investmentController in _investmentControllers)
+            {
+                investmentController.CalculateOfflineImpact(_timeService.OfflineTime);
+            }
         }
 
         public void BuyInvestment(InvestmentController investmentController, long amount)

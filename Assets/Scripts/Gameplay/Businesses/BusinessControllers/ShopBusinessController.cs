@@ -1,6 +1,10 @@
+using System;
 using Configs;
 using Gameplay.Businesses.Generic;
 using Gameplay.Businesses.Generic.Models;
+using Gameplay.Services;
+using UI.Helpers.SystemMessages;
+using UnityEngine;
 
 namespace Gameplay.Businesses.BusinessControllers
 {
@@ -21,12 +25,12 @@ namespace Gameplay.Businesses.BusinessControllers
             BusinessConfig = config;
         }
 
-        public void Setup(BusinessManager businessManager)
+        public void Setup(MoneyService moneyService, SystemMessageManager systemMessageManager)
         { }
 
-        public void OnMoneyChanged(long money)
+        public void CalculateOfflineImpact(TimeSpan offlineTime)
         { }
-        
+
         public void OnRemove()
         { }
 

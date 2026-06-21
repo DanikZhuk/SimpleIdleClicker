@@ -21417,13 +21417,19 @@ MonoBehaviour:
   lastChange: {fileID: 422626762126279966}
   amount: {fileID: 438547438268190516}
   buyAmountInput: {fileID: 7496759423748630809}
-  maxAmountBuyButton: {fileID: 2560087785346842994}
   buyButton: {fileID: 4797654702380683494}
   buyTimerText: {fileID: 3758537536979748125}
+  maxAmountBuyButton: {fileID: 2560087785346842994}
+  maxAmountBuyImage: {fileID: 2631961754299867814}
+  maxAmountBuyButtonInactiveColor: {r: 0.19245279, g: 0.19245279, b: 0.19245279, a: 1}
+  maxAmountBuyButtonActiveColor: {r: 0, g: 0.5372549, b: 0.10980393, a: 1}
   sellAmountInput: {fileID: 7760141383018702712}
-  maxAmountSellButton: {fileID: 7274860447904575217}
   sellButton: {fileID: 5665439347742160864}
   sellTimerText: {fileID: 5384713496938836007}
+  maxAmountSellButton: {fileID: 7274860447904575217}
+  maxAmountSellImage: {fileID: 3200347134661598418}
+  maxAmountSellButtonInactiveColor: {r: 0.19215688, g: 0.19215688, b: 0.19215688, a: 1}
+  maxAmountSellButtonActiveColor: {r: 0, g: 0.5372549, b: 0.10980393, a: 1}
 --- !u!222 &1109518453390203113
 CanvasRenderer:
   m_ObjectHideFlags: 0

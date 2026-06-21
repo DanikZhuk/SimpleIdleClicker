@@ -12,6 +12,5 @@ namespace Configs
         public long Income;
         public int MaxCount;
         public float SellPercentage = 0.3f;
-        public float IncomeInterval = 5f; // Секунд между получением дохода
     }
 }

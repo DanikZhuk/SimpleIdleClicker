@@ -41,15 +41,15 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
         {
         }
 
-        public void Repair(float repairTime)
+        public void Repair(float repairSeconds)
         {
             if (!CanRepair) return;
             houseModel.Condition = HouseCondition.UnderRepair;
             CanSell = false;
-            houseModel.RepairTime = repairTime;
+            houseModel.RepairTimeSeconds = repairSeconds;
         }
 
-        public bool FinishRepair(float deltaTime)
+        public bool FinishRepair(float seconds)
         {
             if (houseModel.Condition != HouseCondition.UnderRepair)
             {
@@ -57,8 +57,8 @@ namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
                     CanSell = true;
                 return true;
             }
-            houseModel.RepairTime -= deltaTime;
-            if (houseModel.RepairTime <= 0)
+            houseModel.RepairTimeSeconds -= seconds;
+            if (houseModel.RepairTimeSeconds <= 0)
             {
                 houseModel.Condition = HouseCondition.FullyRepaired;
                 CanSell = true;

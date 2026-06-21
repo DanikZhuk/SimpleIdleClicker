@@ -95,6 +95,17 @@ namespace Gameplay.Investments
             }
         }
 
+        public void CalculateOfflineImpact(TimeSpan timeServiceOfflineTime)
+        {
+            if (InvestmentModel.ResumptionTime > 0)
+            {
+                InvestmentModel.ResumptionTime -= (float)timeServiceOfflineTime.TotalSeconds;
+            }
+
+            if (!(InvestmentModel.ResumptionTime < 0)) return;
+            InvestmentModel.ResumptionTime = 0f;
+            UpdateStatus();
+        }
 
         #region CalculateNewValue
 

@@ -2,17 +2,17 @@ using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
 
 namespace Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller
 {
-    public class BaseHouseController
+    public abstract class BaseHouseController
     {
         protected readonly HouseModel houseModel;
         public HouseModel HouseModel=>houseModel;
 
-        public BaseHouseController(HouseModel houseModel)
+        protected BaseHouseController(HouseModel houseModel)
         {
             this.houseModel = houseModel;
         }
-        
-        public BaseHouseController(BaseHouseController other)
+
+        protected BaseHouseController(BaseHouseController other)
         {
             houseModel = other.houseModel;
         }

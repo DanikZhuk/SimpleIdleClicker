@@ -1,6 +1,5 @@
 using Configs;
 using Gameplay.Businesses.Enums;
-using UnityEngine;
 
 namespace Gameplay.Businesses.Generic.Models
 {

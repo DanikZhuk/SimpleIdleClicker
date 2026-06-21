@@ -30,13 +30,6 @@ namespace Core.SceneInstallers
                 .FromInstance(moneyService)
                 .AsSingle();
             Container
-                .BindInterfacesAndSelfTo<TimeService>()
-                .FromInstance(timeService)
-                .AsSingle();
-            Container
-                .BindInterfacesAndSelfTo<OfflinePaymentService>()
-                .AsSingle();
-            Container
                 .BindInterfacesAndSelfTo<SystemMessageManager>()
                 .FromInstance(systemMessageManager)
                 .AsSingle();

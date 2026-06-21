@@ -28,6 +28,7 @@ namespace UI.BusinessViews.RepairShop
         {
             _houseController = houseController;
             _houseController.OnStatusChanged += UpdateInfo;
+            UpdateInfo();
             UpdateButtons();
         }
 
@@ -88,7 +89,7 @@ namespace UI.BusinessViews.RepairShop
         {
             if (_houseController.HouseModel.Condition == HouseCondition.UnderRepair)
             {
-                repairTime.text = StringFormatUtility.TimeString(_houseController.HouseModel.RepairTime);
+                repairTime.text = StringFormatUtility.TimeString(_houseController.HouseModel.RepairTimeSeconds);
             }
         }
 
