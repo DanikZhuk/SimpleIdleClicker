@@ -14,38 +14,26 @@ namespace Core.SaveSystem
     public class SaveDataService : MonoBehaviour
     {
         [Inject] private TimeService _timeService;
-
-        private string _filePath;
+        
         private SaveData _data;
-
-        private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        private string _filePath;
+        
+        private static readonly JsonSerializerSettings Settings = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
-            Formatting = Formatting.Indented,
+            Formatting = Formatting.Indented
         };
-
+        
+        public IReadOnlyList<BusinessModel> BusinessModels => _data.BusinessModels;
+        public List<InvestmentModel> Investments => _data.Investments;
+        
         public long Money
         {
             get => _data.Money;
             set => _data.Money = value;
         }
 
-        public IReadOnlyList<BusinessModel> BusinessModels => _data.BusinessModels;
-        public List<InvestmentModel> Investments => _data.Investments;
-
         public DateTime RecordTime => _data.RecordTime;
-
-        public void AddBusiness(BusinessModel businessModel)
-        {
-            _data.BusinessModels.Add(businessModel);
-            SaveData();
-        }
-
-        public void RemoveBusiness(BusinessModel businessModel)
-        {
-            _data.BusinessModels.Remove(businessModel);
-            SaveData();
-        }
 
         private void Awake()
         {
@@ -61,6 +49,18 @@ namespace Core.SaveSystem
 
         private void OnApplicationQuit()
         {
+            SaveData();
+        }
+
+        public void AddBusiness(BusinessModel businessModel)
+        {
+            _data.BusinessModels.Add(businessModel);
+            SaveData();
+        }
+
+        public void RemoveBusiness(BusinessModel businessModel)
+        {
+            _data.BusinessModels.Remove(businessModel);
             SaveData();
         }
 

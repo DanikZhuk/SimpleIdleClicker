@@ -14,8 +14,8 @@ namespace UI.Helpers.SystemMessages
         [SerializeField] private float overallTime;
         [SerializeField] private Vector2 initialOffset;
         [SerializeField] private Vector2 offset;
-        
-        public bool IsRunning {get; private set;}
+
+        public bool IsRunning { get; private set; }
 
         private void Awake()
         {

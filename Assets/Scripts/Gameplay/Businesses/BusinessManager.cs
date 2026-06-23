@@ -17,24 +17,57 @@ namespace Gameplay.Businesses
     {
         [SerializeField] private BusinessListConfig businessListConfig;
 
+        [Inject] private DiContainer _diContainer;
         [Inject] private MoneyService _moneyService;
         [Inject] private SaveDataService _saveDataService;
         [Inject] private SystemMessageManager _systemMessageManager;
         [Inject] private TimeService _timeService;
 
-        public event Action OnBusinessesChanged;
-        
         private readonly List<BusinessController> _purchasedBusinessControllers = new();
         private Dictionary<BusinessType, BusinessConfig> _configs = new();
+        
+        public event Action OnBusinessesChanged;
+
         public IReadOnlyList<BusinessController> PurchasedBusinessControllers => _purchasedBusinessControllers;
+        public float IncomeHourInSeconds => businessListConfig.IncomeHourInSeconds;
+
+        private void Awake()
+        {
+            Initialize();
+        }
+
+        private void Update()
+        {
+            foreach (var purchasedBusinessController in _purchasedBusinessControllers)
+                purchasedBusinessController.Update(Time.deltaTime);
+        }
+
+        private void OnApplicationPause(bool isPaused)
+        {
+            if (!isPaused) CalculateOfflineImpact();
+        }
+        
+        private void Initialize()
+        {
+            _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
+
+            foreach (var businessModel in _saveDataService.BusinessModels)
+            {
+                var businessController =
+                    CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
+                _purchasedBusinessControllers.Add(businessController);
+            }
+
+            CalculateOfflineImpact();
+        }
 
         public void AddBusiness(BusinessType businessType, string userBusinessName)
         {
             var config = _configs[businessType];
-            
+
             var businessModel = CreateBusinessModel(config, userBusinessName);
             _saveDataService.AddBusiness(businessModel);
-            
+
             var businessController = CreateBusinessController(config, businessModel);
             _purchasedBusinessControllers.Add(businessController);
 
@@ -56,54 +89,17 @@ namespace Gameplay.Businesses
         public int GetTypeCount(BusinessType businessType)
         {
             return _purchasedBusinessControllers
-                .Count(businessController => 
+                .Count(businessController =>
                     businessController.BusinessModel.BusinessType == businessType);
-        }
-
-        private void Awake()
-        {
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
-
-            foreach (var businessModel in _saveDataService.BusinessModels)
-            {
-                var businessController =
-                    CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
-                _purchasedBusinessControllers.Add(businessController);
-            }
-
-            CalculateOfflineImpact();
         }
 
         private void CalculateOfflineImpact()
         {
             var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
             var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
-            
+
             foreach (var businessController in _purchasedBusinessControllers)
-            {
                 businessController.Update(offlineTimeSeconds);
-            }
-        }
-
-        private void OnApplicationPause(bool isPaused)
-        {
-            if (!isPaused)
-            {
-                CalculateOfflineImpact();
-            }
-        }
-
-        private void Update()
-        {
-            foreach (var purchasedBusinessController in _purchasedBusinessControllers)
-            {
-                purchasedBusinessController.Update(Time.deltaTime);
-            }
         }
 
         private BusinessModel CreateBusinessModel(BusinessConfig businessConfig, string businessModelName)
@@ -127,7 +123,10 @@ namespace Gameplay.Businesses
                 _ => throw new ArgumentOutOfRangeException(
                     $"The type {businessConfig.Type} is not defined")
             };
-            businessController.Setup(_moneyService, _systemMessageManager);
+
+            _diContainer.Inject(businessController);
+            businessController.Setup();
+
             return businessController;
         }
 

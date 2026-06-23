@@ -6,37 +6,28 @@ namespace Utils
     {
         private const string Symbol = "$";
         private const string Time = "hour";
-        
+
         public static string MoneyString(this long money)
         {
             return $"{money:N0}{Symbol}";
         }
-        
-        public static string MoneySpeedString(long money)
+
+        public static string MoneySpeedString(this long money)
         {
             return $"{money:N0}{Symbol}/{Time}";
         }
-        
-        public static string TimeString(float seconds)
+
+        public static string TimeString(this float seconds)
         {
             var time = TimeSpan.FromSeconds(seconds);
             var format = "";
             if (time.Hours > 0)
-            {
                 format = @"h\:mm\:s";
-            }
             else if (time.Minutes > 0)
-            {
                 format = @"m\:ss";
-            }
             else if (time.Seconds > 0)
-            {
                 format = @"s\s";
-            }
-            else if (time.Milliseconds > 0)
-            {
-                format = @"s\s";
-            }
+            else if (time.Milliseconds > 0) format = @"s\s";
             return time.ToString(format);
         }
     }

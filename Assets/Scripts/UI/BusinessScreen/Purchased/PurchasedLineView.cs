@@ -15,21 +15,22 @@ namespace UI.BusinessScreen.Purchased
         [SerializeField] private TMP_Text income;
         [SerializeField] private Button panelAreaButton;
 
-        public event Action<BusinessController> OnClick;
-
         private BusinessController _businessController;
 
         private void Awake()
         {
             panelAreaButton.onClick.AddListener(PanelAreaButton_OnClick);
         }
-        
+
+        public event Action<BusinessController> OnClick;
+
         public void Initialize(Sprite icon, BusinessController businessController)
         {
             image.sprite = icon;
             estateName.text = businessController.BusinessModel.Name;
-            income.text = businessController.BusinessModel.Income > 0 ?
-                StringFormatUtility.MoneySpeedString(businessController.BusinessModel.Income) : "";
+            income.text = businessController.BusinessModel.Income > 0
+                ? businessController.BusinessModel.Income.MoneySpeedString()
+                : "";
             _businessController = businessController;
         }
 

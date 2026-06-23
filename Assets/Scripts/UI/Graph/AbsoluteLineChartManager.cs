@@ -9,40 +9,30 @@ namespace UI.Graph
     {
         [SerializeField] private LineChart chart;
 
-        private bool _isChartReady;
-
-        public void UpdateValue(List<float> history)
-        {
-            chart.ClearData();
-            if (!_isChartReady)
-            {
-                InitializeChart();
-            }
-            var serie = chart.GetSerie(0);
-            if (serie == null) return;
-
-            if (history.Count > 0)
-            {
-                serie.areaStyle.color =
-                    history[^2] > history.Last() ? Color.darkRed : Color.darkGreen;
-                serie.lineStyle.color = serie.areaStyle.color;
-            }
-
-            foreach (var f in history)
-            {
-                chart.AddData(serie.index, f);
-            }
-
-            chart.RefreshChart();
-        }
-
-        private void InitializeChart()
+        public void Initialize()
         {
             chart.ClearData();
             var serie = chart.GetSerie(0);
             serie.areaStyle.color = Color.white;
             chart.RefreshChart();
-            _isChartReady = true;
+        }
+
+        public void UpdateValue(List<float> history)
+        {
+            chart.ClearData();
+            var series = chart.GetSerie(0);
+            if (series == null) return;
+
+            if (history.Count > 0)
+            {
+                series.areaStyle.color =
+                    history[^2] > history.Last() ? Color.darkRed : Color.darkGreen;
+                series.lineStyle.color = series.areaStyle.color;
+            }
+
+            foreach (var f in history) chart.AddData(series.index, f);
+
+            chart.RefreshChart();
         }
     }
 }

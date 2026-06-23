@@ -12,22 +12,30 @@ namespace UI.BusinessViews.RepairShop
     public class HouseManagerView : MonoBehaviour
     {
         [Header("Offers")]
-        [SerializeField] OfferLineView offerLineViewPrefab;
-        [SerializeField] Transform offerLineContainer;
-        [SerializeField] SpriteLibrary library;
+        [SerializeField] private OfferLineView offerLineViewPrefab;
+        [SerializeField] private RectTransform offerLineContainer;
+        [SerializeField] private SpriteLibrary library;
+
         [Header("Renovation")]
-        [SerializeField] RepairLineView repairLineViewPrefab;
-        [SerializeField] Transform renovationLineContainer;
+        [SerializeField] private RepairLineView repairLineViewPrefab;
+        [SerializeField] private RectTransform renovationLineContainer;
+
         [Header("Info Elements")]
-        [SerializeField] TMP_Text counter;
+        [SerializeField] private TMP_Text counter;
 
         [Inject] private MoneyService _moneyService;
-
+        
         private const string Category = "House";
-
-        private readonly List<RepairLineView> _repairLines = new();
+        
         private readonly List<OfferLineView> _offerLines = new();
+        private readonly List<RepairLineView> _repairLines = new();
         private RepairShopBusinessController _businessController;
+        
+        private void OnDestroy()
+        {
+            _businessController.OnHousesUpdate -= UpdateInfo;
+            _moneyService.OnMoneyChanged -= UpdateInfo;
+        }
 
         public void Initialize(BusinessController businessController)
         {
@@ -35,12 +43,6 @@ namespace UI.BusinessViews.RepairShop
             _businessController.OnHousesUpdate += UpdateInfo;
             _moneyService.OnMoneyChanged += UpdateInfo;
             UpdateInfo();
-        }
-
-        private void OnDestroy()
-        {
-            _businessController.OnHousesUpdate -= UpdateInfo;
-            _moneyService.OnMoneyChanged -= UpdateInfo;
         }
 
         private void UpdateInfo()
@@ -93,7 +95,9 @@ namespace UI.BusinessViews.RepairShop
 
                 RepairLineView line;
                 if (index < _repairLines.Count)
+                {
                     line = _repairLines[index];
+                }
                 else
                 {
                     line = Instantiate(repairLineViewPrefab, renovationLineContainer);

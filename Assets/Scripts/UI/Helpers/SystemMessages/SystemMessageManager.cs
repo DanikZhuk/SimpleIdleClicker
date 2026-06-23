@@ -5,20 +5,15 @@ namespace UI.Helpers.SystemMessages
 {
     public class SystemMessageManager : MonoBehaviour
     {
-        [SerializeField] SystemMessageView systemMessageViewPrefab;
-        [SerializeField] Transform rectTransform;
+        [SerializeField] private SystemMessageView systemMessageViewPrefab;
+        [SerializeField] private RectTransform prefabContainer;
 
         private readonly Queue<string> _messagesQueue = new();
         private SystemMessageView _messageViewInstance;
 
         private void Awake()
         {
-            _messageViewInstance = Instantiate(systemMessageViewPrefab, rectTransform);
-        }
-
-        public void Log(string message)
-        {
-            _messagesQueue.Enqueue(message);
+            _messageViewInstance = Instantiate(systemMessageViewPrefab, prefabContainer);
         }
 
         private void Update()
@@ -27,6 +22,11 @@ namespace UI.Helpers.SystemMessages
             if (_messageViewInstance.IsRunning) return;
             var message = _messagesQueue.Dequeue();
             _messageViewInstance.Initialize(message, Color.white);
+        }
+
+        public void Log(string message)
+        {
+            _messagesQueue.Enqueue(message);
         }
     }
 }

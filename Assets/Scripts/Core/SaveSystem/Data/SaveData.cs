@@ -7,10 +7,9 @@ namespace Core.SaveSystem.Data
 {
     public class SaveData
     {
-        public long Money;
-        
         public readonly List<BusinessModel> BusinessModels = new();
         public readonly List<InvestmentModel> Investments = new();
+        public long Money;
 
         public DateTime RecordTime;
     }

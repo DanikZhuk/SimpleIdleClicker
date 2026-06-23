@@ -7,17 +7,19 @@ namespace UI.BusinessScreen.Store
 {
     public class BusinessListView : MonoBehaviour
     {
+        private const string Category = "Business";
+
         [Header("Config")]
-        [SerializeField] private BusinessListConfig  businessListConfig;
+        [SerializeField] private BusinessListConfig businessListConfig;
+
         [Header("Instance Settings")]
         [SerializeField] private BusinessLineView businessLinePrefab;
-        [SerializeField] private Transform lineContainer;
+        [SerializeField] private RectTransform lineContainer;
         [SerializeField] private SpriteLibrary library;
+
         [Header("PopUp Settings")]
         [SerializeField] private PurchaseView purchaseView;
-        [SerializeField] private Transform popUpContainer;
-
-        private const string Category = "Estate";
+        [SerializeField] private RectTransform popUpContainer;
 
         private void Start()
         {
@@ -41,7 +43,7 @@ namespace UI.BusinessScreen.Store
         {
             Instantiate(purchaseView, popUpContainer)
                 .Initialize(
-                    library.GetSprite(Category, 
+                    library.GetSprite(Category,
                         businessConfig.Type.ToString()),
                     businessConfig);
         }

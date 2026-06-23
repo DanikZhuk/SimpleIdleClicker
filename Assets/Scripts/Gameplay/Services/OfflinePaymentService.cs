@@ -11,52 +11,41 @@ namespace Gameplay.Services
     public class OfflinePaymentService : MonoBehaviour
     {
         [SerializeField] private OfflinePaymentConfig paymentConfig;
-
-        [Inject] private SaveDataService _saveDataService;
-        [Inject] private MoneyService _moneyService;
         [Inject] private BusinessManager _businessManager;
+        [Inject] private MoneyService _moneyService;
+        [Inject] private SaveDataService _saveDataService;
         [Inject] private TimeService _timeService;
 
-        private DateTime _nextIncomeTime;
-
+        private TimeSpan _nextIncomeTime;
+        
+        
         private void Start()
         {
-            AddOfflineIncomes();
-        }
-        
-        private void OnApplicationPause(bool isPaused)
-        {
-            if (!isPaused)
-            {
-                AddOfflineIncomes();
-            }
+            AddIncomes(_saveDataService.RecordTime, _timeService.Now);
         }
 
         private void Update()
         {
-            if (Time.time >= _nextIncomeTime)
-            {
-                AddIncomes();
-                _nextIncomeTime += paymentConfig.IncomeIntervalSeconds;
-            }
+            if (!(Time.time >= _nextIncomeTime.TotalSeconds)) return;
+
+            var endTime = DateTime.Now;
+            var startTime = endTime - _nextIncomeTime;
+
+            AddIncomes(startTime, endTime);
+            _nextIncomeTime += TimeSpan.FromSeconds(paymentConfig.IncomeIntervalSeconds);
         }
 
-        private void AddIncomes()
+        private void OnApplicationPause(bool isPaused)
+        {
+            if (!isPaused) AddIncomes(_saveDataService.RecordTime, _timeService.Now);
+        }
+
+        private void AddIncomes(DateTime startTime, DateTime endTime)
         {
             var incomes = _businessManager.PurchasedBusinessControllers
-                .Sum(controller => controller.GetIncome());
+                .Sum(controller => controller.GetIncome(startTime, endTime, _businessManager.IncomeHourInSeconds));
 
             _moneyService.Money += incomes;
-        }
-        
-        private void AddOfflineIncomes()
-        {
-            var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
-            var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
-            var count = (int)(offlineTimeSeconds/paymentConfig.IncomeIntervalSeconds);
-
-            for (var i = 0; i < count; i++)
-                AddIncomes();
         }
     }
 }

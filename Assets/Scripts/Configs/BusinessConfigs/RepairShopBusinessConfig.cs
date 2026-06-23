@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Configs.BusinessConfigs
 {
     [CreateAssetMenu(fileName = "RepairShopBusinessConfig", menuName = "Configs/RepairShopBusinessConfig")]
-    public class RepairShopBusinessConfig: BusinessConfig
+    public class RepairShopBusinessConfig : BusinessConfig
     {
         [Header("Houses properties")]
         public int HouseOffersAmount;

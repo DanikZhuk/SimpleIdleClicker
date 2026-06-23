@@ -20,6 +20,11 @@ namespace UI.BusinessViews.Default
 
         protected BusinessController BusinessController;
 
+        protected virtual void Start()
+        {
+            sellButton.onClick.AddListener(SellButton_OnClick);
+        }
+
         public virtual void Initialize(Sprite icon, BusinessController businessController)
         {
             if (nameText)
@@ -27,17 +32,12 @@ namespace UI.BusinessViews.Default
             if (image)
                 image.sprite = icon;
             if (incomeText)
-                incomeText.text = businessController.GetIncome() > 0
-                    ? businessController.GetIncome().MoneySpeedString()
+                incomeText.text = businessController.IncomePerHour > 0
+                    ? businessController.IncomePerHour.MoneySpeedString()
                     : "";
             if (priceText)
                 priceText.text = businessController.GetSellPrice().MoneyString();
             BusinessController = businessController;
-        }
-
-        protected virtual void Start()
-        {
-            sellButton.onClick.AddListener(SellButton_OnClick);
         }
 
         protected virtual void SellButton_OnClick()

@@ -2,16 +2,28 @@ using System;
 using Configs;
 using Gameplay.Services;
 using UnityEngine;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Investments
 {
     public class InvestmentController
     {
+        [Inject] private MoneyService _moneyService;
+        
         public InvestmentModel InvestmentModel { get; }
         public InvestmentConfig InvestmentConfig { get; }
+        public event Action OnInvestmentUpdate;
 
-        private MoneyService _moneyService;
+        public long MaxAmountCanBuy
+        {
+            get => _maxAmountCanBuy;
+            private set
+            {
+                _maxAmountCanBuy = value;
+                OnInvestmentUpdate?.Invoke();
+            }
+        }
 
         public long Amount
         {
@@ -20,44 +32,39 @@ namespace Gameplay.Investments
             {
                 InvestmentModel.PurchasedAmount = value;
                 InvestmentModel.ResumptionTime = InvestmentConfig.ResumptionTime;
+                OnInvestmentUpdate?.Invoke();
             }
         }
-
-        public long MaxAmountCanBuy { get; private set; }
-
-        public event Action OnInvestmentUpdate;
-
-        private long _amount;
-        private long _userInput;
 
         public InvestmentController(InvestmentModel investmentModel, InvestmentConfig investmentConfig)
         {
             InvestmentModel = investmentModel;
             InvestmentConfig = investmentConfig;
-            InitializeValues();
         }
 
-        public void Setup(MoneyService moneyService)
+        public void Setup()
         {
-            _moneyService = moneyService;
+            while (InvestmentModel.History.Count < InvestmentConfig.HistorySize)
+            {
+                GetNewValue();
+                InvestmentModel.History.Add(InvestmentModel.CurrentCost);
+            }
+
+            _moneyService.OnMoneyChanged += OnMoneyChanged;
+            OnMoneyChanged();
         }
 
-        public void UpdateInvestment()
+        public void UpdateInvestmentCurrentCost()
         {
             GetNewValue();
             InvestmentModel.History.Add(InvestmentModel.CurrentCost);
             if (InvestmentModel.History.Count <= InvestmentConfig.HistorySize)
                 return;
             InvestmentModel.History.RemoveAt(0);
-            
-            var amountCanBuy = _moneyService.Money / InvestmentModel.CurrentCost;
-            if (amountCanBuy > InvestmentConfig.MaxAmount-Amount)
-                amountCanBuy = InvestmentConfig.MaxAmount-Amount;
-            MaxAmountCanBuy = amountCanBuy;
-            
+
             OnInvestmentUpdate?.Invoke();
         }
-
+        
         public void Update(float deltaTime)
         {
             switch (InvestmentModel.ResumptionTime)
@@ -71,18 +78,23 @@ namespace Gameplay.Investments
             }
         }
 
+        public void OnRemove()
+        {
+            _moneyService.OnMoneyChanged -= OnMoneyChanged;
+        }
+
+        private void OnMoneyChanged()
+        {
+            var amountCanBuy = _moneyService.Money / InvestmentModel.CurrentCost;
+            if (amountCanBuy > InvestmentConfig.MaxAmount - Amount)
+                amountCanBuy = InvestmentConfig.MaxAmount - Amount;
+            MaxAmountCanBuy = amountCanBuy;
+        }
+
         #region CalculateNewValue
 
         private float _maxAllowedChange;
-
-        private void InitializeValues()
-        {
-            while (InvestmentModel.History.Count < InvestmentConfig.HistorySize)
-            {
-                GetNewValue();
-                InvestmentModel.History.Add(InvestmentModel.CurrentCost);
-            }
-        }
+        private long _maxAmountCanBuy;
 
         private void GetNewValue()
         {

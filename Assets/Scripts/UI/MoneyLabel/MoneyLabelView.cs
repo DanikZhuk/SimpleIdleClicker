@@ -10,7 +10,7 @@ namespace UI.MoneyLabel
         [SerializeField] private TMP_Text moneyText;
 
         [Inject] private MoneyService _moneyService;
-        
+
         private void Start()
         {
             _moneyService.OnMoneyChanged += OnMoneyChanged;

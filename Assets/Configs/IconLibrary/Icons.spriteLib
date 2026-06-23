@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrarySourceAsset
   m_Library:
-  - m_Name: Estate
-    m_Hash: 199630746
+  - m_Name: Business
+    m_Hash: 832900206
     m_CategoryList: []
     m_OverrideEntries:
     - m_Name: Shop
@@ -45,8 +45,8 @@ MonoBehaviour:
       m_SpriteOverride: {fileID: 21300000, guid: d889a922215864d4798bd4ae1e2c3a9e, type: 3}
     m_FromMain: 0
     m_EntryOverrideCount: 2
-  - m_Name: Crypt
-    m_Hash: 993010335
+  - m_Name: Investment
+    m_Hash: 211224838
     m_CategoryList: []
     m_OverrideEntries:
     - m_Name: DodgeCoin
@@ -62,5 +62,5 @@ MonoBehaviour:
     m_FromMain: 0
     m_EntryOverrideCount: 2
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 639173958070170598
+  m_ModificationHash: 639178548651285033
   m_Version: 1

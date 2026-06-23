@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Configs;
 using Configs.BusinessConfigs;
 using Gameplay.Businesses.BusinessModels;
-using Gameplay.Services;
-using UI.Helpers.SystemMessages;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Businesses.BusinessControllers
@@ -14,7 +12,9 @@ namespace Gameplay.Businesses.BusinessControllers
         private readonly List<HouseController> _houseOffers = new();
         private readonly List<HouseController> _purchasedHouses = new();
         private readonly List<HouseController> _repairHouses = new();
-
+        
+        public event Action OnHousesUpdate;
+        
         private RepairShopBusinessModel RepairShopBusinessModel => (RepairShopBusinessModel)businessModel;
         private RepairShopBusinessConfig RepairShopBusinessConfig => (RepairShopBusinessConfig)businessConfig;
 
@@ -22,23 +22,17 @@ namespace Gameplay.Businesses.BusinessControllers
         public IReadOnlyList<HouseController> PurchasedHouses => _purchasedHouses;
 
         public int MaxPurchasedHousesAmount => RepairShopBusinessConfig.MaxPurchasedHousesAmount;
-
-        public event Action OnHousesUpdate;
-
-        public RepairShopBusinessController(BusinessConfig businessConfig, 
-                                            BusinessModel businessModel): base(businessConfig, 
-                                                                               businessModel)
+        
+        public RepairShopBusinessController(BusinessConfig businessConfig,
+            BusinessModel businessModel) : base(businessConfig,
+            businessModel)
         { }
 
-        public override void Setup(MoneyService moneyService, 
-                                   SystemMessageManager systemMessageManager)
-        {
-            base.Setup(moneyService, systemMessageManager);
 
+        public override void Setup()
+        {
             foreach (var houseModel in RepairShopBusinessModel.HouseOffers)
-            {
                 _houseOffers.Add(new HouseController(houseModel));
-            }
 
             foreach (var houseModel in RepairShopBusinessModel.PurchasedHouses)
             {
@@ -103,7 +97,7 @@ namespace Gameplay.Businesses.BusinessControllers
             for (var i = _repairHouses.Count - 1; i >= 0; i--)
             {
                 var houseController = _repairHouses[i];
-                if (!houseController.UpdateRepair(deltaTime)) 
+                if (!houseController.UpdateRepair(deltaTime))
                     continue;
                 houseController.CompleteRepair(RepairShopBusinessConfig.AfterRepairCostCoeff);
                 _repairHouses.RemoveAt(i);
@@ -120,38 +114,35 @@ namespace Gameplay.Businesses.BusinessControllers
             return new HouseModel(cost, repairCost);
         }
     }
-    
+
     public class HouseController
     {
         public HouseModel Model { get; }
-
-        public event Action OnConditionChanged;
-        public string Id => Model.Id;
+        
         public long Cost => Model.Cost;
         public long RepairCost => Model.RepairCost;
+        public bool IsUnderRepair => Model.Condition == HouseCondition.UnderRepair;
+        public bool IsNeedRepair => Model.Condition == HouseCondition.NeedRepair;
+
+        public long SellPrice => Model.Cost;
+        
+        public event Action OnConditionChanged;
         public HouseCondition Condition
         {
             get => Model.Condition;
             private set
             {
-                Model.Condition=value;
+                Model.Condition = value;
                 OnConditionChanged?.Invoke();
             }
         }
 
-        public bool IsUnderRepair => Model.Condition == HouseCondition.UnderRepair;
-        public bool IsNeedRepair => Model.Condition == HouseCondition.NeedRepair;
-
-        public long SellPrice => Model.Cost;
         public float RepairProgress
         {
             get => Model.RemainingRepairTime;
             private set => Model.RemainingRepairTime = value;
         }
-
-        public bool CanBeRepaired => Model.Condition == HouseCondition.NeedRepair;
-        public bool CanBeSold => Model.Condition != HouseCondition.UnderRepair;
-
+        
         public HouseController(HouseModel model)
         {
             Model = model;

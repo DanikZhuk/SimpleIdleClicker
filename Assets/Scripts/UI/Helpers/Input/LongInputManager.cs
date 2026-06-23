@@ -5,12 +5,12 @@ namespace UI.Helpers.Input
 {
     public class LongInputManager : MonoBehaviour
     {
-        [SerializeField] TMP_InputField inputField;
-
-        private long _minValue = 0;
-        private long _maxValue = 100;
+        [SerializeField] private TMP_InputField inputField;
 
         private long _lastValue = 1;
+        private long _maxValue = 100;
+
+        private long _minValue;
 
         public long Value
         {
@@ -18,10 +18,7 @@ namespace UI.Helpers.Input
             set
             {
                 _lastValue = value;
-                if (_lastValue > _maxValue)
-                {
-                    _lastValue = _maxValue;
-                }
+                if (_lastValue > _maxValue) _lastValue = _maxValue;
 
                 inputField.SetTextWithoutNotify(_lastValue.ToString());
             }
@@ -39,10 +36,7 @@ namespace UI.Helpers.Input
             _minValue = minValue;
             _maxValue = maxValue;
             _lastValue = _minValue;
-            if (_lastValue > maxValue)
-            {
-                _lastValue = maxValue;
-            }
+            if (_lastValue > maxValue) _lastValue = maxValue;
 
             inputField.SetTextWithoutNotify(_lastValue.ToString());
         }
@@ -60,22 +54,16 @@ namespace UI.Helpers.Input
         {
             if (long.TryParse(value, out var newValue))
             {
-                if (newValue < _minValue)
-                {
-                    newValue = _minValue;
-                }
+                if (newValue < _minValue) newValue = _minValue;
 
-                if (newValue > _maxValue)
-                {
-                    newValue = _maxValue;
-                }
+                if (newValue > _maxValue) newValue = _maxValue;
 
                 inputField.SetTextWithoutNotify(newValue.ToString());
                 _lastValue = newValue;
             }
             else
             {
-                if (inputField.text == "")
+                if (inputField.text == string.Empty)
                     return;
                 inputField.SetTextWithoutNotify(_lastValue.ToString());
             }
@@ -83,7 +71,7 @@ namespace UI.Helpers.Input
 
         private void Input_OnSelectAndDeselect(string value)
         {
-            if (value == "")
+            if (value == string.Empty)
                 inputField.SetTextWithoutNotify(_minValue.ToString());
         }
     }

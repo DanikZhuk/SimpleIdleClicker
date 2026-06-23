@@ -1,5 +1,4 @@
 using System;
-using Configs;
 using Gameplay.Investments;
 using TMPro;
 using UnityEngine;
@@ -16,9 +15,14 @@ namespace UI.Investments
         [SerializeField] private TMP_Text currentCost;
 
         public event Action<InvestmentController> OnClick;
-
+        
         private InvestmentController _investmentController;
-    
+
+        private void Awake()
+        {
+            panelButton.onClick.AddListener(PanelButton_OnClick);
+        }
+        
         public void Initialize(InvestmentController investmentController, Sprite investmentImage)
         {
             image.sprite = investmentImage;
@@ -28,20 +32,12 @@ namespace UI.Investments
 
         public void UpdateValues()
         {
-            currentCost.text = StringFormatUtility.MoneyString(_investmentController.InvestmentModel.CurrentCost);
-        }
-    
-        private void Awake()
-        {
-            panelButton.onClick.AddListener(PanelButton_OnClick);
+            currentCost.text = _investmentController.InvestmentModel.CurrentCost.MoneyString();
         }
 
         private void PanelButton_OnClick()
         {
-            if (_investmentController != null)
-            {
-                OnClick?.Invoke(_investmentController);
-            }
+            if (_investmentController != null) OnClick?.Invoke(_investmentController);
         }
     }
 }

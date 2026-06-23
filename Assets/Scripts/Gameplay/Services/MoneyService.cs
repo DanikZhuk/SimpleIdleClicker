@@ -11,7 +11,7 @@ namespace Gameplay.Services
         [SerializeField] private ClickConfig clickConfig;
 
         [Inject] private SaveDataService _saveDataService;
-
+        
         public event Action OnMoneyChanged;
 
         public long Money
@@ -23,7 +23,7 @@ namespace Gameplay.Services
                 OnMoneyChanged?.Invoke();
             }
         }
-
+        
         public void TapEarn()
         {
             Money += clickConfig.TapAmount;

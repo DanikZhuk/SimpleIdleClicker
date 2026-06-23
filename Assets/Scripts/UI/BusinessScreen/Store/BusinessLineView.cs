@@ -16,7 +16,6 @@ namespace UI.BusinessScreen.Store
         [SerializeField] private Button panelAreaButton;
 
         private BusinessConfig _config;
-        
         public event Action<BusinessConfig> OnClick;
 
         private void Awake()

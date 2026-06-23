@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Configs
 {
     [CreateAssetMenu(fileName = "InvestmentConfig", menuName = "Configs/InvestmentConfig")]
-    public class InvestmentConfig: ScriptableObject
+    public class InvestmentConfig : ScriptableObject
     {
         public InvestmentType Type;
         public string Name;
@@ -13,7 +13,7 @@ namespace Configs
         public long InitialCost;
         public float ResumptionTime;
         public int MaxAmount;
-        public int HistorySize=200;
+        public int HistorySize = 200;
         public float MeanReversionStrength;
         public float MaxAllowedChangeCoeff;
         public float BaseStep;

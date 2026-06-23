@@ -3,17 +3,17 @@ using Gameplay.Investments;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Core.SceneInstallers
 {
-    public class GameplaySceneMonoInstaller: MonoInstaller
+    public class GameplaySceneMonoInstaller : MonoInstaller
     {
         [SerializeField] private BusinessManager businessManager;
         [SerializeField] private InvestmentManager investmentManager;
         [SerializeField] private MoneyService moneyService;
         [SerializeField] private SystemMessageManager systemMessageManager;
+
         public override void InstallBindings()
         {
             Container

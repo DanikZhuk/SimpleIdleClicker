@@ -5,10 +5,11 @@ using Zenject;
 
 namespace Core.ProjectInstaller
 {
-    public class ProjectMonoInstaller: MonoInstaller
+    public class ProjectMonoInstaller : MonoInstaller
     {
         [SerializeField] private TimeService timeServicePrefab;
         [SerializeField] private SaveDataService saveDataServicePrefab;
+
         public override void InstallBindings()
         {
             Container.Bind<TimeService>()

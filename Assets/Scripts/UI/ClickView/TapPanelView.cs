@@ -8,7 +8,7 @@ namespace UI.ClickView
     public class TapPanelView : MonoBehaviour
     {
         [SerializeField] private Button tapAreaButton;
-        
+
         [Inject] private MoneyService _moneyService;
 
         private void Awake()

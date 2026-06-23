@@ -7,25 +7,24 @@ using Utils;
 
 namespace UI.BusinessViews.RepairShop
 {
-    public class OfferLineView: MonoBehaviour
+    public class OfferLineView : MonoBehaviour
     {
         [SerializeField] private Image image;
         [SerializeField] private Button buyButton;
         [SerializeField] private TMP_Text buyCost;
-        
-        public event Action<OfferLineView> OnBuyButtonClick;
 
+        public event Action<OfferLineView> OnBuyButtonClick;
         public HouseController HouseController { get; private set; }
 
         private void Awake()
         {
             buyButton.onClick.AddListener(BuyButton_Clicked);
         }
-
+        
         public void Initialize(HouseController houseController)
         {
             HouseController = houseController;
-            buyCost.text = StringFormatUtility.MoneyString(houseController.Cost);
+            buyCost.text = houseController.Cost.MoneyString();
         }
 
         public void UpdateBuyButton(long money, bool hasFreeSpace)

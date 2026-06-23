@@ -12,26 +12,19 @@ namespace UI.BusinessScreen.Purchased
 {
     public class PurchasedListView : MonoBehaviour
     {
-        [Serializable]
-        private class CustomView{
-            public BusinessType Type;
-            public ReviseView View;
-        }
-        
         [Header("Instance Settings")]
         [SerializeField] private PurchasedLineView businessLinePrefab;
-        [SerializeField] private Transform lineContainer;
+        [SerializeField] private RectTransform lineContainer;
         [SerializeField] private SpriteLibrary library;
 
         [Header("PopUp Settings")]
         [SerializeField] private ReviseView defaultReviseView;
         [SerializeField] private CustomView[] customViews;
-        [SerializeField] private Transform popUpContainer;
+        [SerializeField] private RectTransform popUpContainer;
 
         [Inject] private BusinessManager _businessManager;
-
-        private const string Category = "Estate";
-
+        
+        private const string Category = "Business";
         private readonly List<PurchasedLineView> _lineViews = new();
 
         private void Start()
@@ -39,16 +32,16 @@ namespace UI.BusinessScreen.Purchased
             Initialize();
         }
 
-        private void Initialize()
-        {
-            _businessManager.OnBusinessesChanged += UpdateInfo;
-            UpdateInfo();
-        }
-
         private void OnDestroy()
         {
             if (_businessManager != null)
                 _businessManager.OnBusinessesChanged -= UpdateInfo;
+        }
+
+        private void Initialize()
+        {
+            _businessManager.OnBusinessesChanged += UpdateInfo;
+            UpdateInfo();
         }
 
         private void UpdateInfo()
@@ -58,7 +51,9 @@ namespace UI.BusinessScreen.Purchased
             {
                 PurchasedLineView view;
                 if (_lineViews.Count > index)
+                {
                     view = _lineViews[index];
+                }
                 else
                 {
                     view = Instantiate(businessLinePrefab, lineContainer);
@@ -89,10 +84,18 @@ namespace UI.BusinessScreen.Purchased
                 view = customView.View;
                 break;
             }
+
             Instantiate(view, popUpContainer)
                 .Initialize(
                     library.GetSprite(Category, businessController.Type.ToString()),
                     businessController);
+        }
+
+        [Serializable]
+        private class CustomView
+        {
+            public BusinessType Type;
+            public ReviseView View;
         }
     }
 }

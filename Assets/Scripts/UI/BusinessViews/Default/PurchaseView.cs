@@ -18,10 +18,23 @@ namespace UI.BusinessViews.Default
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private Button buyButton;
 
-        [Inject] private MoneyService _moneyService;
         [Inject] private BusinessManager _businessManager;
+        [Inject] private MoneyService _moneyService;
 
         private BusinessConfig _businessConfig;
+        
+        private void Start()
+        {
+            buyButton.onClick.AddListener(BuyButton_Clicked);
+            _businessManager.OnBusinessesChanged += OnBusinessesChanged;
+            _moneyService.OnMoneyChanged += MoneyService_OnMoneyChanged;
+            OnBusinessesChanged();
+        }
+
+        private void OnDestroy()
+        {
+            _businessManager.OnBusinessesChanged -= OnBusinessesChanged;
+        }
 
         public void Initialize(Sprite icon, BusinessConfig businessConfig)
         {
@@ -32,22 +45,9 @@ namespace UI.BusinessViews.Default
             _businessConfig = businessConfig;
         }
 
-        private void Start()
-        {
-            buyButton.onClick.AddListener(BuyButton_Clicked);
-            _businessManager.OnBusinessesChanged += OnBusinessesChanged;
-            _moneyService.OnMoneyChanged += MoneyService_OnMoneyChanged;
-            OnBusinessesChanged();
-        }
-
         private void MoneyService_OnMoneyChanged()
         {
             buyButton.interactable = _moneyService.Money >= _businessConfig.Price;
-        }
-
-        private void OnDestroy()
-        {
-            _businessManager.OnBusinessesChanged -= OnBusinessesChanged;
         }
 
         private void BuyButton_Clicked()

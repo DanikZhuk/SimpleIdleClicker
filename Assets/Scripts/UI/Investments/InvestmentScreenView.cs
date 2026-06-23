@@ -13,25 +13,32 @@ namespace UI.Investments
         [Header("General")]
         [SerializeField] private SpriteLibrary library;
         [SerializeField] private Slider timeSlider;
+        
         [Header("InvestmentModel List  Line")]
         [SerializeField] private InvestmentLineView investmentLineViewPrefab;
-        [SerializeField] private Transform viewsContainer;
+        [SerializeField] private RectTransform viewsContainer;
+        
         [Header("InvestmentModel View")]
         [SerializeField] private InvestmentPanelView investmentPanelViewPrefab;
-        [SerializeField] private Transform popUpContainer;
+        [SerializeField] private RectTransform popUpContainer;
+
         [Inject] private InvestmentManager _investmentManager;
         [Inject] private TimeService _timeService;
         
-        private const string Category = "Crypt";
-
+        private const string Category = "Investment";
+        
         private readonly List<InvestmentLineView> _investmentLineViews = new();
-
         private InvestmentPanelView _investmentPanelView;
 
         private void Start()
         {
             InitializeListViews();
             _investmentManager.OnInvestmentsUpdate += OnInvestmentsUpdate;
+        }
+
+        private void Update()
+        {
+            timeSlider.value = _investmentManager.GetUpdateTimeProgress();
         }
 
         private void OnDestroy()
@@ -49,7 +56,7 @@ namespace UI.Investments
                 investmentLineView.OnClick += InitializeView;
                 _investmentLineViews.Add(investmentLineView);
             }
-            
+
             OnInvestmentsUpdate();
         }
 
@@ -68,19 +75,8 @@ namespace UI.Investments
 
         private void OnInvestmentsUpdate()
         {
-            if (_investmentPanelView)
-            {
-                _investmentPanelView.UpdateValues();
-            }
-            foreach (var investmentLineView in _investmentLineViews)
-            {
-                investmentLineView.UpdateValues();
-            }
-        }
-
-        private void Update()
-        {
-            timeSlider.value = _investmentManager.GetUpdateTimeProgress();
+            if (_investmentPanelView) _investmentPanelView.UpdateValues();
+            foreach (var investmentLineView in _investmentLineViews) investmentLineView.UpdateValues();
         }
     }
 }

@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace UI.BusinessViews.RepairShop
 {
-    public class RepairView: ReviseView
+    public class RepairView : ReviseView
     {
         [SerializeField] private Button housesManagementButton;
         [SerializeField] private HouseManagerView houseManagerViewPrefab;
-        
+
         public override void Initialize(Sprite icon, BusinessController businessController)
         {
             base.Initialize(icon, businessController);
