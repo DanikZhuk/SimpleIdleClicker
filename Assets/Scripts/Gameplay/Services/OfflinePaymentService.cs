@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Configs;
+using Core.SaveSystem;
 using Gameplay.Businesses;
 using UnityEngine;
 using Zenject;
@@ -10,6 +12,7 @@ namespace Gameplay.Services
     {
         [SerializeField] private OfflinePaymentConfig paymentConfig;
 
+        [Inject] private SaveDataService _saveDataService;
         [Inject] private MoneyService _moneyService;
         [Inject] private BusinessManager _businessManager;
         [Inject] private TimeService _timeService;
@@ -19,25 +22,14 @@ namespace Gameplay.Services
         private void Start()
         {
             AddOfflineIncomes();
-            _timeService.OnOfflineTime += AddOfflineIncomes;
-        }
-
-        private void AddIncomes()
-        {
-            var incomes = _businessManager.PurchasedBusinessControllers
-                .Sum(controller => controller.BusinessModel.Income);
-
-            _moneyService.Money += incomes;
         }
         
-        private void AddOfflineIncomes()
+        private void OnApplicationPause(bool isPaused)
         {
-            var incomes = _businessManager.PurchasedBusinessControllers
-                .Sum(controller => controller.BusinessModel.Income);
-            var count = (int)(_timeService.OfflineTime.TotalSeconds
-                              /paymentConfig.IncomeIntervalSeconds);
-
-            _moneyService.Money += incomes*count;
+            if (!isPaused)
+            {
+                AddOfflineIncomes();
+            }
         }
 
         private void Update()
@@ -47,6 +39,24 @@ namespace Gameplay.Services
             if (!(_incomesRunningTime >= paymentConfig.IncomeIntervalSeconds)) return;
             AddIncomes();
             _incomesRunningTime = 0f;
+        }
+
+        private void AddIncomes()
+        {
+            var incomes = _businessManager.PurchasedBusinessControllers
+                .Sum(controller => controller.GetIncome());
+
+            _moneyService.Money += incomes;
+        }
+        
+        private void AddOfflineIncomes()
+        {
+            var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
+            var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
+            var count = (int)(offlineTimeSeconds/paymentConfig.IncomeIntervalSeconds);
+
+            for (var i = 0; i < count; i++)
+                AddIncomes();
         }
     }
 }

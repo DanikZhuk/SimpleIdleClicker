@@ -1,4 +1,5 @@
 using Gameplay.Businesses;
+using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Businesses.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,20 +19,20 @@ namespace UI.BusinessViews.Default
 
         [Inject] private BusinessManager _businessManager;
 
-        protected IBusinessController BusinessController;
+        protected BusinessController BusinessController;
 
-        public virtual void Initialize(Sprite icon, IBusinessController businessController)
+        public virtual void Initialize(Sprite icon, BusinessController businessController)
         {
             if (nameText)
                 nameText.text = businessController.BusinessModel.Name;
             if (image)
                 image.sprite = icon;
             if (incomeText)
-                incomeText.text = BusinessController.BusinessModel.Income > 0
-                    ? StringFormatUtility.MoneySpeedString(businessController.BusinessModel.Income)
+                incomeText.text = businessController.GetIncome() > 0
+                    ? StringFormatUtility.MoneySpeedString(businessController.GetIncome())
                     : "";
             if (priceText)
-                priceText.text = StringFormatUtility.MoneyString(businessController.BusinessModel.Cost);
+                priceText.text = StringFormatUtility.MoneyString(businessController.GetSellPrice());
             BusinessController = businessController;
         }
 

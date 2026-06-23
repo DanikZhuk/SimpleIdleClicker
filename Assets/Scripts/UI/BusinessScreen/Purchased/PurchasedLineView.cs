@@ -1,4 +1,5 @@
 using System;
+using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Businesses.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,16 +16,16 @@ namespace UI.BusinessScreen.Purchased
         [SerializeField] private TMP_Text income;
         [SerializeField] private Button panelAreaButton;
 
-        public event Action<IBusinessController> OnClick;
+        public event Action<BusinessController> OnClick;
 
-        private IBusinessController _businessController;
+        private BusinessController _businessController;
 
         private void Awake()
         {
             panelAreaButton.onClick.AddListener(PanelAreaButton_OnClick);
         }
         
-        public void Initialize(Sprite icon, IBusinessController businessController)
+        public void Initialize(Sprite icon, BusinessController businessController)
         {
             image.sprite = icon;
             estateName.text = businessController.BusinessModel.Name;

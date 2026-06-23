@@ -1,5 +1,5 @@
 using System;
-using Gameplay.Businesses.BusinessControllers;
+using Configs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,30 +11,31 @@ namespace UI.BusinessScreen.Store
     {
         [Header("Controlled elements")]
         [SerializeField] private Image image;
-        [SerializeField] private TMP_Text estateName;
+        [SerializeField] private TMP_Text businessName;
         [SerializeField] private TMP_Text price;
         [SerializeField] private Button panelAreaButton;
 
-        public event Action<AvailableBusinessController> OnClick;
+        private BusinessConfig _config;
         
-        private AvailableBusinessController _businessController;
+        public event Action<BusinessConfig> OnClick;
 
         private void Awake()
         {
             panelAreaButton.onClick.AddListener(Button_OnClick);
         }
         
-        public void Initialize(Sprite icon, AvailableBusinessController availableBusinessController)
+        public void Initialize(Sprite icon, BusinessConfig config)
         {
             image.sprite = icon;
-            estateName.text = availableBusinessController.BusinessModel.Name;
-            price.text = StringFormatUtility.MoneyString(availableBusinessController.BusinessConfig.Price);
-            _businessController = availableBusinessController;
+            businessName.text = config.BusinessName;
+            price.text = StringFormatUtility.MoneyString(config.Price);
+
+            _config = config;
         }
 
         private void Button_OnClick()
         {
-            OnClick?.Invoke(_businessController);
+            OnClick?.Invoke(_config);
         }
     }
 }

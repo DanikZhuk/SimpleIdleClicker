@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using Gameplay.Businesses.BusinessControllers.RepairShop;
-using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
-using Gameplay.Businesses.Generic;
+using Gameplay.Businesses.BusinessControllers;
+using Gameplay.Businesses.BusinessModels;
+using Gameplay.Services;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.U2D.Animation;
+using Zenject;
 
-namespace UI.BusinessViews.RepairShop.HouseManager
+namespace UI.BusinessViews.RepairShop
 {
     public class HouseManagerView : MonoBehaviour
     {
@@ -21,30 +21,28 @@ namespace UI.BusinessViews.RepairShop.HouseManager
         [Header("Info Elements")]
         [SerializeField] TMP_Text counter;
 
+        [Inject] private MoneyService _moneyService;
+
         private const string Category = "House";
 
         private readonly List<RepairLineView> _repairLines = new();
         private readonly List<OfferLineView> _offerLines = new();
         private RepairShopBusinessController _businessController;
 
-        public void Initialize(IBusinessController businessController)
+        public void Initialize(BusinessController businessController)
         {
             _businessController = businessController as RepairShopBusinessController;
         }
 
         private void Start()
         {
-            UpdateInfo();
             _businessController.OnHousesUpdate += UpdateInfo;
+            _moneyService.OnMoneyChanged += UpdateInfo;
+            UpdateInfo();
         }
 
         private void OnDestroy()
         {
-            foreach (var line in _offerLines)
-            {
-                line.Clear();
-            }
-
             foreach (var line in _repairLines)
             {
                 line.Clear();
@@ -69,7 +67,6 @@ namespace UI.BusinessViews.RepairShop.HouseManager
                 if (index < _offerLines.Count)
                 {
                     line = _offerLines[index];
-                    line.Clear();
                 }
                 else
                 {
@@ -80,14 +77,15 @@ namespace UI.BusinessViews.RepairShop.HouseManager
 
                 line.Initialize(houseController);
                 line.SetImage(
-                    GetImage(houseController.HouseModel.Condition)
+                    GetImage(houseController.Condition)
                 );
+                line.UpdateBuyButton(_moneyService.Money, 
+                    _businessController.PurchasedHouses.Count<_businessController.MaxPurchasedHousesAmount);
             }
 
             for (var i = _offerLines.Count - 1; i >= index; i--)
             {
                 var line = _offerLines[i];
-                line.Clear();
                 Destroy(line.gameObject);
                 _offerLines.RemoveAt(i);
             }
@@ -117,8 +115,9 @@ namespace UI.BusinessViews.RepairShop.HouseManager
 
                 line.Initialize(purchasedHouseController);
                 line.SetImage(
-                    GetImage(purchasedHouseController.HouseModel.Condition)
+                    GetImage(purchasedHouseController.Condition)
                 );
+                line.CheckMoney(_moneyService.Money);
             }
 
             for (var i = _repairLines.Count - 1; i >= index; i--)
@@ -151,7 +150,7 @@ namespace UI.BusinessViews.RepairShop.HouseManager
 
         private void OnRepairButton(RepairLineView line)
         {
-            _businessController.RepairHouse(line.HouseController);
+            _businessController.StartRepairHouse(line.HouseController);
         }
     }
 }

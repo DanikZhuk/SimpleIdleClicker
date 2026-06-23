@@ -4,7 +4,7 @@ using System.Linq;
 using Configs;
 using Core.SaveSystem;
 using Gameplay.Businesses.BusinessControllers;
-using Gameplay.Businesses.BusinessControllers.RepairShop;
+using Gameplay.Businesses.BusinessModels;
 using Gameplay.Businesses.Enums;
 using Gameplay.Businesses.Generic;
 using Gameplay.Businesses.Generic.Models;
@@ -25,35 +25,43 @@ namespace Gameplay.Businesses
         [Inject] private SystemMessageManager _systemMessageManager;
         [Inject] private TimeService _timeService;
 
-        private readonly List<AvailableBusinessController> _availableBusinessControllers = new();
-        private readonly List<IBusinessController> _purchasedBusinessControllers = new();
-        private readonly Dictionary<BusinessType, int> _typeCounts = new();
-
         public event Action OnBusinessesChanged;
-        public IReadOnlyList<AvailableBusinessController> AvailableBusinessControllers => _availableBusinessControllers;
-        public IReadOnlyList<IBusinessController> PurchasedBusinessControllers => _purchasedBusinessControllers;
+        
+        private readonly List<BusinessController> _purchasedBusinessControllers = new();
+        private Dictionary<BusinessType, BusinessConfig> _configs = new();
+        public IReadOnlyList<BusinessController> PurchasedBusinessControllers => _purchasedBusinessControllers;
 
-        public bool AddBusiness(AvailableBusinessController availableBusinessController)
+        public bool AddBusiness(BusinessType businessType, string userBusinessName)
         {
-            CreateBusinessController(availableBusinessController);
+            var config = _configs[businessType];
+            
+            var businessModel = CreateBusinessModel(config, userBusinessName);
+            _saveDataService.AddBusiness(businessModel);
+            
+            var businessController = CreateBusinessController(config, businessModel);
+            _purchasedBusinessControllers.Add(businessController);
 
-            _moneyService.Money -= availableBusinessController.BusinessConfig.Price;
-            _systemMessageManager.Log($"You bought {availableBusinessController.BusinessModel.Name}" +
-                                      $" with name {availableBusinessController.UserBusinessName}");
+            _moneyService.Money -= config.Price;
+            OnBusinessesChanged?.Invoke();
+            _systemMessageManager.Log($"You bought {config.BusinessName}" +
+                                      $" with name {userBusinessName}");
             return true;
         }
 
-        public void SellBusiness(IBusinessController businessController)
+        public void SellBusiness(BusinessController businessController)
         {
             RemoveBusinessController(businessController);
 
-            _moneyService.Money += businessController.BusinessConfig.Price;
+            _moneyService.Money += businessController.GetSellPrice();
+            OnBusinessesChanged?.Invoke();
             _systemMessageManager.Log($"You sold {businessController.BusinessModel.Name}");
         }
 
         public int GetTypeCount(BusinessType businessType)
         {
-            return _typeCounts.GetValueOrDefault(businessType);
+            return _purchasedBusinessControllers
+                .Count(businessController => 
+                    businessController.BusinessModel.BusinessType == businessType);
         }
 
         private void Awake()
@@ -63,37 +71,38 @@ namespace Gameplay.Businesses
 
         private void Initialize()
         {
-            foreach (var config in businessListConfig.Businesses)
-            {
-                var businessController = new AvailableBusinessController(config);
-                _availableBusinessControllers.Add(businessController);
-            }
-
-            var configDict = businessListConfig.Businesses.ToDictionary(config => config.Type);
+            _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
 
             foreach (var businessModel in _saveDataService.BusinessModels)
             {
-                CreateBusinessController(configDict[businessModel.BusinessType], businessModel);
+                var businessController =
+                    CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
+                _purchasedBusinessControllers.Add(businessController);
             }
 
-            configDict.Clear();
-
-            OnMoneyChanged();
-            _moneyService.OnMoneyChanged += OnMoneyChanged;
-            
             CalculateOfflineImpact();
-            _timeService.OnOfflineTime += CalculateOfflineImpact;
         }
 
         private void CalculateOfflineImpact()
         {
+            var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
+            var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
+            
             foreach (var businessController in _purchasedBusinessControllers)
             {
-                businessController.CalculateOfflineImpact(_timeService.OfflineTime);
+                businessController.Update(offlineTimeSeconds);
             }
         }
 
-    private void Update()
+        private void OnApplicationPause(bool isPaused)
+        {
+            if (!isPaused)
+            {
+                CalculateOfflineImpact();
+            }
+        }
+
+        private void Update()
         {
             foreach (var purchasedBusinessController in _purchasedBusinessControllers)
             {
@@ -101,45 +110,21 @@ namespace Gameplay.Businesses
             }
         }
 
-        private void OnMoneyChanged()
+        private BusinessModel CreateBusinessModel(BusinessConfig businessConfig, string businessModelName)
         {
-            foreach (var businessController in _availableBusinessControllers)
+            var businessModel = businessConfig.Type switch
             {
-                var config = businessController.BusinessConfig;
-                var count = _typeCounts[config.Type];
-                if (count >= config.MaxCount
-                    || _moneyService.Money < config.Price)
-                {
-                    businessController.CanBuy = false;
-                    continue;
-                }
-
-                businessController.CanBuy = true;
-            }
-
-            OnBusinessesChanged?.Invoke();
-        }
-
-        private void CreateBusinessController(AvailableBusinessController availableBusinessController)
-        {
-            IBusinessController businessController = availableBusinessController.BusinessConfig.Type switch
-            {
-                BusinessType.Shop => new ShopBusinessController(availableBusinessController.BusinessConfig,
-                    availableBusinessController.UserBusinessName),
-                BusinessType.RepairShop => new RepairShopBusinessController(availableBusinessController.BusinessConfig,
-                    availableBusinessController.UserBusinessName),
+                BusinessType.Shop => new BusinessModel(businessConfig, businessModelName),
+                BusinessType.RepairShop => new RepairShopBusinessModel(businessConfig, businessModelName),
                 _ => throw new ArgumentOutOfRangeException(
-                    $"The type {availableBusinessController.BusinessConfig.Type} is not defined")
+                    $"The type {businessConfig.Type} is not defined")
             };
-            _saveDataService.AddBusiness(businessController.BusinessModel);
-            businessController.Setup(_moneyService, _systemMessageManager);
-            _purchasedBusinessControllers.Add(businessController);
-            UpdateBusinessTypeCounts();
+            return businessModel;
         }
-        
-        private void CreateBusinessController(BusinessConfig businessConfig, BusinessModel businessModel)
+
+        private BusinessController CreateBusinessController(BusinessConfig businessConfig, BusinessModel businessModel)
         {
-            IBusinessController businessController = businessConfig.Type switch
+            BusinessController businessController = businessConfig.Type switch
             {
                 BusinessType.Shop => new ShopBusinessController(businessConfig, businessModel),
                 BusinessType.RepairShop => new RepairShopBusinessController(businessConfig, businessModel),
@@ -147,25 +132,13 @@ namespace Gameplay.Businesses
                     $"The type {businessConfig.Type} is not defined")
             };
             businessController.Setup(_moneyService, _systemMessageManager);
-            _purchasedBusinessControllers.Add(businessController);
-            UpdateBusinessTypeCounts();
+            return businessController;
         }
 
-        private void RemoveBusinessController(IBusinessController businessController)
+        private void RemoveBusinessController(BusinessController businessController)
         {
             _saveDataService.RemoveBusiness(businessController.BusinessModel);
             _purchasedBusinessControllers.Remove(businessController);
-            businessController.OnRemove();
-            UpdateBusinessTypeCounts();
-        }
-
-        private void UpdateBusinessTypeCounts()
-        {
-            foreach (BusinessType type in Enum.GetValues(typeof(BusinessType)))
-            {
-                _typeCounts[type] = _purchasedBusinessControllers.Count(businessController =>
-                    businessController.BusinessConfig.Type == type);
-            }
         }
     }
 }

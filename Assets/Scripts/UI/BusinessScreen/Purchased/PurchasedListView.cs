@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.Businesses;
+using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Businesses.Enums;
-using Gameplay.Businesses.Generic;
 using UI.BusinessViews.Default;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
@@ -67,7 +67,7 @@ namespace UI.BusinessScreen.Purchased
                 }
 
                 var businessController = _businessManager.PurchasedBusinessControllers[index];
-                view.Initialize(library.GetSprite(Category, businessController.BusinessConfig.Type.ToString()),
+                view.Initialize(library.GetSprite(Category, businessController.Type.ToString()),
                     businessController);
             }
 
@@ -80,18 +80,18 @@ namespace UI.BusinessScreen.Purchased
             }
         }
 
-        private void ShowPopUp(IBusinessController businessController)
+        private void ShowPopUp(BusinessController businessController)
         {
             var view = defaultReviseView;
             foreach (var customView in customViews)
             {
-                if (customView.Type != businessController.BusinessConfig.Type) continue;
+                if (customView.Type != businessController.Type) continue;
                 view = customView.View;
                 break;
             }
             Instantiate(view, popUpContainer)
                 .Initialize(
-                    library.GetSprite(Category, businessController.BusinessConfig.Type.ToString()),
+                    library.GetSprite(Category, businessController.Type.ToString()),
                     businessController);
         }
     }

@@ -1,6 +1,6 @@
+using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Businesses.Generic;
 using UI.BusinessViews.Default;
-using UI.BusinessViews.RepairShop.HouseManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +11,7 @@ namespace UI.BusinessViews.RepairShop
         [SerializeField] private Button housesManagementButton;
         [SerializeField] private HouseManagerView houseManagerViewPrefab;
         
-        public override void Initialize(Sprite icon, IBusinessController businessController)
+        public override void Initialize(Sprite icon, BusinessController businessController)
         {
             base.Initialize(icon, businessController);
             housesManagementButton.onClick.AddListener(OpenHousesManagement);

@@ -8,7 +8,6 @@ namespace Gameplay.Businesses.Generic.Models
         public string Id;
         public BusinessType BusinessType;
         public string Name;
-        public long Cost;
         public long Income;
 
         private static long _nextId = 0;
@@ -18,7 +17,6 @@ namespace Gameplay.Businesses.Generic.Models
             Id = _nextId++.ToString();
             Name = businessName;
             BusinessType = businessConfig.Type;
-            Cost = (long)(businessConfig.Price * businessConfig.SellPercentage);
             Income = businessConfig.Income;
         }
 

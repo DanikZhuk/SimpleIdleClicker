@@ -13,7 +13,6 @@ namespace Core.SceneInstallers
         [SerializeField] private BusinessManager businessManager;
         [SerializeField] private InvestmentManager investmentManager;
         [SerializeField] private MoneyService moneyService;
-        [SerializeField] private TimeService timeService;
         [SerializeField] private SystemMessageManager systemMessageManager;
         public override void InstallBindings()
         {

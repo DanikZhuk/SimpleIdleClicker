@@ -1,5 +1,6 @@
 using System;
 using Configs;
+using Gameplay.Services;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,8 @@ namespace Gameplay.Investments
         public InvestmentModel InvestmentModel { get; }
         public InvestmentConfig InvestmentConfig { get; }
 
+        private MoneyService _moneyService;
+
         public long Amount
         {
             get => InvestmentModel.PurchasedAmount;
@@ -17,28 +20,15 @@ namespace Gameplay.Investments
             {
                 InvestmentModel.PurchasedAmount = value;
                 InvestmentModel.ResumptionTime = InvestmentConfig.ResumptionTime;
-                UpdateStatus();
             }
         }
 
-        public long MaxAmountCanBuy
-        {
-            get => _maxAmountCanBuy;
-            private set
-            {
-                _maxAmountCanBuy = value;
-                UpdateStatus();
-            }
-        }
+        public long MaxAmountCanBuy { get; private set; }
 
-        public event Action OnStatusChanged;
+        public event Action OnInvestmentUpdate;
 
         private long _amount;
-        private long _maxAmountCanBuy;
         private long _userInput;
-
-        public bool CanBuy { get; private set; }
-        public bool CanSell{ get; private set; }
 
         public InvestmentController(InvestmentModel investmentModel, InvestmentConfig investmentConfig)
         {
@@ -47,38 +37,25 @@ namespace Gameplay.Investments
             InitializeValues();
         }
 
-        public void OnInvestmentUpdate(long money)
+        public void Setup(MoneyService moneyService)
         {
-            MaxAmountCanBuy = money / InvestmentModel.CurrentCost;
-        }
-
-        private void UpdateStatus()
-        {
-            if (InvestmentModel.ResumptionTime > 0)
-            {
-                CanBuy = false;
-                CanSell = false;
-            }
-            else
-            {
-                if (MaxAmountCanBuy > 0)
-                {
-                    CanBuy = true;
-                }
-
-                if (Amount > 0)
-                {
-                    CanSell = true;
-                }
-            }
-
-            OnStatusChanged?.Invoke();
+            _moneyService = moneyService;
         }
 
         public void UpdateInvestment()
         {
-            UpdateInvestmentValue();
-            UpdateStatus();
+            GetNewValue();
+            InvestmentModel.History.Add(InvestmentModel.CurrentCost);
+            if (InvestmentModel.History.Count <= InvestmentConfig.HistorySize)
+                return;
+            InvestmentModel.History.RemoveAt(0);
+            
+            var amountCanBuy = _moneyService.Money / InvestmentModel.CurrentCost;
+            if (amountCanBuy > InvestmentConfig.MaxAmount-Amount)
+                amountCanBuy = InvestmentConfig.MaxAmount-Amount;
+            MaxAmountCanBuy = amountCanBuy;
+            
+            OnInvestmentUpdate?.Invoke();
         }
 
         public void Update(float deltaTime)
@@ -90,21 +67,8 @@ namespace Gameplay.Investments
                     break;
                 case < 0:
                     InvestmentModel.ResumptionTime = 0f;
-                    UpdateStatus();
                     break;
             }
-        }
-
-        public void CalculateOfflineImpact(TimeSpan timeServiceOfflineTime)
-        {
-            if (InvestmentModel.ResumptionTime > 0)
-            {
-                InvestmentModel.ResumptionTime -= (float)timeServiceOfflineTime.TotalSeconds;
-            }
-
-            if (!(InvestmentModel.ResumptionTime < 0)) return;
-            InvestmentModel.ResumptionTime = 0f;
-            UpdateStatus();
         }
 
         #region CalculateNewValue
@@ -118,17 +82,6 @@ namespace Gameplay.Investments
                 GetNewValue();
                 InvestmentModel.History.Add(InvestmentModel.CurrentCost);
             }
-
-            UpdateStatus();
-        }
-
-        private void UpdateInvestmentValue()
-        {
-            GetNewValue();
-            InvestmentModel.History.Add(InvestmentModel.CurrentCost);
-            if (InvestmentModel.History.Count <= InvestmentConfig.HistorySize)
-                return;
-            InvestmentModel.History.RemoveAt(0);
         }
 
         private void GetNewValue()

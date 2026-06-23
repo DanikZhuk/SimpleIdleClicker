@@ -65,8 +65,8 @@ namespace UI.Investments
             maxAmountSellButton.onClick.AddListener(MaxAmountSellButton_OnClick);
             maxAmountSellImage.color = maxAmountSellButtonInactiveColor;
             
-            _investmentController.OnStatusChanged += OnStatusChanged;
-            OnStatusChanged();
+            _investmentController.OnInvestmentUpdate += OnInvestmentUpdate;
+            OnInvestmentUpdate();
         }
         
         public void UpdateValues()
@@ -79,7 +79,12 @@ namespace UI.Investments
 
         private void MaxAmountBuyButton_OnClick()
         {
-            if (!_maxBuyAmount)
+            SetActiveMaxAmountBuyButton(!_maxBuyAmount);
+        }
+
+        private void SetActiveMaxAmountBuyButton(bool active)
+        {
+            if (active)
             {
                 buyAmountInput.Value = _investmentController.MaxAmountCanBuy;
                 maxAmountBuyImage.color=maxAmountBuyButtonActiveColor;
@@ -88,12 +93,18 @@ namespace UI.Investments
             {
                 maxAmountBuyImage.color=maxAmountBuyButtonInactiveColor;
             }
-            _maxBuyAmount = !_maxBuyAmount;
-        }
 
+            _maxBuyAmount = active;
+        }
+        
         private void MaxAmountSellButton_OnClick()
         {
-            if (!_maxSellAmount)
+            SetActiveMaxAmountSellButton(!_maxSellAmount);
+        }
+
+        private void SetActiveMaxAmountSellButton(bool active)
+        {
+            if (active)
             {
                 sellAmountInput.Value = _investmentController.Amount;
                 maxAmountSellImage.color=maxAmountSellButtonActiveColor;
@@ -102,7 +113,8 @@ namespace UI.Investments
             {
                 maxAmountSellImage.color=maxAmountSellButtonInactiveColor;
             }
-            _maxSellAmount = !_maxSellAmount;
+
+            _maxSellAmount = active;
         }
 
         private void Update()
@@ -113,8 +125,23 @@ namespace UI.Investments
 
         private void UpdateButtons()
         {
-            buyButton.interactable = _investmentController.CanBuy && buyAmountInput.Value > 0;
-            sellButton.interactable = _investmentController.CanSell && sellAmountInput.Value > 0;
+            if (buyAmountInput.Value != _investmentController.MaxAmountCanBuy)
+            {
+                SetActiveMaxAmountBuyButton(false);
+            }
+            if (sellAmountInput.Value != _investmentController.Amount)
+            {
+                SetActiveMaxAmountSellButton(false);
+            }
+            
+            buyButton.interactable =
+                _investmentController.MaxAmountCanBuy>0
+                && buyAmountInput.Value > 0
+                && !(_investmentController.InvestmentModel.ResumptionTime>0);
+            sellButton.interactable = 
+                _investmentController.Amount>0
+                && sellAmountInput.Value > 0
+                && !(_investmentController.InvestmentModel.ResumptionTime>0);
         }
         
         private void UpdateTime()
@@ -132,7 +159,7 @@ namespace UI.Investments
             }
         }
 
-        private void OnStatusChanged()
+        private void OnInvestmentUpdate()
         {
             buyAmountInput.ChangeBounds(1, _investmentController.MaxAmountCanBuy);
             if (_maxBuyAmount)
@@ -167,7 +194,7 @@ namespace UI.Investments
 
         private void OnDestroy()
         {
-            _investmentController.OnStatusChanged -= OnStatusChanged;
+            _investmentController.OnInvestmentUpdate -= OnInvestmentUpdate;
         }
     }
 }

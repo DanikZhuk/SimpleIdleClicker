@@ -2546,7 +2546,6 @@ MonoBehaviour:
   businessManager: {fileID: 713788461}
   investmentManager: {fileID: 713788464}
   moneyService: {fileID: 713788462}
-  timeService: {fileID: 713788463}
   systemMessageManager: {fileID: 713788465}
 --- !u!114 &1243805343
 MonoBehaviour:
@@ -3722,6 +3721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727a85e84769ec7478a27f97e3838253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  businessListConfig: {fileID: 11400000, guid: e78e28a10baccf24d9f3dd99c286a856, type: 2}
   businessLinePrefab: {fileID: -5916038710499051395, guid: 50f964cd58892e54b90a4465b2ebb69c, type: 3}
   lineContainer: {fileID: 1212922544}
   library: {fileID: 1929359905}

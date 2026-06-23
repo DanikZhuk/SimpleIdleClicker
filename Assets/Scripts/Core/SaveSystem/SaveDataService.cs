@@ -50,13 +50,12 @@ namespace Core.SaveSystem
         private void Awake()
         {
             _filePath = Path.Combine(Application.persistentDataPath, "data.json");
-
             LoadData();
         }
 
-        private void OnApplicationPause(bool pauseStatus)
+        private void OnApplicationPause(bool isPaused)
         {
-            if (pauseStatus)
+            if (isPaused)
                 SaveData();
             else
                 LoadData();
@@ -71,7 +70,7 @@ namespace Core.SaveSystem
         {
             try
             {
-                _data.RecordTime = _timeService.Now();
+                _data.RecordTime = _timeService.Now;
                 File.WriteAllText(_filePath, JsonConvert.SerializeObject(_data, Settings));
             }
             catch (Exception e)
@@ -86,6 +85,7 @@ namespace Core.SaveSystem
             {
                 Debug.Log($"Cannot load file at {_filePath}. File does not exist yet");
                 _data = new GameData();
+                return;
             }
 
             try
@@ -98,8 +98,6 @@ namespace Core.SaveSystem
                 Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
                 _data = new GameData();
             }
-            
-            _timeService.SetLastRunTime(RecordTime);
         }
     }
 }

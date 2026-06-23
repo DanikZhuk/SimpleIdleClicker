@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 8770353283166330648}
   - component: {fileID: 5183379435490678415}
   m_Layer: 5
-  m_Name: EstateName
+  m_Name: BusinessName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   image: {fileID: 1134648988862916486}
-  estateName: {fileID: 5183379435490678415}
+  businessName: {fileID: 5183379435490678415}
   price: {fileID: 563113749732004091}
   panelAreaButton: {fileID: 953382709051695419}
 --- !u!222 &7525531141791202509

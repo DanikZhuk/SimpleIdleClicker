@@ -1,6 +1,6 @@
 using System;
-using Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller;
-using Gameplay.Businesses.BusinessControllers.RepairShop.House.Model;
+using Gameplay.Businesses.BusinessControllers;
+using Gameplay.Businesses.BusinessModels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,16 +20,18 @@ namespace UI.BusinessViews.RepairShop
         public event Action<RepairLineView> OnSellButtonClick;
         public event Action<RepairLineView> OnRenovationButtonClick;
         
-        private PurchasedHouseController _houseController;
-        
-        public PurchasedHouseController HouseController=>_houseController;
+        private HouseController _houseController;
 
-        public void Initialize(PurchasedHouseController houseController)
+        private bool _hasMoneyForRepair;
+        
+        public HouseController HouseController=>_houseController;
+
+        public void Initialize(HouseController houseController)
         {
             _houseController = houseController;
-            _houseController.OnStatusChanged += UpdateInfo;
+            _houseController.OnConditionChanged += OnConditionChanged;
             UpdateInfo();
-            UpdateButtons();
+            OnConditionChanged();
         }
 
         public void SetImage(Sprite sprite)
@@ -43,11 +45,11 @@ namespace UI.BusinessViews.RepairShop
             repairButton.onClick.AddListener(() => OnRenovationButtonClick?.Invoke(this));
         }
 
-        private void UpdateInfo()
+        private void OnConditionChanged()
         {
-            repairCost.text = StringFormatUtility.MoneyString(_houseController.HouseModel.RepairCost);
-            sellCost.text = StringFormatUtility.MoneyString(_houseController.HouseModel.Cost);
-            switch (_houseController.HouseModel.Condition)
+            repairCost.text = StringFormatUtility.MoneyString(_houseController.RepairCost);
+            sellCost.text = StringFormatUtility.MoneyString(_houseController.SellPrice);
+            switch (_houseController.Condition)
             {
                 case HouseCondition.NeedRepair:
                     repairTime.gameObject.SetActive(false);
@@ -70,32 +72,32 @@ namespace UI.BusinessViews.RepairShop
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            UpdateButtons();
-        }
-        
-        private void UpdateButtons()
-        {
-            sellButton.interactable = _houseController.CanSell;
-            repairButton.interactable = _houseController.CanRepair;
         }
 
         private void Update()
         {
-            UpdateTime();
+            UpdateInfo();
         }
 
-        private void UpdateTime()
+        public void CheckMoney(long money)
         {
-            if (_houseController.HouseModel.Condition == HouseCondition.UnderRepair)
+            _hasMoneyForRepair=money>=HouseController.RepairCost;
+        }
+
+        private void UpdateInfo()
+        {
+            sellButton.interactable = !_houseController.IsUnderRepair;
+            repairButton.interactable = _houseController.IsNeedRepair&&_hasMoneyForRepair;
+            
+            if (_houseController.IsUnderRepair)
             {
-                repairTime.text = StringFormatUtility.TimeString(_houseController.HouseModel.RepairTimeSeconds);
+                repairTime.text = StringFormatUtility.TimeString(_houseController.RepairProgress);
             }
         }
 
         public void Clear()
         {
-            _houseController.OnStatusChanged -= UpdateInfo;
+            _houseController.OnConditionChanged -= OnConditionChanged;
         }
 
         private void OnDestroy()

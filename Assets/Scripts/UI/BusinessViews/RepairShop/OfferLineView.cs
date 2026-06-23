@@ -1,5 +1,5 @@
 using System;
-using Gameplay.Businesses.BusinessControllers.RepairShop.House.Controller;
+using Gameplay.Businesses.BusinessControllers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,37 +14,23 @@ namespace UI.BusinessViews.RepairShop
         [SerializeField] private TMP_Text buyCost;
         
         public event Action<OfferLineView> OnBuyButtonClick;
-        
-        private AvailableHouseController _houseController;
-        
-        public AvailableHouseController HouseController=>_houseController;
+
+        public HouseController HouseController { get; private set; }
 
         private void Awake()
         {
             buyButton.onClick.AddListener(() => OnBuyButtonClick?.Invoke(this));
         }
 
-        public void Initialize(AvailableHouseController houseController)
+        public void Initialize(HouseController houseController)
         {
-            _houseController = houseController;
-            buyCost.text=StringFormatUtility.MoneyString(houseController.HouseModel.Cost);
-            _houseController.OnCanBuyUpdate += OnCanBuyUpdate;
-            OnCanBuyUpdate();
+            HouseController = houseController;
+            buyCost.text=StringFormatUtility.MoneyString(houseController.Cost);
         }
 
-        public void Clear()
+        public void UpdateBuyButton(long money, bool hasFreeSpace)
         {
-            _houseController.OnCanBuyUpdate -= OnCanBuyUpdate;
-        }
-
-        private void OnDestroy()
-        {
-            Clear();
-        }
-
-        private void OnCanBuyUpdate()
-        {
-            buyButton.interactable = _houseController.CanBuy;
+            buyButton.interactable = money >= HouseController.Cost && hasFreeSpace;
         }
 
         public void SetImage(Sprite sprite)

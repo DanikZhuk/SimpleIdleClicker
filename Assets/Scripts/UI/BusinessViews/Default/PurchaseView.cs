@@ -1,3 +1,4 @@
+using Configs;
 using Gameplay.Businesses;
 using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Services;
@@ -21,47 +22,53 @@ namespace UI.BusinessViews.Default
         [Inject]private MoneyService _moneyService;
         [Inject]private BusinessManager _businessManager;
 
-        private AvailableBusinessController _businessController;
+        private BusinessConfig _businessConfig;
 
-        public void Initialize(Sprite icon, AvailableBusinessController businessController)
+        public void Initialize(Sprite icon, BusinessConfig businessConfig)
         {
-            nameText.text = businessController.BusinessConfig.BusinessName;
+            nameText.text = businessConfig.BusinessName;
             image.sprite = icon;
-            priceText.text = $"{businessController.BusinessConfig.Price}$";
-            incomeText.text = $"{businessController.BusinessModel.Income}$";
-            _businessController = businessController;
+            priceText.text = $"{businessConfig.Price}$";
+            incomeText.text = $"{businessConfig.Income}$";
+            _businessConfig = businessConfig;
         }
 
         private void Start()
         {
             buyButton.onClick.AddListener(Buy);
-            _businessController.OnBuyStatusUpdated += OnBuyStatusUpdated;
-            OnBuyStatusUpdated(false);
+            _businessManager.OnBusinessesChanged += OnBusinessesChanged;
+            OnBusinessesChanged();
+        }
+
+        private void Update()
+        {
+            CheckButtonStatus();
         }
 
         private void OnDestroy()
         {
-            _businessController.OnBuyStatusUpdated-=OnBuyStatusUpdated;
+            _businessManager.OnBusinessesChanged -= OnBusinessesChanged;;
+        }
+
+        private void CheckButtonStatus()
+        {
+            buyButton.interactable = _moneyService.Money >= _businessConfig.Price;
         }
 
         private void Buy()
         {
             var text = nameInput.text;
             if (text.Length == 0)
-                text = "Unnamed";
-            _businessController.UserBusinessName = text;
-            if (!_businessManager.AddBusiness(_businessController)) return;
+                text = _businessConfig.BusinessName;
+            if (!_businessManager.AddBusiness(_businessConfig.Type, text)) return;
             nameInput.text = "";
         }
 
-        private void OnBuyStatusUpdated(bool value)
+        private void OnBusinessesChanged()
         {
-            var num = _businessManager.GetTypeCount(_businessController.BusinessConfig.Type);
+            var num = _businessManager.GetTypeCount(_businessConfig.Type);
             countText.text =
-                $"{num}/{_businessController.BusinessConfig.MaxCount}";
-            if (_moneyService == null) return;
-            buyButton.interactable = 
-                _businessController.CanBuy;
+                $"{num}/{_businessConfig.MaxCount}";
         }
     }
 }

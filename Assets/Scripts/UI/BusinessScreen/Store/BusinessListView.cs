@@ -1,14 +1,14 @@
-using Gameplay.Businesses;
-using Gameplay.Businesses.BusinessControllers;
+using Configs;
 using UI.BusinessViews.Default;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
-using Zenject;
 
 namespace UI.BusinessScreen.Store
 {
     public class BusinessListView : MonoBehaviour
     {
+        [Header("Config")]
+        [SerializeField] private BusinessListConfig  businessListConfig;
         [Header("Instance Settings")]
         [SerializeField] private BusinessLineView businessLinePrefab;
         [SerializeField] private Transform lineContainer;
@@ -16,8 +16,6 @@ namespace UI.BusinessScreen.Store
         [Header("PopUp Settings")]
         [SerializeField] private PurchaseView purchaseView;
         [SerializeField] private Transform popUpContainer;
-
-        [Inject] BusinessManager _businessManager;
 
         private const string Category = "Estate";
 
@@ -28,24 +26,24 @@ namespace UI.BusinessScreen.Store
 
         private void Initialize()
         {
-            foreach (var availableBusinessController in _businessManager.AvailableBusinessControllers)
+            foreach (var businessConfig in businessListConfig.Businesses)
             {
                 var line = Instantiate(businessLinePrefab, lineContainer);
                 line.Initialize(
                     library.GetSprite(Category,
-                        availableBusinessController.BusinessConfig.Type.ToString())
-                    , availableBusinessController);
+                        businessConfig.Type.ToString()),
+                    businessConfig);
                 line.OnClick += ShowPopUp;
             }
         }
 
-        private void ShowPopUp(AvailableBusinessController availableBusinessController)
+        private void ShowPopUp(BusinessConfig businessConfig)
         {
             Instantiate(purchaseView, popUpContainer)
                 .Initialize(
                     library.GetSprite(Category, 
-                        availableBusinessController.BusinessConfig.Type.ToString()),
-                    availableBusinessController);
+                        businessConfig.Type.ToString()),
+                    businessConfig);
         }
     }
 }
