@@ -1,5 +1,5 @@
 using Configs;
-using Gameplay.Businesses.Generic.Models;
+using Gameplay.Businesses.BusinessModels;
 
 namespace Gameplay.Businesses.BusinessControllers
 {

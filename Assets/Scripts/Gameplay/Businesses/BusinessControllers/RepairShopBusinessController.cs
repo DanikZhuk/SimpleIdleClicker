@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Configs;
 using Configs.BusinessConfigs;
 using Gameplay.Businesses.BusinessModels;
-using Gameplay.Businesses.Generic.Models;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using Random = UnityEngine.Random;
@@ -21,7 +20,6 @@ namespace Gameplay.Businesses.BusinessControllers
 
         public IReadOnlyList<HouseController> HouseOffers => _houseOffers;
         public IReadOnlyList<HouseController> PurchasedHouses => _purchasedHouses;
-        public IReadOnlyList<HouseController> RepairHouses => _repairHouses;
 
         public int MaxPurchasedHousesAmount => RepairShopBusinessConfig.MaxPurchasedHousesAmount;
 

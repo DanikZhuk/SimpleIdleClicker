@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Configs;
-using Gameplay.Businesses.Generic.Models;
 
 namespace Gameplay.Businesses.BusinessModels
 {

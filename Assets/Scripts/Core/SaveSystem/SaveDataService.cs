@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Core.SaveSystem.Data;
-using Gameplay.Businesses.Generic.Models;
+using Gameplay.Businesses.BusinessModels;
 using Gameplay.Investments;
 using Gameplay.Services;
 using Newtonsoft.Json;
@@ -16,7 +16,7 @@ namespace Core.SaveSystem
         [Inject] private TimeService _timeService;
 
         private string _filePath;
-        private GameData _data;
+        private SaveData _data;
 
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {
@@ -43,7 +43,21 @@ namespace Core.SaveSystem
 
         public void RemoveBusiness(BusinessModel businessModel)
         {
-            _data.BusinessModels.Remove(businessModel);
+            Debug.Log($"Name:{businessModel.Name}\n" +
+                      $"BusinessType:{businessModel.BusinessType}\n" +
+                      $"Id:{businessModel.Id}\n" +
+                      $"Income:{businessModel.Income}\n" +
+                      $"HashCode{businessModel.GetHashCode()}\n");
+            foreach (var businessModel1 in BusinessModels)
+            {
+                Debug.Log($"Name:{businessModel1.Name}\n" +
+                          $"BusinessType:{businessModel1.BusinessType}\n" +
+                          $"Id:{businessModel1.Id}\n" +
+                          $"Income:{businessModel1.Income}\n" +
+                          $"HashCode{businessModel1.GetHashCode()}\n");
+                Debug.Log($"Equals:{businessModel1.Equals(businessModel)}");
+            }
+            Debug.Log(_data.BusinessModels.Remove(businessModel));
             SaveData();
         }
 
@@ -84,19 +98,19 @@ namespace Core.SaveSystem
             if (!File.Exists(_filePath))
             {
                 Debug.Log($"Cannot load file at {_filePath}. File does not exist yet");
-                _data = new GameData();
+                _data = new SaveData();
                 return;
             }
 
             try
             {
-                var data = JsonConvert.DeserializeObject<GameData>(File.ReadAllText(_filePath), Settings);
+                var data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(_filePath), Settings);
                 _data = data;
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
-                _data = new GameData();
+                _data = new SaveData();
             }
         }
     }

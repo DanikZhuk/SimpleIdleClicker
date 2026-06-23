@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Gameplay.Businesses.Generic.Models;
+using Gameplay.Businesses.BusinessModels;
 using Gameplay.Investments;
 
 namespace Core.SaveSystem.Data
 {
-    public class GameData
+    public class SaveData
     {
         public long Money;
         

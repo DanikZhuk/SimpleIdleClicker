@@ -60,7 +60,7 @@ namespace UI.BusinessViews.Default
             var text = nameInput.text;
             if (text.Length == 0)
                 text = _businessConfig.BusinessName;
-            if (!_businessManager.AddBusiness(_businessConfig.Type, text)) return;
+            _businessManager.AddBusiness(_businessConfig.Type, text);
             nameInput.text = "";
         }
 

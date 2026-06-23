@@ -1,6 +1,6 @@
 using Configs;
+using Gameplay.Businesses.BusinessModels;
 using Gameplay.Businesses.Enums;
-using Gameplay.Businesses.Generic.Models;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 

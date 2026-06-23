@@ -6,12 +6,9 @@ using Core.SaveSystem;
 using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Businesses.BusinessModels;
 using Gameplay.Businesses.Enums;
-using Gameplay.Businesses.Generic;
-using Gameplay.Businesses.Generic.Models;
 using Gameplay.Services;
 using UI.Helpers.SystemMessages;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Gameplay.Businesses
@@ -31,7 +28,7 @@ namespace Gameplay.Businesses
         private Dictionary<BusinessType, BusinessConfig> _configs = new();
         public IReadOnlyList<BusinessController> PurchasedBusinessControllers => _purchasedBusinessControllers;
 
-        public bool AddBusiness(BusinessType businessType, string userBusinessName)
+        public void AddBusiness(BusinessType businessType, string userBusinessName)
         {
             var config = _configs[businessType];
             
@@ -45,7 +42,6 @@ namespace Gameplay.Businesses
             OnBusinessesChanged?.Invoke();
             _systemMessageManager.Log($"You bought {config.BusinessName}" +
                                       $" with name {userBusinessName}");
-            return true;
         }
 
         public void SellBusiness(BusinessController businessController)

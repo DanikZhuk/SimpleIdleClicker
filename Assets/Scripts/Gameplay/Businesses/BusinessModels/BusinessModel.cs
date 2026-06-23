@@ -1,7 +1,8 @@
 using Configs;
 using Gameplay.Businesses.Enums;
+using UnityEngine;
 
-namespace Gameplay.Businesses.Generic.Models
+namespace Gameplay.Businesses.BusinessModels
 {
     public class BusinessModel
     {

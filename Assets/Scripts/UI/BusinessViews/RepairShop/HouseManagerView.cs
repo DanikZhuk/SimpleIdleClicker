@@ -48,6 +48,7 @@ namespace UI.BusinessViews.RepairShop
                 line.Clear();
             }
             _businessController.OnHousesUpdate -= UpdateInfo;
+            _moneyService.OnMoneyChanged -= UpdateInfo;
         }
 
         private void UpdateInfo()
