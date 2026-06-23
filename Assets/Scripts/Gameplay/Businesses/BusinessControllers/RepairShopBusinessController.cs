@@ -25,11 +25,13 @@ namespace Gameplay.Businesses.BusinessControllers
 
         public event Action OnHousesUpdate;
 
-        public RepairShopBusinessController(BusinessConfig businessConfig, BusinessModel businessModel)
-            : base(businessConfig, businessModel)
+        public RepairShopBusinessController(BusinessConfig businessConfig, 
+                                            BusinessModel businessModel): base(businessConfig, 
+                                                                               businessModel)
         { }
 
-        public override void Setup(MoneyService moneyService, SystemMessageManager systemMessageManager)
+        public override void Setup(MoneyService moneyService, 
+                                   SystemMessageManager systemMessageManager)
         {
             base.Setup(moneyService, systemMessageManager);
 
@@ -101,7 +103,8 @@ namespace Gameplay.Businesses.BusinessControllers
             for (var i = _repairHouses.Count - 1; i >= 0; i--)
             {
                 var houseController = _repairHouses[i];
-                if (!houseController.UpdateRepair(deltaTime)) continue;
+                if (!houseController.UpdateRepair(deltaTime)) 
+                    continue;
                 houseController.CompleteRepair(RepairShopBusinessConfig.AfterRepairCostCoeff);
                 _repairHouses.RemoveAt(i);
                 OnHousesUpdate?.Invoke();
@@ -167,7 +170,7 @@ namespace Gameplay.Businesses.BusinessControllers
         public bool UpdateRepair(float deltaTime)
         {
             if (!IsUnderRepair)
-                return false;
+                return true;
 
             RepairProgress -= deltaTime;
 

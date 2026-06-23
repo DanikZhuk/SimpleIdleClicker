@@ -18,7 +18,8 @@ namespace UI.BusinessViews.RepairShop
 
         private void OpenHousesManagement()
         {
-            Instantiate(houseManagerViewPrefab, transform.parent).Initialize(BusinessController);
+            var houseManager = Instantiate(houseManagerViewPrefab, transform.parent);
+            houseManager.Initialize(BusinessController);
         }
     }
 }

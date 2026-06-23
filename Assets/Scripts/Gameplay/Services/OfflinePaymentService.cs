@@ -17,7 +17,7 @@ namespace Gameplay.Services
         [Inject] private BusinessManager _businessManager;
         [Inject] private TimeService _timeService;
 
-        private float _incomesRunningTime;
+        private DateTime _nextIncomeTime;
 
         private void Start()
         {
@@ -34,11 +34,11 @@ namespace Gameplay.Services
 
         private void Update()
         {
-            _incomesRunningTime += Time.deltaTime;
-
-            if (!(_incomesRunningTime >= paymentConfig.IncomeIntervalSeconds)) return;
-            AddIncomes();
-            _incomesRunningTime = 0f;
+            if (Time.time >= _nextIncomeTime)
+            {
+                AddIncomes();
+                _nextIncomeTime += paymentConfig.IncomeIntervalSeconds;
+            }
         }
 
         private void AddIncomes()

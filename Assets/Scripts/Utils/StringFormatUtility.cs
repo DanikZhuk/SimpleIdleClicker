@@ -7,7 +7,7 @@ namespace Utils
         private const string Symbol = "$";
         private const string Time = "hour";
         
-        public static string MoneyString(long money)
+        public static string MoneyString(this long money)
         {
             return $"{money:N0}{Symbol}";
         }

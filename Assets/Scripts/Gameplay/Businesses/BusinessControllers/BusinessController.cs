@@ -1,3 +1,4 @@
+using System;
 using Configs;
 using Gameplay.Businesses.BusinessModels;
 using Gameplay.Businesses.Enums;
@@ -35,8 +36,10 @@ namespace Gameplay.Businesses.BusinessControllers
             return (long)(businessConfig.Price * businessConfig.SellPercentage);
         }
 
-        public virtual long GetIncome()
+        public virtual long GetIncome(DateTime startTime,
+                                      DateTime endTime)
         {
+
             return businessConfig.Income;
         }
     }

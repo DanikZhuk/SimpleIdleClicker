@@ -1,6 +1,5 @@
 using Configs;
 using Gameplay.Businesses;
-using Gameplay.Businesses.BusinessControllers;
 using Gameplay.Services;
 using TMPro;
 using UnityEngine;
@@ -19,8 +18,8 @@ namespace UI.BusinessViews.Default
         [SerializeField] private TMP_InputField nameInput;
         [SerializeField] private Button buyButton;
 
-        [Inject]private MoneyService _moneyService;
-        [Inject]private BusinessManager _businessManager;
+        [Inject] private MoneyService _moneyService;
+        [Inject] private BusinessManager _businessManager;
 
         private BusinessConfig _businessConfig;
 
@@ -35,40 +34,38 @@ namespace UI.BusinessViews.Default
 
         private void Start()
         {
-            buyButton.onClick.AddListener(Buy);
+            buyButton.onClick.AddListener(BuyButton_Clicked);
             _businessManager.OnBusinessesChanged += OnBusinessesChanged;
+            _moneyService.OnMoneyChanged += MoneyService_OnMoneyChanged;
             OnBusinessesChanged();
         }
 
-        private void Update()
-        {
-            CheckButtonStatus();
-        }
-
-        private void OnDestroy()
-        {
-            _businessManager.OnBusinessesChanged -= OnBusinessesChanged;;
-        }
-
-        private void CheckButtonStatus()
+        private void MoneyService_OnMoneyChanged()
         {
             buyButton.interactable = _moneyService.Money >= _businessConfig.Price;
         }
 
-        private void Buy()
+        private void OnDestroy()
         {
-            var text = nameInput.text;
-            if (text.Length == 0)
-                text = _businessConfig.BusinessName;
-            _businessManager.AddBusiness(_businessConfig.Type, text);
-            nameInput.text = "";
+            _businessManager.OnBusinessesChanged -= OnBusinessesChanged;
+        }
+
+        private void BuyButton_Clicked()
+        {
+            if (_moneyService.Money >= _businessConfig.Price)
+            {
+                var businessName = nameInput.text;
+                if (businessName.Length == 0)
+                    businessName = _businessConfig.BusinessName;
+                _businessManager.AddBusiness(_businessConfig.Type, businessName);
+                nameInput.text = string.Empty;
+            }
         }
 
         private void OnBusinessesChanged()
         {
             var num = _businessManager.GetTypeCount(_businessConfig.Type);
-            countText.text =
-                $"{num}/{_businessConfig.MaxCount}";
+            countText.text = $"{num}/{_businessConfig.MaxCount}";
         }
     }
 }

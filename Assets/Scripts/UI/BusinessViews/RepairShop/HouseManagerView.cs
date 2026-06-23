@@ -31,11 +31,7 @@ namespace UI.BusinessViews.RepairShop
 
         public void Initialize(BusinessController businessController)
         {
-            _businessController = businessController as RepairShopBusinessController;
-        }
-
-        private void Start()
-        {
+            _businessController = (RepairShopBusinessController)businessController;
             _businessController.OnHousesUpdate += UpdateInfo;
             _moneyService.OnMoneyChanged += UpdateInfo;
             UpdateInfo();
@@ -43,10 +39,6 @@ namespace UI.BusinessViews.RepairShop
 
         private void OnDestroy()
         {
-            foreach (var line in _repairLines)
-            {
-                line.Clear();
-            }
             _businessController.OnHousesUpdate -= UpdateInfo;
             _moneyService.OnMoneyChanged -= UpdateInfo;
         }
@@ -80,8 +72,8 @@ namespace UI.BusinessViews.RepairShop
                 line.SetImage(
                     GetImage(houseController.Condition)
                 );
-                line.UpdateBuyButton(_moneyService.Money, 
-                    _businessController.PurchasedHouses.Count<_businessController.MaxPurchasedHousesAmount);
+                line.UpdateBuyButton(_moneyService.Money,
+                    _businessController.PurchasedHouses.Count < _businessController.MaxPurchasedHousesAmount);
             }
 
             for (var i = _offerLines.Count - 1; i >= index; i--)
@@ -101,10 +93,7 @@ namespace UI.BusinessViews.RepairShop
 
                 RepairLineView line;
                 if (index < _repairLines.Count)
-                {
                     line = _repairLines[index];
-                    line.Clear();
-                }
                 else
                 {
                     line = Instantiate(repairLineViewPrefab, renovationLineContainer);
@@ -114,17 +103,15 @@ namespace UI.BusinessViews.RepairShop
                     _repairLines.Add(line);
                 }
 
-                line.Initialize(purchasedHouseController);
-                line.SetImage(
-                    GetImage(purchasedHouseController.Condition)
-                );
-                line.CheckMoney(_moneyService.Money);
+                line.SetHouse(purchasedHouseController);
+                var houseImage = GetImage(purchasedHouseController.Condition);
+                line.SetImage(houseImage);
+                line.CheckRepairAbility(_moneyService.Money);
             }
 
             for (var i = _repairLines.Count - 1; i >= index; i--)
             {
                 var line = _repairLines[i];
-                line.Clear();
                 Destroy(line.gameObject);
                 _repairLines.RemoveAt(i);
             }

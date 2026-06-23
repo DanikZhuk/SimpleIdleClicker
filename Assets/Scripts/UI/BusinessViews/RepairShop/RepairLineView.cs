@@ -24,10 +24,14 @@ namespace UI.BusinessViews.RepairShop
 
         private bool _hasMoneyForRepair;
         
-        public HouseController HouseController=>_houseController;
+        public HouseController HouseController => _houseController;
 
-        public void Initialize(HouseController houseController)
+        public void SetHouse(HouseController houseController)
         {
+            if (houseController != null)
+            {
+                _houseController.OnConditionChanged -= OnConditionChanged;
+            }
             _houseController = houseController;
             _houseController.OnConditionChanged += OnConditionChanged;
             UpdateInfo();
@@ -79,9 +83,9 @@ namespace UI.BusinessViews.RepairShop
             UpdateInfo();
         }
 
-        public void CheckMoney(long money)
+        public void CheckRepairAbility(long money)
         {
-            _hasMoneyForRepair=money>=HouseController.RepairCost;
+            _hasMoneyForRepair = money >= HouseController.RepairCost;
         }
 
         private void UpdateInfo()
@@ -95,14 +99,10 @@ namespace UI.BusinessViews.RepairShop
             }
         }
 
-        public void Clear()
-        {
-            _houseController.OnConditionChanged -= OnConditionChanged;
-        }
-
         private void OnDestroy()
         {
-            Clear();
+            if (_houseController != null)
+                _houseController.OnConditionChanged -= OnConditionChanged;
         }
     }
 }

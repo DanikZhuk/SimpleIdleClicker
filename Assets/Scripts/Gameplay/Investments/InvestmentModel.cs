@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace Gameplay.Investments
 {
@@ -19,7 +17,7 @@ namespace Gameplay.Investments
             get => _currentCost;
             set
             {
-                _lastChange = (value*100) / (float)_currentCost;
+                _lastChange = (value * 100) / (float)_currentCost;
                 _lastChange -= 100f;
                 _currentCost = value;
             }

@@ -21,19 +21,19 @@ namespace UI.BusinessScreen.Store
 
         private void Awake()
         {
-            panelAreaButton.onClick.AddListener(Button_OnClick);
+            panelAreaButton.onClick.AddListener(PanelAreaButton_OnClick);
         }
         
         public void Initialize(Sprite icon, BusinessConfig config)
         {
             image.sprite = icon;
             businessName.text = config.BusinessName;
-            price.text = StringFormatUtility.MoneyString(config.Price);
+            price.text = config.Price.MoneyString();
 
             _config = config;
         }
 
-        private void Button_OnClick()
+        private void PanelAreaButton_OnClick()
         {
             OnClick?.Invoke(_config);
         }

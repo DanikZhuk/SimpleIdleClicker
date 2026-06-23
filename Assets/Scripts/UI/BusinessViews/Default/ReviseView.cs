@@ -28,10 +28,10 @@ namespace UI.BusinessViews.Default
                 image.sprite = icon;
             if (incomeText)
                 incomeText.text = businessController.GetIncome() > 0
-                    ? StringFormatUtility.MoneySpeedString(businessController.GetIncome())
+                    ? businessController.GetIncome().MoneySpeedString()
                     : "";
             if (priceText)
-                priceText.text = StringFormatUtility.MoneyString(businessController.GetSellPrice());
+                priceText.text = businessController.GetSellPrice().MoneyString();
             BusinessController = businessController;
         }
 

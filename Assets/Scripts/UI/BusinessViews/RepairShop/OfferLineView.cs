@@ -19,13 +19,13 @@ namespace UI.BusinessViews.RepairShop
 
         private void Awake()
         {
-            buyButton.onClick.AddListener(() => OnBuyButtonClick?.Invoke(this));
+            buyButton.onClick.AddListener(BuyButton_Clicked);
         }
 
         public void Initialize(HouseController houseController)
         {
             HouseController = houseController;
-            buyCost.text=StringFormatUtility.MoneyString(houseController.Cost);
+            buyCost.text = StringFormatUtility.MoneyString(houseController.Cost);
         }
 
         public void UpdateBuyButton(long money, bool hasFreeSpace)
@@ -36,6 +36,11 @@ namespace UI.BusinessViews.RepairShop
         public void SetImage(Sprite sprite)
         {
             image.sprite = sprite;
+        }
+
+        private void BuyButton_Clicked()
+        {
+            OnBuyButtonClick?.Invoke(this);
         }
     }
 }

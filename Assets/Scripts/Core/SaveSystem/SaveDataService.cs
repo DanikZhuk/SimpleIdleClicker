@@ -43,21 +43,7 @@ namespace Core.SaveSystem
 
         public void RemoveBusiness(BusinessModel businessModel)
         {
-            Debug.Log($"Name:{businessModel.Name}\n" +
-                      $"BusinessType:{businessModel.BusinessType}\n" +
-                      $"Id:{businessModel.Id}\n" +
-                      $"Income:{businessModel.Income}\n" +
-                      $"HashCode{businessModel.GetHashCode()}\n");
-            foreach (var businessModel1 in BusinessModels)
-            {
-                Debug.Log($"Name:{businessModel1.Name}\n" +
-                          $"BusinessType:{businessModel1.BusinessType}\n" +
-                          $"Id:{businessModel1.Id}\n" +
-                          $"Income:{businessModel1.Income}\n" +
-                          $"HashCode{businessModel1.GetHashCode()}\n");
-                Debug.Log($"Equals:{businessModel1.Equals(businessModel)}");
-            }
-            Debug.Log(_data.BusinessModels.Remove(businessModel));
+            _data.BusinessModels.Remove(businessModel);
             SaveData();
         }
 
@@ -71,8 +57,6 @@ namespace Core.SaveSystem
         {
             if (isPaused)
                 SaveData();
-            else
-                LoadData();
         }
 
         private void OnApplicationQuit()
