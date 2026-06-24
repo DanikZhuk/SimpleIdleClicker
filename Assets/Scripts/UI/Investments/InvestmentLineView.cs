@@ -30,14 +30,15 @@ namespace UI.Investments
             _investmentController = investmentController;
         }
 
-        public void UpdateValues()
+        public void OnInvestmentsCostUpdate()
         {
             currentCost.text = _investmentController.InvestmentModel.CurrentCost.MoneyString();
         }
 
         private void PanelButton_OnClick()
         {
-            if (_investmentController != null) OnClick?.Invoke(_investmentController);
+            if (_investmentController != null)
+                OnClick?.Invoke(_investmentController);
         }
     }
 }

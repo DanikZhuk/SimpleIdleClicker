@@ -15,3 +15,4 @@ MonoBehaviour:
   Businesses:
   - {fileID: 11400000, guid: 35e8c72b30aa8344988014634ccf0fee, type: 2}
   - {fileID: 11400000, guid: 28786d96a5b1f1b4e814db69b75faf6f, type: 2}
+  IncomeHourInSeconds: 30

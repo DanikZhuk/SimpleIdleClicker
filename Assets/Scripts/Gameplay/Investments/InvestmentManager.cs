@@ -19,13 +19,13 @@ namespace Gameplay.Investments
         [Inject] private SaveDataService _saveDataService;
         [Inject] private SystemMessageManager _systemMessageManager;
         [Inject] private TimeService _timeService;
-        
-        public event Action OnInvestmentsUpdate;
-        
+
+        public event Action OnInvestmentsCostUpdate;
+
         private readonly List<InvestmentController> _investmentControllers = new();
-        
+
         private float _runningUpdateTime;
-        
+
         public IReadOnlyList<InvestmentController> InvestmentControllersList => _investmentControllers;
 
         private void Start()
@@ -35,73 +35,28 @@ namespace Gameplay.Investments
 
         private void Update()
         {
-            foreach (var investmentController in _investmentControllers) investmentController.Update(Time.deltaTime);
+            foreach (var investmentController in _investmentControllers)
+                investmentController.Update(Time.deltaTime);
+            
             _runningUpdateTime += Time.deltaTime;
-            if (_runningUpdateTime <= investmentListConfig.UpdateTime) return;
-            UpdateValues();
-            OnInvestmentsUpdate?.Invoke();
+            if (_runningUpdateTime < investmentListConfig.UpdateTime)
+                return;
+            
+            UpdateInvestmentCurrentCosts();
+            OnInvestmentsCostUpdate?.Invoke();
             _runningUpdateTime = 0;
         }
 
         private void OnDestroy()
         {
-            foreach (var controller in _investmentControllers) controller.OnRemove();
+            foreach (var controller in _investmentControllers)
+                controller.OnRemove();
         }
 
         private void OnApplicationPause(bool isPaused)
         {
-            if (!isPaused) CalculateOfflineImpact();
-        }
-        
-        public float GetUpdateTimeProgress()
-        {
-            return _runningUpdateTime / investmentListConfig.UpdateTime;
-        }
-        
-        private void Initialize()
-        {
-            var configs = investmentListConfig.InvestmentConfigs.ToDictionary(investment => investment.Type);
-
-            foreach (var investment in _saveDataService.Investments)
-            {
-                var investmentController = new InvestmentController(investment, configs[investment.Type]);
-                _investmentControllers.Add(investmentController);
-
-                _diContainer.Inject(investmentController);
-                investmentController.Setup();
-                configs.Remove(investment.Type);
-            }
-
-            if (configs.Count > 0)
-                foreach (var investmentConfig in configs.Values)
-                {
-                    var investmentModel = new InvestmentModel(investmentConfig.Type, investmentConfig.InitialCost);
-                    _saveDataService.Investments.Add(investmentModel);
-                    var investmentController = new InvestmentController(investmentModel, investmentConfig);
-                    _investmentControllers.Add(investmentController);
-
-                    _diContainer.Inject(investmentController);
-                    investmentController.Setup();
-                }
-
-            CalculateOfflineImpact();
-        }
-
-        private void UpdateValues()
-        {
-            foreach (var investmentController in _investmentControllers)
-                investmentController.UpdateInvestmentCurrentCost();
-
-            OnInvestmentsUpdate?.Invoke();
-        }
-
-        private void CalculateOfflineImpact()
-        {
-            var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
-            var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
-
-            foreach (var investmentController in _investmentControllers)
-                investmentController.Update(offlineTimeSeconds);
+            if (!isPaused)
+                CalculateOfflineImpact();
         }
 
         public void BuyInvestment(InvestmentController investmentController, long amount)
@@ -125,6 +80,59 @@ namespace Gameplay.Investments
 
             _moneyService.Money += investmentController.InvestmentModel.CurrentCost * amount;
             _systemMessageManager.Log($"You successfully sold {amount} {investmentController.InvestmentConfig.Name}");
+        }
+
+        public float GetUpdateTimeProgress()
+        {
+            return _runningUpdateTime / investmentListConfig.UpdateTime;
+        }
+
+        private void Initialize()
+        {
+            var configs = investmentListConfig.InvestmentConfigs.ToDictionary(investment => investment.Type);
+
+            foreach (var investment in _saveDataService.Investments)
+            {
+                var investmentController = new InvestmentController(investment, configs[investment.Type]);
+                _investmentControllers.Add(investmentController);
+
+                _diContainer.Inject(investmentController);
+                investmentController.Setup();
+                configs.Remove(investment.Type);
+            }
+
+            if (configs.Count > 0)
+            {
+                foreach (var investmentConfig in configs.Values)
+                {
+                    var investmentModel = new InvestmentModel(investmentConfig.Type, investmentConfig.InitialCost);
+                    _saveDataService.Investments.Add(investmentModel);
+                    var investmentController = new InvestmentController(investmentModel, investmentConfig);
+                    _investmentControllers.Add(investmentController);
+
+                    _diContainer.Inject(investmentController);
+                    investmentController.Setup();
+                }
+            }
+
+            CalculateOfflineImpact();
+        }
+
+        private void UpdateInvestmentCurrentCosts()
+        {
+            foreach (var investmentController in _investmentControllers)
+                investmentController.UpdateInvestmentCurrentCost();
+
+            OnInvestmentsCostUpdate?.Invoke();
+        }
+
+        private void CalculateOfflineImpact()
+        {
+            var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
+            var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
+
+            foreach (var investmentController in _investmentControllers)
+                investmentController.Update(offlineTimeSeconds);
         }
     }
 }

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab069968b9b47e19865ba5d21bfe78e, type: 3}
   m_Name: OfflinePaymentConfig
   m_EditorClassIdentifier: Assembly-CSharp::Configs.OfflinePaymentConfig
-  IncomeIntervalSeconds: 5
+  IncomeIntervalSeconds: 30

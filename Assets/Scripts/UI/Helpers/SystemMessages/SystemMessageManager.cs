@@ -6,14 +6,14 @@ namespace UI.Helpers.SystemMessages
     public class SystemMessageManager : MonoBehaviour
     {
         [SerializeField] private SystemMessageView systemMessageViewPrefab;
-        [SerializeField] private RectTransform prefabContainer;
 
         private readonly Queue<string> _messagesQueue = new();
         private SystemMessageView _messageViewInstance;
 
         private void Awake()
         {
-            _messageViewInstance = Instantiate(systemMessageViewPrefab, prefabContainer);
+            var rectTransform = FindAnyObjectByType<Canvas>().transform as RectTransform;
+            _messageViewInstance = Instantiate(systemMessageViewPrefab, rectTransform);
         }
 
         private void Update()

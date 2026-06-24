@@ -11,8 +11,6 @@ namespace Core.SceneInstallers
     {
         [SerializeField] private BusinessManager businessManager;
         [SerializeField] private InvestmentManager investmentManager;
-        [SerializeField] private MoneyService moneyService;
-        [SerializeField] private SystemMessageManager systemMessageManager;
 
         public override void InstallBindings()
         {
@@ -23,14 +21,6 @@ namespace Core.SceneInstallers
             Container
                 .BindInterfacesAndSelfTo<InvestmentManager>()
                 .FromInstance(investmentManager)
-                .AsSingle();
-            Container
-                .BindInterfacesAndSelfTo<MoneyService>()
-                .FromInstance(moneyService)
-                .AsSingle();
-            Container
-                .BindInterfacesAndSelfTo<SystemMessageManager>()
-                .FromInstance(systemMessageManager)
                 .AsSingle();
         }
     }

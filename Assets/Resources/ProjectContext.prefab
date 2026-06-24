@@ -76,3 +76,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.ProjectInstaller.ProjectMonoInstaller
   timeServicePrefab: {fileID: -4209265443652440317, guid: f5ea5c7aca0b6684798f97e1aba67b3c, type: 3}
   saveDataServicePrefab: {fileID: 942864388117033969, guid: 6a91316a81dea1746bbb5c90a37d7f6f, type: 3}
+  moneyServicePrefab: {fileID: -9151197572379908762, guid: c2e733ba29e070d43ac509dbf9c864d6, type: 3}
+  systemMessageManagerPrefab: {fileID: 3941113931968529953, guid: 241929fde5a63924191d5691305287b3, type: 3}

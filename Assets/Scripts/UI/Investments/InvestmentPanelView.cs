@@ -49,7 +49,7 @@ namespace UI.Investments
 
         private void Update()
         {
-            UpdateTime();
+            UpdateResumptionTime();
             UpdateButtons();
         }
 
@@ -68,8 +68,8 @@ namespace UI.Investments
             
             chartManager.Initialize();
 
-            UpdateAmount();
-            UpdateValues();
+            UpdateBoughtAmount();
+            OnInvestmentsCostUpdate();
 
             buyButton.onClick.AddListener(BuyButton_OnClick);
             sellButton.onClick.AddListener(SellButton_OnClick);
@@ -84,7 +84,7 @@ namespace UI.Investments
             OnInvestmentUpdate();
         }
 
-        public void UpdateValues()
+        public void OnInvestmentsCostUpdate()
         {
             chartManager.UpdateValue(_investmentController.InvestmentModel.History);
             currentCost.text = _investmentController.InvestmentModel.CurrentCost.MoneyString();
@@ -141,13 +141,14 @@ namespace UI.Investments
                 _investmentController.MaxAmountCanBuy > 0
                 && buyAmountInput.Value > 0
                 && !(_investmentController.InvestmentModel.ResumptionTime > 0);
+            
             sellButton.interactable =
                 _investmentController.Amount > 0
                 && sellAmountInput.Value > 0
                 && !(_investmentController.InvestmentModel.ResumptionTime > 0);
         }
 
-        private void UpdateTime()
+        private void UpdateResumptionTime()
         {
             if (_investmentController.InvestmentModel.ResumptionTime > 0)
             {
@@ -174,16 +175,16 @@ namespace UI.Investments
         private void BuyButton_OnClick()
         {
             OnBuyButtonClick?.Invoke(_investmentController, buyAmountInput.Value);
-            UpdateAmount();
+            UpdateBoughtAmount();
         }
 
         private void SellButton_OnClick()
         {
             OnSellButtonClick?.Invoke(_investmentController, sellAmountInput.Value);
-            UpdateAmount();
+            UpdateBoughtAmount();
         }
 
-        private void UpdateAmount()
+        private void UpdateBoughtAmount()
         {
             amount.text =
                 $"{_investmentController.Amount.ToString()}/{_investmentController.InvestmentConfig.MaxAmount}";

@@ -1195,11 +1195,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 713788460}
-  - component: {fileID: 713788463}
-  - component: {fileID: 713788462}
   - component: {fileID: 713788461}
   - component: {fileID: 713788464}
-  - component: {fileID: 713788465}
   - component: {fileID: 713788466}
   m_Layer: 0
   m_Name: GameManager
@@ -1236,31 +1233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Estates.Generic.EstateManager
   businessListConfig: {fileID: 11400000, guid: e78e28a10baccf24d9f3dd99c286a856, type: 2}
---- !u!114 &713788462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713788458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f0b9eb3bf5943d6a4d3bee9dc44823d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.MoneyService
-  clickConfig: {fileID: 11400000, guid: 35c9f1874abe0d442add779e521c6297, type: 2}
---- !u!114 &713788463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713788458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b5150992a7c432f981e8b236180747e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Services.TimeService
 --- !u!114 &713788464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1274,20 +1246,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.Investitions.InvestitionManager
   investmentListConfig: {fileID: 11400000, guid: f6fb22f4d4efd97438f37905f930d104, type: 2}
---- !u!114 &713788465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713788458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd985fa014a3451383af9e17e088c240, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.Helpers.SystemMessages.SystemMessageManager
-  systemMessageViewPrefab: {fileID: 7841634343137629276, guid: 3de6a74e3dc589c47a0076aa8c844757, type: 3}
-  rectTransform: {fileID: 1645531956}
 --- !u!114 &713788466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,8 +2503,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Core.Installers.GameplaySceneInstaller
   businessManager: {fileID: 713788461}
   investmentManager: {fileID: 713788464}
-  moneyService: {fileID: 713788462}
-  systemMessageManager: {fileID: 713788465}
 --- !u!114 &1243805343
 MonoBehaviour:
   m_ObjectHideFlags: 0

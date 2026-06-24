@@ -14,7 +14,7 @@ namespace UI.Investments
         [SerializeField] private SpriteLibrary library;
         [SerializeField] private Slider timeSlider;
         
-        [Header("InvestmentModel List  Line")]
+        [Header("InvestmentModel List Line")]
         [SerializeField] private InvestmentLineView investmentLineViewPrefab;
         [SerializeField] private RectTransform viewsContainer;
         
@@ -33,7 +33,7 @@ namespace UI.Investments
         private void Start()
         {
             InitializeListViews();
-            _investmentManager.OnInvestmentsUpdate += OnInvestmentsUpdate;
+            _investmentManager.OnInvestmentsCostUpdate += OnInvestmentsCostUpdate;
         }
 
         private void Update()
@@ -43,7 +43,7 @@ namespace UI.Investments
 
         private void OnDestroy()
         {
-            _investmentManager.OnInvestmentsUpdate -= OnInvestmentsUpdate;
+            _investmentManager.OnInvestmentsCostUpdate -= OnInvestmentsCostUpdate;
         }
 
         private void InitializeListViews()
@@ -51,13 +51,15 @@ namespace UI.Investments
             foreach (var investmentController in _investmentManager.InvestmentControllersList)
             {
                 var investmentLineView = Instantiate(investmentLineViewPrefab, viewsContainer);
-                investmentLineView.Initialize(investmentController,
-                    GetSprite(investmentController.InvestmentConfig.Type));
+
+                var investmentSprite = GetSprite(investmentController.InvestmentConfig.Type);
+                
+                investmentLineView.Initialize(investmentController, investmentSprite);
                 investmentLineView.OnClick += InitializeView;
                 _investmentLineViews.Add(investmentLineView);
             }
 
-            OnInvestmentsUpdate();
+            OnInvestmentsCostUpdate();
         }
 
         private Sprite GetSprite(InvestmentType type)
@@ -69,14 +71,26 @@ namespace UI.Investments
         {
             _investmentPanelView = Instantiate(investmentPanelViewPrefab, popUpContainer);
             _investmentPanelView.Initialize(investmentController);
-            _investmentPanelView.OnBuyButtonClick += _investmentManager.BuyInvestment;
-            _investmentPanelView.OnSellButtonClick += _investmentManager.SellInvestment;
+            _investmentPanelView.OnBuyButtonClick += OnBuyButtonClick;
+            _investmentPanelView.OnSellButtonClick += OnSellButtonClick;
         }
 
-        private void OnInvestmentsUpdate()
+        private void OnInvestmentsCostUpdate()
         {
-            if (_investmentPanelView) _investmentPanelView.UpdateValues();
-            foreach (var investmentLineView in _investmentLineViews) investmentLineView.UpdateValues();
+            if (_investmentPanelView)
+                _investmentPanelView.OnInvestmentsCostUpdate();
+            foreach (var investmentLineView in _investmentLineViews)
+                investmentLineView.OnInvestmentsCostUpdate();
+        }
+
+        private void OnBuyButtonClick(InvestmentController investmentController, long amount)
+        {
+            _investmentManager.BuyInvestment(investmentController, amount);
+        }
+        
+        private void OnSellButtonClick(InvestmentController investmentController, long amount)
+        {
+            _investmentManager.SellInvestment(investmentController, amount);
         }
     }
 }
