@@ -14,19 +14,19 @@ namespace Core.SaveSystem
     public class SaveDataService : MonoBehaviour
     {
         [Inject] private TimeService _timeService;
-        
+
         private SaveData _data;
         private string _filePath;
-        
+
         private static readonly JsonSerializerSettings Settings = new()
         {
             TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
-        
+
         public IReadOnlyList<BusinessModel> BusinessModels => _data.BusinessModels;
         public List<InvestmentModel> Investments => _data.Investments;
-        
+
         public long Money
         {
             get => _data.Money;
@@ -83,6 +83,7 @@ namespace Core.SaveSystem
             {
                 Debug.Log($"Cannot load file at {_filePath}. File does not exist yet");
                 _data = new SaveData();
+                _data.RecordTime = _timeService.Now;
                 return;
             }
 
@@ -90,11 +91,22 @@ namespace Core.SaveSystem
             {
                 var data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(_filePath), Settings);
                 _data = data;
+                
+                var playTime = _timeService.Now;
+                if (playTime < _data.RecordTime)
+                {
+                    _timeService.SetLoadTime(data.RecordTime);
+                }
+                else
+                {
+                    _data.RecordTime = playTime;
+                }
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
                 _data = new SaveData();
+                _data.RecordTime = _timeService.Now;
             }
         }
     }

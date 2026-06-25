@@ -34,6 +34,7 @@ namespace UI.BusinessViews.Default
         private void OnDestroy()
         {
             _businessManager.OnBusinessesChanged -= OnBusinessesChanged;
+            _moneyService.OnMoneyChanged -= MoneyService_OnMoneyChanged;
         }
 
         public void Initialize(Sprite icon, BusinessConfig businessConfig)
