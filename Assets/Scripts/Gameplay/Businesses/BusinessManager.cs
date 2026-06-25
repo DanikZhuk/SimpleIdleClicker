@@ -25,7 +25,7 @@ namespace Gameplay.Businesses
 
         private readonly List<BusinessController> _purchasedBusinessControllers = new();
         private Dictionary<BusinessType, BusinessConfig> _configs = new();
-        
+
         public event Action OnBusinessesChanged;
 
         public IReadOnlyList<BusinessController> PurchasedBusinessControllers => _purchasedBusinessControllers;
@@ -42,11 +42,6 @@ namespace Gameplay.Businesses
                 purchasedBusinessController.Update(Time.deltaTime);
         }
 
-        private void OnApplicationPause(bool isPaused)
-        {
-            if (!isPaused) CalculateOfflineImpact();
-        }
-        
         private void Initialize()
         {
             _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
@@ -57,6 +52,8 @@ namespace Gameplay.Businesses
                     CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
                 _purchasedBusinessControllers.Add(businessController);
             }
+
+            _timeService.OnTimeLoaded += CalculateOfflineImpact;
         }
 
         public void AddBusiness(BusinessType businessType, string userBusinessName)
@@ -95,7 +92,6 @@ namespace Gameplay.Businesses
         {
             var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
             var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
-            Debug.Log("offlineTimeSeconds: " + offlineTimeSeconds);
 
             foreach (var businessController in _purchasedBusinessControllers)
                 businessController.Update(offlineTimeSeconds);

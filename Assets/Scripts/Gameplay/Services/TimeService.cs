@@ -1,41 +1,41 @@
 using System;
 using System.Net;
+using Core.SaveSystem;
 using UnityEngine;
+using Zenject;
 
 namespace Gameplay.Services
 {
     public class TimeService : MonoBehaviour
     {
+        [Inject] SaveDataService _saveDataService;
         public DateTime Now => _loadedTime + TimeSpan.FromSeconds(_elapsedTime);
+        public event Action OnTimeLoaded;
 
         private DateTime _loadedTime;
         private float _elapsedTime = 0;
 
         private readonly ServerTimeManager _serverTimeManager = new();
 
-
         private void Awake()
         {
-            LoadTime();
+            //Initializing time
+            _loadedTime = _serverTimeManager.FetchServerTime();
         }
 
         private void OnApplicationPause(bool isPaused)
         {
-            if (isPaused)
-                LoadTime();
+            if (isPaused) return;
+            LoadTime();
         }
 
         private void LoadTime()
         {
             _loadedTime = _serverTimeManager.FetchServerTime();
             _elapsedTime = 0f;
-        }
-
-        public void SetLoadTime(DateTime loadTime)
-        {
-            Debug.Log("Loading time: " + loadTime);
-            _loadedTime = loadTime;
-            _elapsedTime = 0f;
+            if (_loadedTime < _saveDataService.RecordTime)
+                _loadedTime = _saveDataService.RecordTime;
+            OnTimeLoaded?.Invoke();
         }
 
         public TimeSpan ElapsedTimeSince(DateTime? oldTime)
@@ -52,14 +52,7 @@ namespace Gameplay.Services
 
         private class ServerTimeManager
         {
-            // A free, public API that returns the current UTC time in JSON format
             private const string TimeApiUrl = "https://timeapi.io/api/v1/time/current/utc";
-
-            [Serializable]
-            public class WorldTimeResponse
-            {
-                public string utc_time; // Matches the JSON key from the API
-            }
 
             public DateTime FetchServerTime()
             {
@@ -67,8 +60,8 @@ namespace Gameplay.Services
                 {
                     var myHttpWebRequest = (HttpWebRequest)WebRequest.Create(TimeApiUrl);
                     var response = myHttpWebRequest.GetResponse();
-                    var todaysDates = response.Headers["date"];
-                    if (DateTimeOffset.TryParse(todaysDates, out DateTimeOffset serverDateTimeOffset))
+                    var nowDateTime = response.Headers["date"];
+                    if (DateTimeOffset.TryParse(nowDateTime, out DateTimeOffset serverDateTimeOffset))
                     {
                         var serverTime = serverDateTimeOffset.UtcDateTime;
                         Debug.Log($"Successfully fetched server time (UTC): {serverTime}");
@@ -77,7 +70,7 @@ namespace Gameplay.Services
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Error fetching server time.");
+                    Debug.LogError($"Error fetching server time due to {e.Message}");
                 }
 
                 return DateTime.UtcNow;

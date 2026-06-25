@@ -18,6 +18,11 @@ namespace Gameplay.Services
 
         private TimeSpan _nextIncomeTime;
 
+        private void Awake()
+        {
+            _timeService.OnTimeLoaded += CalculateOfflineImpact;
+        }
+
         private void Update()
         {
             if (!(Time.time >= _nextIncomeTime.TotalSeconds)) return;
@@ -29,9 +34,9 @@ namespace Gameplay.Services
             _nextIncomeTime += TimeSpan.FromSeconds(paymentConfig.IncomeIntervalSeconds);
         }
 
-        private void OnApplicationPause(bool isPaused)
+        private void CalculateOfflineImpact()
         {
-            if (!isPaused) AddIncomes(_saveDataService.RecordTime, _timeService.Now);
+            AddIncomes(_saveDataService.RecordTime, _timeService.Now);
         }
 
         private void AddIncomes(DateTime startTime, DateTime endTime)

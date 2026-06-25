@@ -28,7 +28,7 @@ namespace Gameplay.Investments
 
         public IReadOnlyList<InvestmentController> InvestmentControllersList => _investmentControllers;
 
-        private void Start()
+        private void Awake()
         {
             Initialize();
         }
@@ -37,11 +37,11 @@ namespace Gameplay.Investments
         {
             foreach (var investmentController in _investmentControllers)
                 investmentController.Update(Time.deltaTime);
-            
+
             _runningUpdateTime += Time.deltaTime;
             if (_runningUpdateTime < investmentListConfig.UpdateTime)
                 return;
-            
+
             UpdateInvestmentCurrentCosts();
             OnInvestmentsCostUpdate?.Invoke();
             _runningUpdateTime = 0;
@@ -51,12 +51,6 @@ namespace Gameplay.Investments
         {
             foreach (var controller in _investmentControllers)
                 controller.OnRemove();
-        }
-
-        private void OnApplicationPause(bool isPaused)
-        {
-            if (!isPaused)
-                CalculateOfflineImpact();
         }
 
         public void BuyInvestment(InvestmentController investmentController, long amount)
@@ -114,6 +108,8 @@ namespace Gameplay.Investments
                     investmentController.Setup();
                 }
             }
+
+            _timeService.OnTimeLoaded += CalculateOfflineImpact;
         }
 
         private void UpdateInvestmentCurrentCosts()

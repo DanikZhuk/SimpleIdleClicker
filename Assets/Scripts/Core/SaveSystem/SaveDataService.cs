@@ -79,29 +79,19 @@ namespace Core.SaveSystem
 
         private void LoadData()
         {
-            if (!File.Exists(_filePath))
-            {
-                Debug.Log($"Cannot load file at {_filePath}. File does not exist yet");
-                _data = new SaveData();
-                _data.RecordTime = _timeService.Now;
-                return;
-            }
-
             try
             {
                 var data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(_filePath), Settings);
                 _data = data;
-                
-                if (_timeService.Now < _data.RecordTime)
-                {
-                    _timeService.SetLoadTime(data.RecordTime);
-                }
             }
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load data due to: {e.Message} {e.StackTrace}");
-                _data = new SaveData();
-                _data.RecordTime = _timeService.Now;
+                _data = new SaveData
+                {
+                    RecordTime = _timeService.Now
+                };
+                Debug.Log(_data.RecordTime);
             }
         }
     }
