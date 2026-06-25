@@ -114,8 +114,6 @@ namespace Gameplay.Investments
                     investmentController.Setup();
                 }
             }
-
-            CalculateOfflineImpact();
         }
 
         private void UpdateInvestmentCurrentCosts()

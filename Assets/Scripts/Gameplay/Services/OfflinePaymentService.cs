@@ -17,12 +17,6 @@ namespace Gameplay.Services
         [Inject] private TimeService _timeService;
 
         private TimeSpan _nextIncomeTime;
-        
-        
-        private void Start()
-        {
-            AddIncomes(_saveDataService.RecordTime, _timeService.Now);
-        }
 
         private void Update()
         {

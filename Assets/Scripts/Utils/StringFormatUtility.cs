@@ -22,7 +22,7 @@ namespace Utils
             var time = TimeSpan.FromSeconds(seconds);
             var format = "";
             if (time.Hours > 0)
-                format = @"h\:mm\:s";
+                format = @"h\:mm\:ss";
             else if (time.Minutes > 0)
                 format = @"m\:ss";
             else if (time.Seconds > 0)

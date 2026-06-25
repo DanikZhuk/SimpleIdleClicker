@@ -6,14 +6,7 @@ namespace Gameplay.Services
 {
     public class TimeService : MonoBehaviour
     {
-        public DateTime Now
-        {
-            get
-            {
-                Debug.Log(_loadedTime);
-                return _loadedTime + TimeSpan.FromSeconds(_elapsedTime);
-            }
-        }
+        public DateTime Now => _loadedTime + TimeSpan.FromSeconds(_elapsedTime);
 
         private DateTime _loadedTime;
         private float _elapsedTime = 0;

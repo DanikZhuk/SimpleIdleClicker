@@ -18,7 +18,6 @@ MonoBehaviour:
   Income: 0
   MaxCount: 3
   SellPercentage: 0.3
-  IncomeInterval: 5
   HouseOffersAmount: 5
   MaxPurchasedHousesAmount: 3
   MinHouseCost: 100
@@ -27,4 +26,4 @@ MonoBehaviour:
   MaxRepairCost: 50
   AfterRepairCostCoeff: 1.3
   MinRepairTime: 10
-  MaxRepairTime: 60
+  MaxRepairTime: 7200

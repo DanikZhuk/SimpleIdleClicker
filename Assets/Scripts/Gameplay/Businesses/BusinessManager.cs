@@ -57,8 +57,6 @@ namespace Gameplay.Businesses
                     CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
                 _purchasedBusinessControllers.Add(businessController);
             }
-
-            CalculateOfflineImpact();
         }
 
         public void AddBusiness(BusinessType businessType, string userBusinessName)
@@ -97,6 +95,7 @@ namespace Gameplay.Businesses
         {
             var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
             var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
+            Debug.Log("offlineTimeSeconds: " + offlineTimeSeconds);
 
             foreach (var businessController in _purchasedBusinessControllers)
                 businessController.Update(offlineTimeSeconds);

@@ -92,14 +92,9 @@ namespace Core.SaveSystem
                 var data = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(_filePath), Settings);
                 _data = data;
                 
-                var playTime = _timeService.Now;
-                if (playTime < _data.RecordTime)
+                if (_timeService.Now < _data.RecordTime)
                 {
                     _timeService.SetLoadTime(data.RecordTime);
-                }
-                else
-                {
-                    _data.RecordTime = playTime;
                 }
             }
             catch (Exception e)
