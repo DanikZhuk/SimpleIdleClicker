@@ -32,6 +32,7 @@ namespace UI.Helpers.SystemMessages
         private async UniTask Moving()
         {
             IsRunning = true;
+            rectTransform.SetAsLastSibling();
             var delay = overallTime - slidingTime * 2f;
 
             rectTransform.anchoredPosition = initialOffset;
