@@ -44,16 +44,25 @@ namespace Gameplay.Businesses
 
         private void Initialize()
         {
-            _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
+            if(_configs.Count==0)
+                _configs = businessListConfig.Businesses.ToDictionary(config => config.Type);
 
+            _timeService.OnOfflineTime += CalculateOfflineImpact;
+            _saveDataService.OnDataLoaded+=LoadData;
+            LoadData();
+        }
+        
+        private void LoadData()
+        {
+            _purchasedBusinessControllers.Clear();
+            
             foreach (var businessModel in _saveDataService.BusinessModels)
             {
                 var businessController =
                     CreateBusinessController(_configs[businessModel.BusinessType], businessModel);
                 _purchasedBusinessControllers.Add(businessController);
             }
-
-            _timeService.OnTimeLoaded += CalculateOfflineImpact;
+            OnBusinessesChanged?.Invoke();
         }
 
         public void AddBusiness(BusinessType businessType, string userBusinessName)

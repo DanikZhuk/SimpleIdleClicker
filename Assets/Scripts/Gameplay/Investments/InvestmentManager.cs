@@ -43,7 +43,6 @@ namespace Gameplay.Investments
                 return;
 
             UpdateInvestmentCurrentCosts();
-            OnInvestmentsCostUpdate?.Invoke();
             _runningUpdateTime = 0;
         }
 
@@ -83,7 +82,15 @@ namespace Gameplay.Investments
 
         private void Initialize()
         {
+            _saveDataService.OnDataLoaded += LoadData;
+            LoadData();
+            _timeService.OnOfflineTime += CalculateOfflineImpact;
+        }
+
+        private void LoadData()
+        {
             var configs = investmentListConfig.InvestmentConfigs.ToDictionary(investment => investment.Type);
+            _investmentControllers.Clear();
 
             foreach (var investment in _saveDataService.Investments)
             {
@@ -95,7 +102,7 @@ namespace Gameplay.Investments
                 configs.Remove(investment.Type);
             }
 
-            if (configs.Count > 0)
+            if (configs.Count <= 0) return;
             {
                 foreach (var investmentConfig in configs.Values)
                 {
@@ -108,8 +115,7 @@ namespace Gameplay.Investments
                     investmentController.Setup();
                 }
             }
-
-            _timeService.OnTimeLoaded += CalculateOfflineImpact;
+            OnInvestmentsCostUpdate?.Invoke();
         }
 
         private void UpdateInvestmentCurrentCosts()
@@ -124,6 +130,8 @@ namespace Gameplay.Investments
         {
             var offlineTime = _timeService.ElapsedTimeSince(_saveDataService.RecordTime);
             var offlineTimeSeconds = (float)offlineTime.TotalSeconds;
+
+            Debug.Log($"Time: {_saveDataService.RecordTime} - {_timeService.Now} =  {offlineTimeSeconds}");
 
             foreach (var investmentController in _investmentControllers)
                 investmentController.Update(offlineTimeSeconds);

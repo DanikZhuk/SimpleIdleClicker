@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using UI.WarningViews;
+using UI.WarningViews.TimeWarning;
 using UnityEngine;
 
 namespace UI.Helpers.SystemMessages
@@ -6,14 +9,17 @@ namespace UI.Helpers.SystemMessages
     public class SystemMessageManager : MonoBehaviour
     {
         [SerializeField] private SystemMessageView systemMessageViewPrefab;
+        [SerializeField] private TimeWarningView  timeWarningViewPrefab;
 
+        private RectTransform _rectTransform;
+        
         private readonly Queue<string> _messagesQueue = new();
         private SystemMessageView _messageViewInstance;
 
         private void Awake()
         {
-            var rectTransform = FindAnyObjectByType<Canvas>().transform as RectTransform;
-            _messageViewInstance = Instantiate(systemMessageViewPrefab, rectTransform);
+            _rectTransform = FindAnyObjectByType<Canvas>().transform as RectTransform;
+            _messageViewInstance = Instantiate(systemMessageViewPrefab, _rectTransform);
         }
 
         private void Update()

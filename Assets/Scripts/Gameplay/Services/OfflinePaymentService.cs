@@ -20,7 +20,7 @@ namespace Gameplay.Services
 
         private void Awake()
         {
-            _timeService.OnTimeLoaded += CalculateOfflineImpact;
+            _timeService.OnOfflineTime += CalculateOfflineImpact;
         }
 
         private void Update()

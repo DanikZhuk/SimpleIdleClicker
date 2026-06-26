@@ -12,5 +12,7 @@ namespace Core.SaveSystem.Data
         public long Money;
 
         public DateTime RecordTime;
+        public TimeSpan ServerTimeOffset;
+        public bool TimeDataInitialized = false;
     }
 }
